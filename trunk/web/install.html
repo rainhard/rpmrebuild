@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>rpmrebuild's install</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="Author" content="Gerbier" />
+    <meta name="generator" content="vim" />
+    <link rev="made" href="mailto:gerbier@users.sourceforge.net" />
+    <link rel="stylesheet" type="text/css" href="project.css" />
+  </head>
+  <body>
+    <div>
+      <h1>rpmrebuild's install</h1>
+      
+      As rpmrebuild is designed to work with rpm, it is packaged in rpm format.
+      
+      <h2>which file to choose</h2>
+      
+      <ul>
+	<li>rpmrebuild-{version}.noarch.rpm : is an rpm package for current linux distributions, which use rpm 4.x releases. this is the method to use at first</li>
+	<li>rpmrebuild-{version}.src.rpm : is a source package</li>
+	<li>rpmrebuild-{version}.tgz : contains the software code</li>
+	<li>rpmrebuild-{version}.tgz.sig : will allow to check the origin of the code</li>
+      </ul>
+      
+      <h2>check packages</h2>
+      
+      all the rpm packages are signed with my <a href="gpg.asc">gpg key</a>, so you should verify
+      the downloaded files with :
+      <ul>
+	<li>for rpm packages, the command <code>rpm -K rpmrebuild*.rpm</code></li>
+	<li>for sources, the command <code>gpg --verify rpmrebuild-{version}.tgz.sig rpmrebuild-{version}.tgz</code></li>
+      </ul>
+      
+      <h2>how to install</h2>
+      It is coded in shell script, so it does not depends from an os architecture or libraries
+
+      <h3>if you are using rpm version 4</h3> 
+      It should install anywhere with the following command : <code>rpm -Uvh rpmrebuild-{version}.noarch.rpm</code>
+      
+      <h3>if you are using rpm version 3</h3> 
+      You will have to build your rpm package, with the command : <code>rpm -tb rpmrebuild-{version}.tgz</code>, 
+      then install the package with <code>rpm -Uvh rpmrebuild-{version}.noarch.rpm</code>
+
+      <h2>what if dependencies problem occurs</h2>
+      
+      you can build a package for your own distribution, using one of the following method :
+      <ul>
+	<li><code>rpmbuild --rebuild rpmrebuild-{version}.src.rpm</code> (for rpm 4)</li>
+	<li><code>rpmbuild -tb rpmrebuild-{version}.tgz</code> (for rpm 4)</li>
+	<li><code>rpm -tb rpmrebuild-{version}.tgz</code>, (for rpm 3)</li>
+	<li>if nothing is working, please send a <a href="support.html">bug report</a></li>
+      </ul>
+      
+      <hr />
+      <a href="index.html">back to main page</a>
+    </div>
+  </body>
+</html>

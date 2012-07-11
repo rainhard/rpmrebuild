@@ -1,0 +1,15 @@
+<c>
+use
+<q>
+which difference with repackage option in recent rpm releases
+<a>
+when using rpm repackage option, you have to uninstall the package, not with rpmrebuild.
+
+<c>
+use
+<q>
+error: No compatible architectures found for build
+<a>
+It occurs, for example, when you have a linux distribution on 64 bits, and try
+to rebuild a 32 bit package. A nice way to solve the problem is to use the setarch command :
+setarch i586 rpmrebuild your_package

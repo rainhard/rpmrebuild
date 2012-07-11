@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <title>installation de rpmrebuild</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="Author" content="Gerbier" />
+    <meta name="generator" content="vim" />
+    <link rev="made" href="mailto:gerbier@users.sourceforge.net" />
+    <link rel="stylesheet" type="text/css" href="project.css" />
+  </head>
+  <body>
+    <div>
+      <h1>installation de rpmrebuild</h1>
+      
+      Comme rpmrebuild travaille sur les packages rpm, il est fourni naturellement sous ce format.
+      
+      <h2>quel fichier choisir ?</h2>
+      
+      <ul>
+	<li>rpmrebuild-{version}.noarch.rpm : est un package prêt à installer, conçu pour les distributions qui utilisent rpm version 4.x : à utiliser de préférence</li>
+	<li>rpmrebuild-{version}.src.rpm : est un package source, pour ceux qui voudraient refabriquer le package rpm</li>
+	<li>rpmrebuild-{version}.tgz : les sources du logiciel</li>
+	<li>rpmrebuild-{version}.tgz.sig : la signature des sources</li>
+      </ul>
+      
+      <h2>vérifier le package</h2>
+      
+      Tous les packages rpm sont signés avec ma <a href="gpg.asc">clef gpg</a>. Je vous recommande
+      fortement de vérifier tout fichier téléchargé avec :
+      <ul>
+	<li>pour les packages rpm, la commande <code>rpm -K rpmrebuild*.rpm</code></li>
+	<li>pour les sources, la commande <code>gpg --verify rpmrebuild-{version}.tgz.sig rpmrebuild-{version}.tgz</code></li>
+      </ul>
+      
+      <h2>installation</h2>
+      
+      Rpmrebuild est codé en shell (bash), donc il ne dépends pas de librairies, ni de l'architecture.
+      <h3>avec rpm version 4</h3>
+      Il s'installe avec la commande : <code>rpm -Uvh rpmrebuild-{version}.noarch.rpm</code>.
+
+      <h3>avec rpm version 3</h3>
+      Nous n'avons pas de machine utilisant cette version de rpm. Il vous faudra donc fabriquer votre propre package rpm
+      à partir du fichier source en utilisant la commande : <code>rpm -tb rpmrebuild-{version}.tgz</code>, puis l'installer
+      avec une commande <code>rpm -Uvh rpmrebuild-{version}.noarch.rpm</code>.
+
+      <h2>en cas de problème</h2>
+      
+      vous pouvez fabriquer un package rpm pour votre distribution avec l'une des méthodes suivantes :
+      <ul>
+	<li><code>rpmbuild --rebuild rpmrebuild-{version}.src.rpm</code> (rpm version 4)</li>
+	<li><code>rpmbuild -tb rpmrebuild-{version}.tgz</code> (rpm version 4)</li> 
+	<li><code>rpm -tb rpmrebuild-{version}.tgz</code> (rpm version 3</li>
+	<li>si ça ne marche toujours pas, envoyez-nous un <a href="support.fr.html">rapport de bug</a></li>
+      </ul>
+      
+      <hr />
+      <a href="index.fr.html">retour à la page principale</a>
+    </div>
+  </body>
+</html>
