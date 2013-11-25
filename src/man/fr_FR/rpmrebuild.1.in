@@ -182,7 +182,7 @@ Appelle le plugin (respectivement l'éditeur) pour modifier l'ensemble du fichier
 .LP 
 \fB\-\-change\-spec\-pretrans\fP=<\fIcommand\fP>
 .br 
-\fB\-\-edit\-postrans
+\fB\-\-edit\-pretrans
 .LP 
 \fB\-\-change\-spec\-postrans\fP=<\fIcommand\fP>
 .br 
