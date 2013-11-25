@@ -51,10 +51,10 @@ affiche une aide sur les plugins, puis sort.
 \fB\-i, \-\-include\fP=<\fIfile\fP>
 lit les options dans le fichier 'file' indiqué.
 .TP 
-\fB\-I, \-\-install>
+\fB\-I, \-\-install\fP
 installe le package crée
 .TP 
-\fB\-k, \-\-keep\-perm
+\fB\-k, \-\-keep\-perm\fP
 alias de l'option \fB\-\-pug\-from\-fs\fP
 .TP 
 \fB\-l, \-\-list\-plugin\fP
