@@ -18,6 +18,7 @@ RPM_DEFINES :=                             \
    --define '_srcrpmdir $(RPM_SRPMS_DIR)'  \
    --define '_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm'
 
+PACKAGE=rpmrebuild
 VERSION=$(shell cat Version)
 TAR_FILE := $(RPM_SOURCE_DIR)/rpmrebuild-$(VERSION).tar.gz
 
@@ -43,6 +44,8 @@ MANPAGES_BASE :=        \
 
 LOCALE_BASE := 	\
    rpmrebuild.lang
+
+KEYWORD_FILES = $(SCRIPTS) $(LIB_SCRIPTS) $(INCLUDE_SCRIPTS)
 
 MANPAGES := $(foreach lang,$(LANGS),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
 LOCALES := $(foreach lang,$(LANGS),$(addprefix locale/$(lang)/,$(LOCALE_BASE)))
@@ -117,7 +120,7 @@ install:
 	$(InstallLocales)
 	$(MAKE) -C plugins $@
 
-tar:	rpmrebuild.spec man
+tar:	rpmrebuild.spec man expand
 	tar -cvzf $(TAR_FILE) $(TAR_NAMES)
 
 dist:	tar
@@ -128,7 +131,7 @@ rpmbuild:	tar
 	$@ -ba $(RPM_DEFINES) rpmrebuild.spec
 	rpm --resign rpmrebuild*.rpm
 
-clean:
+clean: unexpand
 	$(RMDIR) $(ROOT) $(RPM_BUILD_DIR)
 	$(RM)    VERSION rpmrebuild.spec *.rpm rpmrebuild.tar.gz rpmrebuild.tar.gz.sig
 	$(RM)    $(MANPAGES)
@@ -139,7 +142,17 @@ man: $(MANPAGES)
 html:
 	./faire_doc.sh
 
+# build all packages
 alldist: rpmbuild dist html
+
+# expand svn keywords just for publish
+expand:
+	git tag -f "$(PACKAGE)-$(VERSION)"
+	git-svn-keyword-expand $(KEYWORD_FILES)
+
+# remove svn keywords to keep repository clean
+unexpand:
+	git-svn-keyword-unexpand $(KEYWORD_FILES)
 
 help:
 	@echo "list of targets :"
