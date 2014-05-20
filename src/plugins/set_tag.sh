@@ -20,7 +20,7 @@
 #
 ###############################################################################
 
-version=1.0
+version=1.1
 ###############################################################################
 function msg () {
 	echo >&2 $*
@@ -41,35 +41,37 @@ function syntaxe () {
 # test for arguments
 if [ $# -ne 0 ]
 then
-	case $1 in
-	-t | --tag )
-		opt_tag=$2
-		opt_val=$3
-	;;
+	while [[ $1 ]]
+	do
+		case $1 in
+			-t | --tag )
+				opt_tag=$2
+				opt_val=$3
+				shift 3
+				;;
 
-	-h | --help )
-		syntaxe
-	;;
+			-h | --help )
+				syntaxe
+				;;
 
-        -v | --version )
-                msg "$0 version $version";
-                exit 1;
-        ;;
+			-v | --version )
+				msg "$0 version $version";
+				exit 1;
+				;;
 
-	*)
-		msg "bad option : $1";
-		syntaxe
-	;;
-	esac
-else
+			*)
+				msg "bad option : $1";
+				syntaxe
+				;;
+		esac
+	done
+elif [ -n "$TAG_ID" ]
+then
 	# we can also provide value by environment
-	if [ -n "$TAG_ID" ]
-	then
-		opt_tag=$TAG_ID
-		opt_val=$TAG_VAL
-	else
-		syntaxe
-	fi
+	opt_tag=$TAG_ID
+	opt_val=$TAG_VAL
+else
+	syntaxe
 fi
 
 # test the way to be called

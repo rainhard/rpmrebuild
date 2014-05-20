@@ -23,7 +23,7 @@
 
 # just a demo script to show what can be done
 # with a file plugin
-version=1.0
+version=1.1
 ###############################################################################
 function msg () {
 	echo >&2 $*
@@ -40,8 +40,8 @@ function syntaxe () {
 ###############################################################################
 
 # test for arguments
-if [ $# -eq 1 ]
-then
+while [[ $ 1 ]]
+do
 	case $1 in
 	-h | --help )
 		syntaxe
@@ -57,7 +57,7 @@ then
 		syntaxe
 	;;
 	esac
-fi
+done
 
 # test the way to be called
 case $LONG_OPTION in
