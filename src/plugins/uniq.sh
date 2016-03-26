@@ -21,7 +21,7 @@
 ###############################################################################
 # code's file of uniq plugin for rpmrebuild
 
-version=1.0
+version=1.1
 ###############################################################################
 function msg () {
 	echo >&2 $*
@@ -29,7 +29,7 @@ function msg () {
 ###############################################################################
 function syntaxe () {
 	msg "this plugin remove duplicate spec lines"
-	msg "it can be called with : rpmrebuild --change-spec-requires|--change-spec-provides|--change-spec-conflicts|--change-spec-obsoletes"
+	msg "it must be called with : rpmrebuild --change-spec-requires|--change-spec-provides|--change-spec-conflicts|--change-spec-obsoletes"
 	msg "-h|--help : this help"
 	msg "-v|--version : print plugin version"
 	exit 1
@@ -38,8 +38,8 @@ function syntaxe () {
 ###############################################################################
 
 # test for arguments
-if [ $# -eq 1 ]
-then
+while [[ $1 ]]
+do
 	case $1 in
 	-h | --help )
 		syntaxe
@@ -55,7 +55,7 @@ then
 		syntaxe
 	;;
 	esac
-fi
+done
 
 # test the way to be called
 case $LONG_OPTION in
@@ -70,7 +70,6 @@ case $LONG_OPTION in
 	;;
 esac
 
-liste=""
 while read line
 do
 	echo $line

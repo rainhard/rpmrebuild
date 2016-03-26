@@ -19,19 +19,19 @@
 #    GNU General Public License for more details.
 #
 ###############################################################################
-# code's file of demo plugin for rpmrebuild
+# code's file of changefile plugin for rpmrebuild
 
-# just a demo script to show what can be done
-# with a file plugin
-version=1.1
+version=1.0
 ###############################################################################
 function msg () {
 	echo >&2 $*
 }
 ###############################################################################
 function syntaxe () {
-	msg "this plugin just show how to modifiy files"
+	msg "this plugin allow change a file in a package"
 	msg "it must be called with --change-files option"
+	msg "-d|--dest : relative path in the rpm of the file to be changed"
+	msg "-s|--src  : path of the file used to replace the rpm file"
 	msg "-h|--help : this help"
 	msg "-v|--version : print plugin version"
 	exit 1
@@ -40,7 +40,7 @@ function syntaxe () {
 ###############################################################################
 
 # test for arguments
-while [[ $ 1 ]]
+while [[ $1 ]]
 do
 	case $1 in
 	-h | --help )
@@ -52,12 +52,25 @@ do
                 exit 1;
         ;;
 
+	-d | --dest )
+		DEST=$2
+		shift 2
+	;;
+
+	-s | --src )
+		SRC=$2
+		shift 2
+	;;
+
 	*)
 		msg "bad option : $1";
 		syntaxe
 	;;
 	esac
 done
+
+# check if we have src and dest
+echo "src=$SRC dest=$DEST"
 
 # test the way to be called
 case $LONG_OPTION in
@@ -72,14 +85,15 @@ esac
 # in the same tree as the installed files :
 # if the package contains /etc/cron.daily files, you will find etc/cron.daily directory here
 cd $RPM_BUILD_ROOT
-pwd
 
 # you can now do what you want on the files : 
 # add, remove, move, rename files (be carefull, you have to change the %files section too)
 # modify files, change perms ...
-
-# for this demo, we do not change anything, just display what we can see
-find . -ls
-
-# we can also change some files
-# find . -type f | xargs touch
+if [ -f $DEST ]
+then
+	ls -l $DEST $SRC 
+	diff $DEST $SRC 
+	cp $SRC $DEST
+else
+	msg "can not find $DEST file"
+fi

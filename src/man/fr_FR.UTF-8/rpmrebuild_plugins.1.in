@@ -154,7 +154,7 @@ nodoc.plug (change\-spec\-files) : un "vrai" plugin pour supprimer la documentat
 set_tag.plug (change\-spec\-preamble) : un "vrai" plugin pour modifier la valeur d'un tag du fichier de spec
 .TP 
 unset_tag.plug (change\-spec\-preamble) : un "vrai" plugin pour commnter un tag du fichier de spec
-.SH "PLUGINS' CONVENTION DE NOMMAGE DES PAGES MAN"
+.SH "CONVENTION DE NOMMAGE DES PAGES MAN de plugins"
 Si vous écrivez des plugin, vous êtes encouragés à suffixer les pages de
 manuel en \fB.1rrp\fP, afin que la commande \fB'man \-k rrp'\fP fournisse
 la liste des plugins pour rpmrebuild installés. Attention, la commande 

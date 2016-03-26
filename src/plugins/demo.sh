@@ -21,7 +21,7 @@
 ###############################################################################
 # code's file of demo plugin for rpmrebuild
 
-version=1.1
+version=1.2
 ###############################################################################
 function msg () {
 	echo >&2 $*
@@ -29,7 +29,7 @@ function msg () {
 ###############################################################################
 function syntaxe () {
 	msg "this plugin just show which spec part is changed by a plugin"
-	msg "it can be called with from any option"
+	msg "it must be called with a change-spec* option"
 	msg "-n|--null : does nothing"
 	msg "-h|--help : this help"
 	msg "-v|--version : print plugin version"
@@ -39,11 +39,12 @@ function syntaxe () {
 ###############################################################################
 
 # test for arguments
-if [ $# -eq 1 ]
-then
+while [[ $1 ]]
+do
 	case $1 in
 	-n | --null )
 		opt_null=y
+		shift
 	;;
 
 	-h | --help )
@@ -60,17 +61,18 @@ then
 		syntaxe
 	;;
 	esac
-fi
+done
 
 # test the way to be called
 case $LONG_OPTION in
 	change-spec*)
 		;;
-	*)	msg "bad option : $LONG_OPTION (should be called from change-spec*)";
+	*)	msg "bad call : $LONG_OPTION (should be called from change-spec*)";
 		syntaxe
 	;;
 esac
 
+# modify spec file
 while read line
 do
 	if [ -n "$opt_null" ]

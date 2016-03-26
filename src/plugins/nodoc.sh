@@ -21,7 +21,7 @@
 ###############################################################################
 # code's file of nodoc plugin for rpmrebuild
 
-version=1.1
+version=1.2
 
 ###############################################################################
 function msg () {
@@ -30,11 +30,12 @@ function msg () {
 ###############################################################################
 function syntaxe () {
 	msg "this plugin remove documentation from package"
-	msg "it can be called with : rpmrebuild --change-spec-files"
-	msg "-m|--man : just remove man pages"
-	msg "-d|--doc : just remove doc files"
+	msg "it must be called with : rpmrebuild --change-spec-files"
+	msg "-m|--man : remove man pages"
+	msg "-d|--doc : remove doc files"
 	msg "-h|--help : this help"
 	msg "-v|--version : print plugin version"
+	msg "without option, remove doc and man files"
 	exit 1
 
 }
@@ -43,8 +44,8 @@ function syntaxe () {
 # default is to treat all docs
 opt_all=y
 # test for arguments
-if [ $# -eq 1 ]
-then
+while [[ $1 ]]
+do
 	case $1 in
 	-h | --help )
 		syntaxe
@@ -53,11 +54,13 @@ then
 	-m | --man )
 		opt_man=y
 		opt_all=''
+		shift
 	;;
 
 	-d | --doc )
 		opt_doc=y
 		opt_all=''
+		shift
 	;;
 
 	-v | --version )
@@ -70,8 +73,9 @@ then
 		syntaxe
 	;;
 	esac
-fi
+done
 
+# by default remove all
 if [ -n "$opt_all" ]
 then
 	opt_man=y

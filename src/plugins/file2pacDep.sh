@@ -24,8 +24,9 @@
 # for performance
 # frst search all motifs, then transform all with only one call
 
-version=1.0
+version=1.1
 
+###############################################################################
 function analyse () {
 	# build the list of file dependencies
 	# without any version dependence
@@ -95,7 +96,7 @@ function msg () {
 ###############################################################################
 function syntaxe () {
 	msg "this plugin transform all dependencies to files into dependencies to package"
-	msg "it can be called with : rpmrebuild --change-spec-requires"
+	msg "it must be called with : rpmrebuild --change-spec-requires"
 	msg "-f|--file : just replace files (with path) by package"
 	msg "-l|--lib : just replace lib file by packages"
 	msg "-h|--help : this help"
@@ -109,8 +110,8 @@ function syntaxe () {
 # default is to treat all dependencies
 opt_all=y
 # test for arguments
-if [ $# -eq 1 ]
-then
+while [[ $1 ]]
+do
 	case $1 in
 	-h | --help )
 		syntaxe
@@ -123,16 +124,19 @@ then
 
 	-V | --forceversion )
 		opt_forceversion=y
+		shift
 	;;
 
 	-f | --file )
 		opt_file=y;
 		opt_all='';
+		shift
 	;;
 
 	-l | --lib )
 		opt_lib=y;
 		opt_all='';
+		shift
 	;;
 
 	*)
@@ -140,7 +144,7 @@ then
 		syntaxe
 	;;
 	esac
-fi
+done
 
 # test the way to be called
 if [ "$LONG_OPTION" != "change-spec-requires" ]
