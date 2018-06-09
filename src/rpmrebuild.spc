@@ -43,11 +43,11 @@ Release: %{release_suffix}
 %global _source_filedigest_algorithm 1
 
 %description
-rpmrebuild allow to build an rpm file from an installed rpm, or from
+rpmrebuild allows to build an rpm file from an installed rpm, or from
 another rpm file, with or without changes (batch or interactive).
 It can be extended by a plugin system.
-A typical use is to easy repackage a software after some configuration's
-change.
+A typical use is to easily repackage a software after some configuration
+changes.
 
 %description -l fr
 rpmbuild permet de fabriquer un package rpm à partir d'un 
