@@ -1,3 +1,6 @@
+* Sun Jun 10 2018 <gerbier@users.sourceforge.net> 2.11-3
+- Made minor grammatical fixes to English language translations (patch from beroset)
+
 * Sun Sep 10 2017 <gerbier@users.sourceforge.net> 2.11-2
 - fix bad day of week in changelog (rpmbuild warning)
 - add dependency to rpm-build package instead rpmbuild binary
