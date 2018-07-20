@@ -99,8 +99,37 @@ function spec_requires
 	# Comment out Requires with rpmlib()
 	local sed_requires='/Requires[[:space:]]*:[[:space:]]*rpmlib(.*)/s/^/#/'
 	[ "X$autorequire" = "Xyes" ] && sed_requires="$sed_requires$sed_comment"
-	spec_query qf_spec_requires | sed -e "$sed_requires" || return
+	spec_query qf_spec_requires_raw | decode_requires \
+	    | sed -e "$sed_requires" || return
 	return 0
+}
+
+function decode_requires
+{
+	# Decode the REQUIREFLAGS bits to dependency attributes.
+	# Bits are defined in lib/rpmlib.h in the rpm source code.
+	awk '
+	    BEGIN {
+		PRE    = lshift(1,  9);
+		POST   = lshift(1, 10);
+		PREUN  = lshift(1, 11);
+		POSTUN = lshift(1, 12);
+	    }
+	    {
+		attr="";
+		if (and($2, PRE))    attr = (attr=="" ? "pre"    : attr ",pre")
+		if (and($2, POST))   attr = (attr=="" ? "post"   : attr ",post")
+		if (and($2, PREUN))  attr = (attr=="" ? "preun"  : attr ",preun")
+		if (and($2, POSTUN)) attr = (attr=="" ? "postun" : attr ",postun")
+		if (attr=="") {
+		    req = "Requires:"
+		} else {
+		    req = "Requires(" attr "):";
+		}
+		printf("%-14s %s %s %s\n", req, $1, $3, $4);
+	    }
+	    '
+	return
 }
 
 function SpecGeneration
