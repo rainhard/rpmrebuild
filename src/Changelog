@@ -1,5 +1,5 @@
 * Fri Jul 20 2018 <gerbier@users.sourceforge.net> 2.12-1
-- apply patch from Bruce Jerrick
+- apply patch from Bruce Jerrick : Handle Requires(pre,post,preun,postun)
 - add new requires syntax with if ( redhat-rpm-config )
 
 * Sun Jun 10 2018 <gerbier@users.sourceforge.net> 2.11-3
