@@ -21,6 +21,7 @@ BuildArchitectures: noarch
 Requires: bash
 Requires: cpio
 Requires: sed
+Requires: gawk
 
 %if %is_rpm3
 # rpm v3
@@ -61,11 +62,11 @@ de configuration.
 %setup -c rpmrebuild
 
 %build
-make
+make %{?_smp_mflags}
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf "$RPM_BUILD_ROOT"
-make DESTDIR="$RPM_BUILD_ROOT" install
+make install DESTDIR="$RPM_BUILD_ROOT"
 
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf "$RPM_BUILD_ROOT"
