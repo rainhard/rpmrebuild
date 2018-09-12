@@ -1,0 +1,9 @@
+src/Version
+src/Release
+src/Changelog
+src/rpmrebuild.lsm
+src/News
+
+web/index*
+web/changelog*
+web/news*
