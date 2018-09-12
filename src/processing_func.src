@@ -38,6 +38,8 @@ function processing_init
 	SPEC_REQUIRES=$SPEC_DIR/requires
 	SPEC_SUGGESTS=$SPEC_DIR/suggests
 	SPEC_ENHANCES=$SPEC_DIR/enhances
+	SPEC_RECOMMENDS=$SPEC_DIR/recommends
+	SPEC_SUPPLEMENTS=$SPEC_DIR/supplements
 	SPEC_TRIGGERS=$SPEC_DIR/triggers
 	SPEC_VERIFYSCRIPT=$SPEC_DIR/verifyscript
 
@@ -59,6 +61,8 @@ function processing_init
 	si_requires=1
 	si_suggests=1
 	si_enhances=1
+	si_recommends=1
+	si_supplements=1
 	si_triggers=1
 	si_verifyscript=1
 	si_rpmqf=1
@@ -196,6 +200,20 @@ function processing_spec_change
 			SPEC_IN=$SPEC_ENHANCES.$si_enhances
 			si_enhances=$[si_enhances + 1]
 			SPEC_OUT=$SPEC_ENHANCES.$si_enhances
+		;;
+
+		Xchange-spec-recommends | \
+		Xedit-recommends)
+			SPEC_IN=$SPEC_RECOMMENDS.$si_recommends
+			si_recommends=$[si_recommends + 1]
+			SPEC_OUT=$SPEC_RECOMMENDS.$si_recommends
+		;;
+
+		Xchange-spec-supplements | \
+		Xedit-supplements)
+			SPEC_IN=$SPEC_SUPPLEMENTS.$si_supplements
+			si_supplements=$[si_supplements + 1]
+			SPEC_OUT=$SPEC_SUPPLEMENTS.$si_supplements
 		;;
 
 		Xchange-spec-triggers | \

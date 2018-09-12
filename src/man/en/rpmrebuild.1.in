@@ -153,7 +153,15 @@ Invoke plugin or editor to change specfile.
 \fB\-\-change\-spec\-enhances\fP=<\fIcommand\fP>
 .br 
 \fB\-\-edit\-enhances
-.LP 
+.LP
+\fB\-\-change\-spec\-recommends\fP=<\fIcommand\fP>
+.br
+\fB\-\-edit\-recommends
+.LP
+\fB\-\-change\-spec\-supplements\fP=<\fIcommand\fP>
+.br
+\fB\-\-edit\-supplements
+.LP
 \fB\-\-change\-spec\-description\fP=<\fIcommand\fP>
 .br 
 \fB\-\-edit\-description

@@ -17,6 +17,7 @@ case $dest in
 		;;
 	*)
 		echo "syntaxe $0 fichier cible";
+		echo "example : $0 rpmrebuild.1.in fr_FR"
 		exit;
 		;;
 esac

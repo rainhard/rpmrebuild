@@ -152,6 +152,14 @@ Appelle le plugin (respectivement l'éditeur) pour modifier l'ensemble du fichier
 .br 
 \fB\-\-edit\-enhances
 .LP 
+\fB\-\-change\-spec\-recommends\fP=<\fIcommand\fP>
+.br
+\fB\-\-edit\-recommends
+.LP
+\fB\-\-change\-spec\-supplements\fP=<\fIcommand\fP>
+.br
+\fB\-\-edit\-supplements
+.LP
 \fB\-\-change\-spec\-description\fP=<\fIcommand\fP>
 .br 
 \fB\-\-edit\-description
