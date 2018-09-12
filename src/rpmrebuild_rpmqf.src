@@ -98,6 +98,16 @@ echo "#enhance"
 echo '%|ENHANCESNAME?{[Enhances:      %{ENHANCESNAME} %{ENHANCESFLAGS:depflags} %{ENHANCESVERSION}\n]}|'
 }
 
+function qf_spec_recommends {
+echo "#recommends"
+echo '%|RECOMMENDNAME?{[Recommends:      %{RECOMMENDNAME} %{RECOMMENDFLAGS:depflags} %{RECOMMENDVERSION}\n]}|'
+}
+
+function qf_spec_supplements {
+echo "#supplements"
+echo '%|SUPPLEMENTNAME?{[Supplements:      %{SUPPLEMENTNAME} %{SUPPLEMENTFLAGS:depflags} %{SUPPLEMENTVERSION}\n]}|'
+}
+
 function qf_spec_description {
 echo '%|DESCRIPTION?{[%{DESCRIPTION}\n]}|'
 }

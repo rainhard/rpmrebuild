@@ -76,6 +76,8 @@ options:
    --change-spec-requires=<command>
    --change-spec-suggests=<command>
    --change-spec-enhances=<command>
+   --change-spec-recommends=<command>
+   --change-spec-supplements=<command>
    --change-spec-description=<command>
    --change-spec-files=<command>
    --change-spec-triggers=<command>
@@ -98,6 +100,8 @@ options:
    --edit-requires
    --edit-suggests
    --edit-enhances
+   --edit-recommends
+   --edit-supplements
    --edit-description
    --edit-files
    --edit-triggers
@@ -425,8 +429,17 @@ function ProcessLongOptions
 				LONG_OPTION="change-spec-provides"
 			;;
 
-			change-spec-r | \
-			change-spec-re | \
+			change-spec-rec | \
+			change-spec-reco | \
+			change-spec-recom | \
+			change-spec-recomm | \
+			change-spec-recomme | \
+			change-spec-recommen | \
+			change-spec-recommend | \
+			change-spec-recommends)
+				LONG_OPTION="change-spec-recommends"
+			;;
+
 			change-spec-req | \
 			change-spec-requ | \
 			change-spec-requi | \
@@ -436,8 +449,6 @@ function ProcessLongOptions
 				LONG_OPTION="change-spec-requires"
 			;;
 
-			change-spec-s | \
-			change-spec-su | \
 			change-spec-sug | \
 			change-spec-sugg | \
 			change-spec-sugge | \
@@ -445,6 +456,18 @@ function ProcessLongOptions
 			change-spec-suggest | \
 			change-spec-suggests)
 				LONG_OPTION="change-spec-suggests"
+			;;
+
+			change-spec-sup | \
+			change-spec-supp | \
+			change-spec-suppl | \
+			change-spec-supple | \
+			change-spec-supplem | \
+			change-spec-suppleme | \
+			change-spec-supplemen | \
+			change-spec-supplement | \
+			change-spec-supplements)
+				LONG_OPTION="change-spec-supplements"
 			;;
 
 			change-spec-t | \
@@ -668,7 +691,17 @@ function ProcessLongOptions
 				LONG_OPTION='edit-provides'
 			;;
 
-			edit-r | \
+			edit-rec | \
+			edit-reco | \
+			edit-recom | \
+			edit-recomm | \
+			edit-recomme | \
+			edit-recommen | \
+			edit-recommend | \
+			edit-recommends)
+				LONG_OPTION='edit-recommends'
+			;;
+
 			edit-re | \
 			edit-req | \
 			edit-requ | \
@@ -690,7 +723,6 @@ function ProcessLongOptions
 				LONG_OPTION='edit-whole' # alias
 			;;
 
-			edit-su | \
 			edit-sug | \
 			edit-sugg | \
 			edit-sugge | \
@@ -698,6 +730,18 @@ function ProcessLongOptions
 			edit-suggest | \
 			edit-suggests)
 				LONG_OPTION="edit-suggests"
+			;;
+
+			edit-sup | \
+			edit-supp | \
+			edit-suppl | \
+			edit-supple | \
+			edit-supplem | \
+			edit-suppleme | \
+			edit-supplemen | \
+			edit-supplement | \
+			edit-supplements)
+				LONG_OPTION="edit-supplements"
 			;;
 
 			edit-t | \
@@ -1000,7 +1044,9 @@ function ProcessLongOptions
 			change-spec-postun       | \
 			change-spec-provides     | \
 			change-spec-requires     | \
+			change-spec-recommends   | \
 			change-spec-suggests     | \
+			change-spec-supplements  | \
 			change-spec-triggers     | \
 			change-spec-verifyscript | \
 			change-spec-whole)
@@ -1052,6 +1098,8 @@ function ProcessLongOptions
 			edit-provides     | \
 			edit-requires     | \
 			edit-suggests     | \
+			edit-recommends   | \
+			edit-supplements  | \
 			edit-triggers     | \
 			edit-verifyscript | \
 			edit-whole)

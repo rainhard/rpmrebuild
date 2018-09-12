@@ -153,8 +153,10 @@ function SpecGeneration
 	spec_requires                  > $SPEC_REQUIRES.$i     || return
 	spec_query qf_spec_suggest	> $SPEC_SUGGESTS.$i     || return
 	spec_query qf_spec_enhance	> $SPEC_ENHANCES.$i     || return
+	spec_query qf_spec_recommends	> $SPEC_RECOMMENDS.$i   || return
+	spec_query qf_spec_supplements	> $SPEC_SUPPLEMENTS.$i  || return
 	spec_query qf_spec_description  > $SPEC_DESCRIPTION.$i  || return
-	spec_files                     > $SPEC_FILES.$i        || return
+	spec_files                     > $SPEC_FILES.$i         || return
 	spec_query qf_spec_triggers     > $SPEC_TRIGGERS.$i     || return
 	spec_query qf_spec_pre          > $SPEC_PRE.$i          || return
 	spec_query qf_spec_pretrans     > $SPEC_PRETRANS.$i     || return
@@ -205,6 +207,8 @@ function spec_concatenate
 		$SPEC_REQUIRES.$si_requires         \
 		$SPEC_SUGGESTS.$si_suggests         \
 		$SPEC_ENHANCES.$si_enhances         \
+		$SPEC_RECOMMENDS.$si_recommends     \
+		$SPEC_SUPPLEMENTS.$si_supplements   \
 	|| return
 
 	echo                   || return
