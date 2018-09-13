@@ -1,3 +1,4 @@
+changes :
 src/Version
 src/Release
 src/Changelog
@@ -7,3 +8,10 @@ src/News
 web/index*
 web/changelog*
 web/news*
+
+publication :
+web site
+news sourceforge
+mailing liste
+icewalker
+freshcode
