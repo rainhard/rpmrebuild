@@ -89,12 +89,22 @@ echo '%|REQUIRENAME?{[%{REQUIRENAME} %{REQUIREFLAGS} %{REQUIREFLAGS:depflags} %{
 }
 
 function qf_spec_suggest {
+# the tag names has been changed during the time
+# GenRpmQf function will keep only the available one's
 echo "#suggest"
+# new name
+echo '%|SUGGESTNAME?{[Suggests:      %{SUGGESTNAME} %{SUGGESTFLAGS:depflags} %{SUGGESTVERSION}\n]}|'
+# old name
 echo '%|SUGGESTSNAME?{[Suggests:      %{SUGGESTSNAME} %{SUGGESTSFLAGS:depflags} %{SUGGESTSVERSION}\n]}|'
 }
 
 function qf_spec_enhance {
+# the tag names has been changed during the time
+# GenRpmQf function will keep only the available one's
 echo "#enhance"
+# new name
+echo '%|ENHANCENAME?{[Enhances:      %{ENHANCENAME} %{ENHANCEFLAGS:depflags} %{ENHANCEVERSION}\n]}|'
+# old name
 echo '%|ENHANCESNAME?{[Enhances:      %{ENHANCESNAME} %{ENHANCESFLAGS:depflags} %{ENHANCESVERSION}\n]}|'
 }
 
