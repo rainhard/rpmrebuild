@@ -484,6 +484,8 @@ st=$?	# save status
 if [ -z "$debug" ]
 then
 	RmDir "$RPMREBUILD_TMPDIR"
+else
+	Debug "workdir : $RPMREBUILD_TMPDIR"
 fi
 exit $st
 
