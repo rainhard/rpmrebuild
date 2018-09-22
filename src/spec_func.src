@@ -48,10 +48,12 @@ function spec_md5_compat_digest
 }
 
 ###############################################################################
+# the i18ndomains option for rpm does not exists in old release
+# the variable is set by check_i18ndomains function
 function spec_query
 {
 	rpm_qf=$( $1 )
-	local RPM_QUERY="rpm --query --i18ndomains /dev/null $package_flag --queryformat "
+	local RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
 	$RPM_QUERY "$rpm_qf" $PAQUET || return
 	return 0
 }

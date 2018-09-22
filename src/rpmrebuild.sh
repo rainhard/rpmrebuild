@@ -374,6 +374,19 @@ function CheckTags
 	fi
 }
 ##############################################################
+# test if --i18ndomains option is available
+# to be used in spec_query function
+function check_i18ndomains
+{
+	rpm --query --i18ndomains /dev/null rpm > /dev/null 2>&1
+	if [ $? -eq 0 ]
+	then
+		i18ndomains='--i18ndomains /dev/null'
+	else
+		i18ndomains=''
+	fi
+}
+##############################################################
 # Main Part                                                  #
 ##############################################################
 # shell pour refabriquer un fichier rpm a partir de la base rpm
@@ -415,6 +428,7 @@ function Main
 	source $MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang
 	
 	processing_init || return
+	check_i18ndomains
 
 	# generate rpm query file 
 	GenRpmQf || return
