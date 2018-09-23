@@ -1,6 +1,7 @@
 * Sun Sep 23 2018 <gerbier@users.sourceforge.net> 2.14-1
 - add list of optional tags, to allow rpmrebuild work with old rpm versions
 - add dependency on setarch
+- add debug code (calls on functions)
 
 * Wed Sep 12 2018 <gerbier@users.sourceforge.net> 2.13-1
 - can handle recommends / supplements rpm tags

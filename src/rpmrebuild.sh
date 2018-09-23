@@ -26,6 +26,7 @@ VERSION="$Id$"
 # use environment variable to choice the editor
 function SpecEdit
 {
+	Debug '(SpecEdit)'
 	[ $# -ne 1 -o "x$1" = "x" ] && {
 		Echo "Usage: $0 SpecEdit <file>"
 		return 1
@@ -44,6 +45,7 @@ function SpecEdit
 # check for package change
 function VerifyPackage
 {
+	Debug '(VerifyPackage)'
 	rpm --verify --nodeps ${PAQUET} # Don't return here, st=1 - verify fail 
 	return 0
 }
@@ -51,6 +53,7 @@ function VerifyPackage
 # ask question to user if necessary
 function QuestionsToUser
 {
+	Debug '(QuestionsToUser)'
 	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, continue
 	[ "X$spec_only" = "Xyes" ] && return 0 ## spec only mode, no questions
 
@@ -67,6 +70,7 @@ function QuestionsToUser
 # check if the given name match an installed rpm package
 function IsPackageInstalled
 {
+	Debug '(IsPackageInstalled)'
 	# test if package exists
 	local output
 	output="$( rpm --query ${PAQUET} 2>&1 )" # Don't return here - use output
@@ -96,6 +100,7 @@ function IsPackageInstalled
 # for rpm file, we have to extract files to BUILDROOT directory
 function RpmUnpack
 {
+	Debug '(RpmUnpack)'
 	# do not install files on /
 	[ "x$BUILDROOT" = "x/" ] && {
 		Error "$BuildRootError" 
@@ -116,6 +121,7 @@ function RpmUnpack
 # create buildroot if necessary
 function CreateBuildRoot
 {
+	Debug '(CreateBuildRoot)'
         if [ "x$package_flag" = "x" ]; then
 		# installed package
 		if [ "X$need_change_files" = "Xyes" ]; then
@@ -133,6 +139,7 @@ function CreateBuildRoot
 # get architecture from package to build
 function RpmArch
 {
+	Debug '(RpmArch)'
 	pac_arch=$( spec_query qf_spec_arch )
 	return;
 }
@@ -141,6 +148,7 @@ function RpmArch
 # and set change_arch if necessary
 function CheckArch
 {
+	Debug '(CheckArch)'
 	# current arcchitecture
 	cur_arch=$( uname -m)
 
@@ -163,6 +171,7 @@ function CheckArch
 # build rpm package using rpmbuild command
 function RpmBuild
 {
+	Debug '(RpmBuild)'
 	# rpmrebuild package dependency
 	# for rpm 3.x : use rpm
 	# for rpm 4.x : use rpmbuild
@@ -195,6 +204,7 @@ function RpmBuild
 # try to guess full package name
 function RpmFileName
 {
+	Debug '(RpmFileName)'
 	QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
 	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
 	# workarount for redhat 6.x
@@ -214,6 +224,7 @@ function RpmFileName
 # test if build package can be installed
 function InstallationTest
 {
+	Debug '(InstallationTest)'
 	# installation test
 	# force is necessary to avoid the message : already installed
 	rpm -U --test --force ${RPMFILENAME} || {
@@ -226,6 +237,7 @@ function InstallationTest
 # install the package
 function Installation
 {
+	Debug '(Installation)'
 	# chek if root
 	ID=$( id -u )
 	if [ $ID -eq 0 ]
@@ -244,6 +256,7 @@ function Installation
 # execute all pre-computed operations on spec files
 function Processing
 {
+	Debug '(Processing)'
 	local Aborted="no"
 	local MsgFail
 
@@ -260,6 +273,7 @@ function Processing
 # recover system informations on rpm/rpmrebuild context
 function GetInformations
 {
+	Debug '(GetInformations)'
 	Echo "from: $1"
 	Echo "-----------"
 	lsb_release -a
@@ -276,6 +290,7 @@ function GetInformations
 # send informations to developper to allow fix problems
 function SendBugReport
 {
+	Debug '(SendBugReport)'
 	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, skip report
 	AskYesNo "$WantSendBugReport" || return
 	# build default mail address 
@@ -313,6 +328,7 @@ function SearchTag
 # and save all intermediate by using si_rpmqf counter
 function ChangeRpmQf
 {
+	Debug "(ChangeRpmQf) $1"
 	SED_PAR=$1
 	input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	si_rpmqf=$[si_rpmqf + 1]
@@ -321,8 +337,11 @@ function ChangeRpmQf
 }
 ###############################################################################
 # generate rpm query file according current rpm tags
+# used to fix strange behavior
+# remove optionnals tags not available
 function GenRpmQf
 {
+	Debug '(GenRpmQf)'
 	RPM_TAGS=$( rpm --querytags ) || return
 
 	# base code
@@ -370,6 +389,7 @@ function GenRpmQf
 # the idea is to check if the tag we use for rpmrebuild still exists
 function CheckTags
 {
+	Debug '(CheckTags)'
 	# list of used tags
 	rpmrebuild_tags=$( $MY_LIB_DIR/rpmrebuild_extract_tags.sh $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf )
 
@@ -394,6 +414,7 @@ function CheckTags
 # to be used in spec_query function
 function check_i18ndomains
 {
+	Debug '(check_i18ndomains)'
 	rpm --query --i18ndomains /dev/null rpm > /dev/null 2>&1
 	if [ $? -eq 0 ]
 	then
@@ -443,6 +464,10 @@ function Main
 	# load translation file
 	source $MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang
 	
+	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
+	CommandLineParsing "$@" || return
+	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
+
 	processing_init || return
 	check_i18ndomains
 
@@ -457,11 +482,6 @@ function Main
 
 	# to solve problems of bad date
 	export LC_TIME=POSIX
-
-	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
-
-	CommandLineParsing "$@" || return
-	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
 
 	if [ "x$package_flag" = "x" ]; then
    		[ "X$need_change_files" = "Xyes" ] || BUILDROOT="/"
