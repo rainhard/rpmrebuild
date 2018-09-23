@@ -340,18 +340,18 @@ function GenRpmQf
 				case "$type" in
 				d_line)
 					ChangeRpmQf "/%{$tag1}/d"
-					Echo "remove tag line $tag1"
+					Echo "(GenRpmQf) $RemoveTagLine $tag1"
 					;;
 				d_word)
 					ChangeRpmQf "s/%{$tag1}//g"
-					Echo "remove tag word $tag1"
+					Echo "(GenRpmQf) $RemoveTagWord $tag1"
 					;;
 				replacedby)
-					Echo "tag1=$tag1 type=$type tag2=$tag2"
-					[ -n "$tag2" ] && SearchTag $tag2 && ChangeRpmQf "s/$tag1/$tag2/g" && 					Echo "replace tag $tag by $tag2"
+					#Echo "tag1=$tag1 type=$type tag2=$tag2"
+					[ -n "$tag2" ] && SearchTag $tag2 && ChangeRpmQf "s/$tag1/$tag2/g" && Echo "(GenRpmQf) $ReplaceTag $tag1 => $tag2"
 					;;
 				*)
-					Echo "bad type $type"
+					Warning "(GenRpmQf) $UnknownType $type"
 					;;
 				esac
 
@@ -359,7 +359,7 @@ function GenRpmQf
 			fi
 		done < $optional_file
 	else
-		Warning "(GenRpmQf) missing $optional_file file"
+		Warning "(GenRpmQf) $FileNotFound $optional_file"
 	fi
 
 	return 0
