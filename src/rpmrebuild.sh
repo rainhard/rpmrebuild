@@ -328,23 +328,39 @@ function GenRpmQf
 	# base code
 	cp $MY_LIB_DIR/rpmrebuild_rpmqf.src $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 
-	# then changes according rpm tags
-	# rpm5 uses FILEPATHS instead FILENAMES
-	SearchTag FILENAMES || ChangeRpmQf 's/FILENAMES/FILEPATHS/g'
+	local optional_file=$MY_LIB_DIR/optional_tags.cfg
+	if [ -f "$optional_file" ]
+	then
+		local tag1 type tag2
+		while read tag1 type tag2
+		do
+			if [[ ! "$tag1" =~ '#' ]]
+			then
+			SearchTag $tag1 || {
+				case "$type" in
+				d_line)
+					ChangeRpmQf "/%{$tag1}/d"
+					Echo "(GenRpmQf) $RemoveTagLine $tag1"
+					;;
+				d_word)
+					ChangeRpmQf "s/%{$tag1}//g"
+					Echo "(GenRpmQf) $RemoveTagWord $tag1"
+					;;
+				replacedby)
+					#Echo "tag1=$tag1 type=$type tag2=$tag2"
+					[ -n "$tag2" ] && SearchTag $tag2 && ChangeRpmQf "s/$tag1/$tag2/g" && Echo "(GenRpmQf) $ReplaceTag $tag1 => $tag2"
+					;;
+				*)
+					Warning "(GenRpmQf) $UnknownType $type"
+					;;
+				esac
 
-	# no TRIGGERTYPE (mandriva 2011)
-	SearchTag TRIGGERTYPE || ChangeRpmQf 's/%{TRIGGERTYPE}//g'
-	SearchTag TRIGGERCONDS || ChangeRpmQf 's/%{TRIGGERCONDS}//g'
-
-	# FILECAPS exists on fedora/Suse/Mageia
-	# ex : iputils package (ping)
-	SearchTag FILECAPS ||  ChangeRpmQf 's/%{FILECAPS}//g'
-
-	# SUGGESTSNAME
-	SearchTag SUGGESTSNAME ||  ChangeRpmQf '/SUGGESTSNAME/d'
-
-	# ENHANCESNAME
-	SearchTag ENHANCESNAME ||  ChangeRpmQf '/ENHANCESNAME/d'
+			}
+			fi
+		done < $optional_file
+	else
+		Warning "(GenRpmQf) $FileNotFound $optional_file"
+	fi
 
 	return 0
 }
@@ -371,6 +387,19 @@ function CheckTags
 		Warning "$CannotWork"
 		SendBugReport
 		return 1
+	fi
+}
+##############################################################
+# test if --i18ndomains option is available
+# to be used in spec_query function
+function check_i18ndomains
+{
+	rpm --query --i18ndomains /dev/null rpm > /dev/null 2>&1
+	if [ $? -eq 0 ]
+	then
+		i18ndomains='--i18ndomains /dev/null'
+	else
+		i18ndomains=''
 	fi
 }
 ##############################################################
@@ -415,6 +444,7 @@ function Main
 	source $MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang
 	
 	processing_init || return
+	check_i18ndomains
 
 	# generate rpm query file 
 	GenRpmQf || return
@@ -484,6 +514,8 @@ st=$?	# save status
 if [ -z "$debug" ]
 then
 	RmDir "$RPMREBUILD_TMPDIR"
+else
+	Debug "workdir : $RPMREBUILD_TMPDIR"
 fi
 exit $st
 

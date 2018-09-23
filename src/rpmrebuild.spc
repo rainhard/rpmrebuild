@@ -28,12 +28,14 @@ Requires: gawk
 Requires: rpm < 4.0
 Requires: fileutils
 Requires: textutils
+Requires: /usr/bin/setarch
 %define release_suffix %{release}rpm3
 
 %else
 # rpm v4 v5
 Requires: rpm-build
 Requires: coreutils
+Requires: util-linux
 %define release_suffix  %{release} 
 %endif
 
