@@ -2,6 +2,7 @@
      /usr/bin/rpmrebuild
 %dir /usr/lib/rpmrebuild
      /usr/lib/rpmrebuild/VERSION
+     /usr/lib/rpmrebuild/optional_tags.cfg
      /usr/lib/rpmrebuild/processing_func.src
      /usr/lib/rpmrebuild/rpmrebuild.sh
      /usr/lib/rpmrebuild/rpmrebuild_lib.src

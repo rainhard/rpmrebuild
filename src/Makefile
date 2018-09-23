@@ -37,6 +37,7 @@ INCLUDE_SCRIPTS :=       \
    rpmrebuild_rpmqf.src  \
    rpmrebuild_parser.src \
    spec_func.src         \
+   optional_tags.cfg
 
 MANPAGES_BASE :=        \
    rpmrebuild.1         \

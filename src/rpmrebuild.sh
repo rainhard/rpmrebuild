@@ -328,23 +328,39 @@ function GenRpmQf
 	# base code
 	cp $MY_LIB_DIR/rpmrebuild_rpmqf.src $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 
-	# then changes according rpm tags
-	# rpm5 uses FILEPATHS instead FILENAMES
-	SearchTag FILENAMES || ChangeRpmQf 's/FILENAMES/FILEPATHS/g'
+	local optional_file=$MY_LIB_DIR/optional_tags.cfg
+	if [ -f "$optional_file" ]
+	then
+		local tag1 type tag2
+		while read tag1 type tag2
+		do
+			if [[ ! "$tag1" =~ '#' ]]
+			then
+			SearchTag $tag1 || {
+				case "$type" in
+				d_line)
+					ChangeRpmQf "/%{$tag1}/d"
+					Echo "remove tag line $tag1"
+					;;
+				d_word)
+					ChangeRpmQf "s/%{$tag1}//g"
+					Echo "remove tag word $tag1"
+					;;
+				replacedby)
+					Echo "tag1=$tag1 type=$type tag2=$tag2"
+					[ -n "$tag2" ] && SearchTag $tag2 && ChangeRpmQf "s/$tag1/$tag2/g" && 					Echo "replace tag $tag by $tag2"
+					;;
+				*)
+					Echo "bad type $type"
+					;;
+				esac
 
-	# no TRIGGERTYPE (mandriva 2011)
-	SearchTag TRIGGERTYPE || ChangeRpmQf 's/%{TRIGGERTYPE}//g'
-	SearchTag TRIGGERCONDS || ChangeRpmQf 's/%{TRIGGERCONDS}//g'
-
-	# FILECAPS exists on fedora/Suse/Mageia
-	# ex : iputils package (ping)
-	SearchTag FILECAPS ||  ChangeRpmQf 's/%{FILECAPS}//g'
-
-	# SUGGESTSNAME
-	SearchTag SUGGESTSNAME ||  ChangeRpmQf '/SUGGESTSNAME/d'
-
-	# ENHANCESNAME
-	SearchTag ENHANCESNAME ||  ChangeRpmQf '/ENHANCESNAME/d'
+			}
+			fi
+		done < $optional_file
+	else
+		Warning "(GenRpmQf) missing $optional_file file"
+	fi
 
 	return 0
 }
