@@ -1,6 +1,4 @@
 #!/bin/sh
-# reste a faire :
-# supprimer le lien vers man2html en fin de page
 
 src=$1
 dest=$2
@@ -10,6 +8,7 @@ then
 	tst=$( file $src | egrep "ASCII|troff" )
 	if [ -n "$tst" ]
 	then
+		echo "--------------- $src => $dest -------------------------"
 
 		echo '<?xml version="1.0" encoding="utf-8"?' > $dest
 		# man en html
