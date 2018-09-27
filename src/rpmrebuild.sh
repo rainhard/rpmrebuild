@@ -58,7 +58,7 @@ function QuestionsToUser
 	[ "X$spec_only" = "Xyes" ] && return 0 ## spec only mode, no questions
 
 	AskYesNo "$WantContinue" || return
-	RELEASE_ORIG="$(spec_query qf_spec_release )"
+	local RELEASE_ORIG="$(spec_query qf_spec_release )"
 	[ -z "$RELEASE_NEW" ] && \
 	AskYesNo "$WantChangeRelease" && {
 		echo -n "$EnterRelease $RELEASE_ORIG): "
@@ -72,9 +72,8 @@ function IsPackageInstalled
 {
 	Debug '(IsPackageInstalled)'
 	# test if package exists
-	local output
-	output="$( rpm --query ${PAQUET} 2>&1 )" # Don't return here - use output
-	iret=$?
+	local output="$( rpm --query ${PAQUET} 2>&1 )" # Don't return here - use output
+	local iret=$?
 	if [ $iret -eq 1 ]
 	then
 		# no such package in rpm database
@@ -150,7 +149,7 @@ function CheckArch
 {
 	Debug '(CheckArch)'
 	# current arcchitecture
-	cur_arch=$( uname -m)
+	local cur_arch=$( uname -m)
 
 	# pac_arch is got from RpmArch
 	RpmArch
@@ -205,10 +204,10 @@ function RpmBuild
 function RpmFileName
 {
 	Debug '(RpmFileName)'
-	QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
+	local QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
 	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
 	# workarount for redhat 6.x
-	arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
+	local arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
 	if [ $arch = "(none)" ]
 	then
 		arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
@@ -239,7 +238,7 @@ function Installation
 {
 	Debug '(Installation)'
 	# chek if root
-	ID=$( id -u )
+	local ID=$( id -u )
 	if [ $ID -eq 0 ]
 	then
 		rpm -Uvh --force ${RPMFILENAME} || {
@@ -294,7 +293,7 @@ function SendBugReport
 	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, skip report
 	AskYesNo "$WantSendBugReport" || return
 	# build default mail address 
-	from="${USER}@${HOSTNAME}"
+	local from="${USER}@${HOSTNAME}"
 	AskYesNo "$WantChangeEmail ($from)" && {
 		echo -n "$EnterEmail"
 		read from
@@ -312,7 +311,7 @@ function SendBugReport
 # search if the given tag exists in current rpm release
 function SearchTag
 {
-	tag=$1
+	local tag=$1
 	for rpm_tag in $RPM_TAGS
 	do
 		if [ "$tag" = "$rpm_tag" ]
@@ -329,11 +328,13 @@ function SearchTag
 function ChangeRpmQf
 {
 	Debug "(ChangeRpmQf) $1"
-	SED_PAR=$1
-	input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	local SED_PAR=$1
+	local input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	si_rpmqf=$[si_rpmqf + 1]
-	output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	local output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	sed -e "$SED_PAR" < $input_rpmqf > $output_rpmqf
+
+	return 0
 }
 ###############################################################################
 # generate rpm query file according current rpm tags
@@ -391,10 +392,11 @@ function CheckTags
 {
 	Debug '(CheckTags)'
 	# list of used tags
-	rpmrebuild_tags=$( $MY_LIB_DIR/rpmrebuild_extract_tags.sh $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf )
+	#Echo "(CheckTags) search tags in rpmrebuild_rpmqf.src.$si_rpmqf"
+	local rpmrebuild_tags=$( $MY_LIB_DIR/rpmrebuild_extract_tags.sh $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf )
 
 	# check for all rpmrebuild tags
-	errors=0
+	local errors=0
 	for tag in $rpmrebuild_tags
 	do
 		SearchTag $tag || {
@@ -528,7 +530,7 @@ function Main
 ###############################################################################
 
 Main "$@"
-st=$?	# save status
+local st=$?	# save status
 
 # in debug mode , we do not clean temp files
 if [ -z "$debug" ]

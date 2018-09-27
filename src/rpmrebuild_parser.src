@@ -19,7 +19,7 @@
 ###############################################################################
 function Usage
 {
-	name='rpmrebuild'
+	local name='rpmrebuild'
 	Echo "$name $UsageTitle
 $UsageUsage: $name [options] package
 options:
@@ -61,7 +61,7 @@ $UsageLicense
 ###############################################################################
 function Usage_Plugins
 {
-	name='rpmrebuild'
+	local name='rpmrebuild'
 	Echo "$name $UsageTitle
 $UsageUsage: $name [options] package
 options:
@@ -122,15 +122,15 @@ options:
 ###############################################################################
 function List_Plugins
 {
-	plugindir=$( dirname $0)/plugins
+	local plugindir=$( dirname $0)/plugins
 	for f in $plugindir/*.plug
 	do
-		plug=$(basename $f)
+		local plug=$(basename $f)
 		# use man to force localisation
 		# line number may vary
 		#text=$(man $plug | awk 'NR==7{print}' )
 		# filter by name of plugin
-		text=$(man $plug | awk "/$plug +- /{print}" )
+		local text=$(man $plug | awk "/$plug +- /{print}" )
 		if [ -n "$text" ]
 		then
 			echo "$text"
