@@ -4,6 +4,7 @@
 - add debug code (calls on functions)
 - use local variables to avoid conflicts
 - rewrite html target in Makefile
+- suppress VERSION (use Version)
 
 * Wed Sep 12 2018 <gerbier@users.sourceforge.net> 2.13-1
 - can handle recommends / supplements rpm tags

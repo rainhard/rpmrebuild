@@ -1192,7 +1192,7 @@ function ProcessLongOptions
 
 			version)
 				set -e
-					source $MY_LIB_DIR/VERSION
+				GetVersion
 				set +e
 				echo "$VERSION"
 				NEED_EXIT=0

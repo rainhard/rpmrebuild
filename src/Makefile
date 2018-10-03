@@ -99,7 +99,7 @@ define Spec
    }
 endef
 
-all: rpmrebuild.spec VERSION $(MANPAGES) 
+all: rpmrebuild.spec $(MANPAGES)
 	$(MAKE) -C plugins $@
 
 rpmrebuild.spec: rpmrebuild.spc Version Release Changelog 
@@ -109,17 +109,13 @@ rpmrebuild.spec: rpmrebuild.spc Version Release Changelog
 $(MANPAGES): %: %.in $(TOP_DIR)/Version
 	$(MakeManPage)
 
-VERSION: Version
-	$(RM) $@
-	read VERSION < $< && echo "VERSION='$$VERSION'" > $@ || { $(RM) $@; exit 1; }
-
 install:
 	$(MKDIR)                                  $(TARGET_DIR)
 	$(INSTALL_RUN) $(SCRIPTS)                 $(TARGET_DIR)
 
 	$(MKDIR)                                 $(TARGET_LIB)
 	$(INSTALL_RUN) $(LIB_SCRIPTS)            $(TARGET_LIB)
-	$(INSTALL_RO) $(INCLUDE_SCRIPTS) VERSION $(TARGET_LIB)
+	$(INSTALL_RO) $(INCLUDE_SCRIPTS) 	$(TARGET_LIB)
 	$(InstallManPages)
 	$(InstallLocales)
 	$(MAKE) -C plugins $@
@@ -137,7 +133,7 @@ rpmbuild:	tar
 
 clean: unexpand
 	$(RMDIR) $(ROOT) $(RPM_BUILD_DIR)
-	$(RM)    VERSION rpmrebuild.spec *.rpm rpmrebuild.tar.gz rpmrebuild.tar.gz.sig
+	$(RM)    rpmrebuild.spec *.rpm rpmrebuild.tar.gz rpmrebuild.tar.gz.sig
 	$(RM)    $(MANPAGES)
 	$(RM)    $(HTML_PAGES)
 	$(MAKE) -C plugins $@

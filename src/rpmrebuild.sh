@@ -17,10 +17,19 @@
 #    GNU General Public License for more details.
 #
 ###############################################################################
-VERSION="$Id$"
 
 # debug 
 #set -x 
+###############################################################################
+function GetVersion
+{
+	if [ -f "$MY_LIB_DIR/Version" ]
+	then
+		VERSION=$( cat $MY_LIB_DIR/Version )
+	else
+		Warning "(GetVersion) $FileNotFound Version"
+	fi
+}
 ###############################################################################
 # edit spec file
 # use environment variable to choice the editor
@@ -442,6 +451,9 @@ function Main
 	MY_LIB_DIR=`dirname $0` || return
 	source $MY_LIB_DIR/rpmrebuild_lib.src	 || return
 
+	# get VERSION
+	GetVersion
+
 	# create tempory directories before any work/test
 	RmDir "$RPMREBUILD_TMPDIR" || return
 	Mkdir_p $TMPDIR_WORK       || return
@@ -469,6 +481,8 @@ function Main
 	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
 	CommandLineParsing "$@" || return
 	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
+
+	Debug "rpmrebuild version $VERSION"
 
 	processing_init || return
 	check_i18ndomains
