@@ -53,6 +53,9 @@ LOCALES := $(foreach lang,$(LANGS),$(addprefix locale/$(lang)/,$(LOCALE_BASE)))
 
 MANPAGES_SRC := $(addsuffix .in,$(MANPAGES))
 
+MANPAGES_DEF := $(foreach lang,$(LANG_DEF),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
+HTML_PAGES=$(MANPAGES_DEF:.1=.html)
+
 DOC_FILES :=      \
    AUTHORS        \
    Changelog      \
@@ -136,12 +139,17 @@ clean: unexpand
 	$(RMDIR) $(ROOT) $(RPM_BUILD_DIR)
 	$(RM)    VERSION rpmrebuild.spec *.rpm rpmrebuild.tar.gz rpmrebuild.tar.gz.sig
 	$(RM)    $(MANPAGES)
+	$(RM)    $(HTML_PAGES)
 	$(MAKE) -C plugins $@
 
 man: $(MANPAGES)
+	$(MAKE) -C plugins $@
 
-html:
-	./faire_doc.sh
+$(HTML_PAGES) : $(MANPAGES_DEF)
+
+html: man $(HTML_PAGES)
+	cp $(HTML_PAGES) ../web
+	$(MAKE) -C plugins $@
 
 # build all packages
 alldist: rpmbuild dist html

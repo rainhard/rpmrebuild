@@ -1,7 +1,16 @@
 #!/bin/sh
+# E Gerbier
+# convert man page into html page
 
 src=$1
 dest=$2
+
+if [ -z "$dest" ]
+then
+	echo "syntaxe : $0 source dest"
+	exit
+fi
+
 if [ -f $src ] 
 then
 	# verification du type man
@@ -19,6 +28,7 @@ then
 		html2xhtml $dest
 
 		# menage
+		rm $dest.old
 	else
 		echo "$src not in man format"
 	fi
