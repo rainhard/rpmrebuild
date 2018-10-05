@@ -544,7 +544,7 @@ function Main
 ###############################################################################
 
 Main "$@"
-local st=$?	# save status
+st=$?	# save status
 
 # in debug mode , we do not clean temp files
 if [ -z "$debug" ]
