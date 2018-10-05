@@ -352,6 +352,7 @@ function ChangeRpmQf
 function GenRpmQf
 {
 	Debug '(GenRpmQf)'
+	#RPM_TAGS=$( cat /home/eric/projets/rpmrebuild/rpmtags/querytags.RedHat6.1_rpm3.0.3 ) || return
 	RPM_TAGS=$( rpm --querytags ) || return
 
 	# base code
@@ -363,7 +364,8 @@ function GenRpmQf
 		local tag1 type tag2
 		while read tag1 type tag2
 		do
-			if [[ ! "$tag1" =~ '#' ]]
+			local tst_comment=$( echo "$tag1" | grep '#' )
+			if [ -z "$tst_comment" ]
 			then
 			SearchTag $tag1 || {
 				case "$type" in
