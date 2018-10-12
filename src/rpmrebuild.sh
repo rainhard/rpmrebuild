@@ -224,6 +224,12 @@ function RpmFileName
 
 	[ -n "$RPMFILENAME" ] || return
 	RPMFILENAME="${rpmdir}/${RPMFILENAME}"
+	if [ ! -f "${RPMFILENAME}" ]
+	then
+		Warning "$FileNotFound rpm $RPMFILENAME"
+		ls -ltr ${rpmdir}/${PAQUET}*
+		return 1
+	fi
 	return 0
 }
 
