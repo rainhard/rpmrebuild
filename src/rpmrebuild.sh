@@ -54,7 +54,7 @@ function SpecEdit
 # check for package change
 function VerifyPackage
 {
-	Debug '(VerifyPackage)'
+	Debug "(VerifyPackage) ${PAQUET}"
 	rpm --verify --nodeps ${PAQUET} # Don't return here, st=1 - verify fail 
 	return 0
 }
@@ -82,8 +82,7 @@ function IsPackageInstalled
 	Debug '(IsPackageInstalled)'
 	# test if package exists
 	local output="$( rpm --query ${PAQUET} 2>&1 )" # Don't return here - use output
-	local iret=$?
-	if [ $iret -eq 1 ]
+	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
 		Error "${PAQUET} $PackageNotInstalled"
@@ -239,6 +238,7 @@ function InstallationTest
 		Error "package '${PAQUET}' $TestFailed"
 		return 1
 	}
+	Debug "(InstallationTest) test install ${PAQUET} ok"
 	return 0
 }
 ###############################################################################
@@ -248,7 +248,7 @@ function Installation
 	Debug '(Installation)'
 	# chek if root
 	local ID=$( id -u )
-	if [ $ID -eq 0 ]
+	if [ "$ID" -eq 0 ]
 	then
 		rpm -Uvh --force ${RPMFILENAME} || {
 			Error "package '${PAQUET}' $InstallFailed"
@@ -429,7 +429,7 @@ function check_i18ndomains
 {
 	Debug '(check_i18ndomains)'
 	rpm --query --i18ndomains /dev/null rpm > /dev/null 2>&1
-	if [ $? -eq 0 ]
+	if [ "$?" -eq 0 ]
 	then
 		i18ndomains='--i18ndomains /dev/null'
 	else
@@ -484,7 +484,7 @@ function Main
 	CommandLineParsing "$@" || return
 	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
 
-	Debug "rpmrebuild version $VERSION"
+	Debug "rpmrebuild version $VERSION : $@"
 
 	processing_init || return
 	check_i18ndomains
@@ -553,7 +553,8 @@ if [ -z "$debug" ]
 then
 	RmDir "$RPMREBUILD_TMPDIR"
 else
-	Debug "workdir : $RPMREBUILD_TMPDIR"
+	Debug "workdir : $TMPDIR_WORK"
+	ls -altr $TMPDIR_WORK
 fi
 exit $st
 

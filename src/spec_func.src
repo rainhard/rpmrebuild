@@ -144,6 +144,7 @@ function decode_requires
 
 function SpecGeneration
 {
+	Debug '(SpecGeneration)'
 	# Comment Out every string
 	local sed_comment=';s/^/#/'
 
@@ -174,6 +175,7 @@ function SpecGeneration
 
 function spec_concatenate
 {
+	Debug '(spec_concatenate)'
 	# duplicate all percent
 	local sed_double_percent='s/%/%%/g'
 

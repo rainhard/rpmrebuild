@@ -1069,6 +1069,7 @@ function ProcessLongOptions
 
 			debug)
 				debug="yes"
+				rpm_verbose="--verbose"
 			;;
 
 			define)

@@ -93,7 +93,8 @@ Ne peut être utilisé avec l'option \fB\-\-change\-files\fP.
 mode verbeux
 .TP 
 \fB\-\-debug\fP
-pour le debuggage : ne supprime pas les fichiers temporaires en fin de travail
+pour le debuggage : ne supprime pas les fichiers temporaires en fin de travail.
+force le mode "verbose"
 .TP 
 \fB\-V, \-\-version\fP
 affiche la version du programme et se termine.
