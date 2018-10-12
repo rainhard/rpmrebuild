@@ -101,8 +101,16 @@ function spec_requires
 	# Comment out Requires with rpmlib()
 	local sed_requires='/Requires[[:space:]]*:[[:space:]]*rpmlib(.*)/s/^/#/'
 	[ "X$autorequire" = "Xyes" ] && sed_requires="$sed_requires$sed_comment"
-	spec_query qf_spec_requires_raw | decode_requires \
+	TestAwk
+	if [ "$?" -eq 0 ]
+	then
+		# current code using awk to decode
+		spec_query qf_spec_requires_raw | decode_requires \
 	    | sed -e "$sed_requires" || return
+	else
+		# old code without awk for old distributions
+		spec_query qf_spec_requires | sed -e "$sed_requires" || return
+	fi
 	return 0
 }
 
