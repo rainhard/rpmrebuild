@@ -156,7 +156,7 @@ function RpmArch
 function CheckArch
 {
 	Debug '(CheckArch)'
-	# current arcchitecture
+	# current architecture
 	local cur_arch=$( uname -m)
 
 	# pac_arch is got from RpmArch
@@ -171,6 +171,7 @@ function CheckArch
 	*)
 		change_arch="setarch $pac_arch";;
 	esac
+	Debug "  change_arch=$change_arch"
 	return
 
 }
@@ -213,13 +214,20 @@ function RpmFileName
 {
 	Debug '(RpmFileName)'
 	local QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
+	#Debug "    QF_RPMFILENAME=$QF_RPMFILENAME"
+	# from generated specfile
 	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
-	# workarount for redhat 6.x
+
+	# workaround for redhat 6.x / rpm 3.x
 	local arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
 	if [ $arch = "(none)" ]
 	then
-		arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
-		RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
+		Debug '    workaround for rpm 3.x'
+		# get info from original paquet
+		# will work if no changes in spec (release ....)
+		#arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
+		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
+		RPMFILENAME=$(eval $change_arch rpm $rpm_defines --query --queryformat "${QF_RPMFILENAME}" ${PAQUET}) || return
 	fi
 
 	[ -n "$RPMFILENAME" ] || return
@@ -227,7 +235,7 @@ function RpmFileName
 	if [ ! -f "${RPMFILENAME}" ]
 	then
 		Warning "$FileNotFound rpm $RPMFILENAME"
-		ls -ltr ${rpmdir}/${PAQUET}*
+		ls -ltr ${rpmdir}/${pac_arch}/${PAQUET}*
 		return 1
 	fi
 	return 0
