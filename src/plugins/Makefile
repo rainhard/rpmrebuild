@@ -30,7 +30,7 @@ MANPAGES_BASE := $(addsuffix .1rrp,$(PLUGINS))
 
 MANPAGES := $(foreach lang,$(LANGS),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
 MANPAGES_DEF := $(foreach lang,$(LANG_DEF),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
-HTML_PAGES=$(MANPAGES_DEF:.1rrp=.html)
+HTML_PAGES=$(MANPAGES_DEF:.1rrp=.1.html)
 
 MANPAGES_SRC := $(addsuffix .in,$(MANPAGES))
 

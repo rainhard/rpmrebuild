@@ -54,7 +54,7 @@ LOCALES := $(foreach lang,$(LANGS),$(addprefix locale/$(lang)/,$(LOCALE_BASE)))
 MANPAGES_SRC := $(addsuffix .in,$(MANPAGES))
 
 MANPAGES_DEF := $(foreach lang,$(LANG_DEF),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
-HTML_PAGES=$(MANPAGES_DEF:.1=.html)
+HTML_PAGES=$(MANPAGES_DEF:.1=.1.html)
 
 DOC_FILES :=      \
    AUTHORS        \

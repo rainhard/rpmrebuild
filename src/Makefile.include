@@ -49,9 +49,9 @@ define InstallLocales
 endef
 
 # rules to convert man page into html pages
-%.html: %.1
+%.1.html: %.1
 	faire_doc2.sh $< $@
 
-%.html: %.1rrp
+%.1.html: %.1rrp
 	faire_doc2.sh $< $@
 
