@@ -5,6 +5,8 @@
 - use local variables to avoid conflicts
 - rewrite html target in Makefile
 - suppress VERSION (use Version)
+- add comments in rpmrebuild_rpmqf.src to avoid bad syntax after GenRpmQf
+- test if awk support non-gnu lshift (qf_spec_requires_raw)
 
 * Wed Sep 12 2018 <gerbier@users.sourceforge.net> 2.13-1
 - can handle recommends / supplements rpm tags

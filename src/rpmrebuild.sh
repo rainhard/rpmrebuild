@@ -54,7 +54,7 @@ function SpecEdit
 # check for package change
 function VerifyPackage
 {
-	Debug '(VerifyPackage)'
+	Debug "(VerifyPackage) ${PAQUET}"
 	rpm --verify --nodeps ${PAQUET} # Don't return here, st=1 - verify fail 
 	return 0
 }
@@ -82,8 +82,7 @@ function IsPackageInstalled
 	Debug '(IsPackageInstalled)'
 	# test if package exists
 	local output="$( rpm --query ${PAQUET} 2>&1 )" # Don't return here - use output
-	local iret=$?
-	if [ $iret -eq 1 ]
+	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
 		Error "${PAQUET} $PackageNotInstalled"
@@ -157,7 +156,7 @@ function RpmArch
 function CheckArch
 {
 	Debug '(CheckArch)'
-	# current arcchitecture
+	# current architecture
 	local cur_arch=$( uname -m)
 
 	# pac_arch is got from RpmArch
@@ -172,6 +171,7 @@ function CheckArch
 	*)
 		change_arch="setarch $pac_arch";;
 	esac
+	Debug "  change_arch=$change_arch"
 	return
 
 }
@@ -214,17 +214,30 @@ function RpmFileName
 {
 	Debug '(RpmFileName)'
 	local QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
+	#Debug "    QF_RPMFILENAME=$QF_RPMFILENAME"
+	# from generated specfile
 	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
-	# workarount for redhat 6.x
+
+	# workaround for redhat 6.x / rpm 3.x
 	local arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
 	if [ $arch = "(none)" ]
 	then
-		arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
-		RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
+		Debug '    workaround for rpm 3.x'
+		# get info from original paquet
+		# will work if no changes in spec (release ....)
+		#arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
+		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
+		RPMFILENAME=$(eval $change_arch rpm $rpm_defines --query --queryformat "${QF_RPMFILENAME}" ${PAQUET}) || return
 	fi
 
 	[ -n "$RPMFILENAME" ] || return
 	RPMFILENAME="${rpmdir}/${RPMFILENAME}"
+	if [ ! -f "${RPMFILENAME}" ]
+	then
+		Warning "$FileNotFound rpm $RPMFILENAME"
+		ls -ltr ${rpmdir}/${pac_arch}/${PAQUET}*
+		return 1
+	fi
 	return 0
 }
 
@@ -239,6 +252,7 @@ function InstallationTest
 		Error "package '${PAQUET}' $TestFailed"
 		return 1
 	}
+	Debug "(InstallationTest) test install ${PAQUET} ok"
 	return 0
 }
 ###############################################################################
@@ -248,7 +262,7 @@ function Installation
 	Debug '(Installation)'
 	# chek if root
 	local ID=$( id -u )
-	if [ $ID -eq 0 ]
+	if [ "$ID" -eq 0 ]
 	then
 		rpm -Uvh --force ${RPMFILENAME} || {
 			Error "package '${PAQUET}' $InstallFailed"
@@ -352,6 +366,7 @@ function ChangeRpmQf
 function GenRpmQf
 {
 	Debug '(GenRpmQf)'
+	#RPM_TAGS=$( cat /home/eric/projets/rpmrebuild/rpmtags/querytags.RedHat6.1_rpm3.0.3 ) || return
 	RPM_TAGS=$( rpm --querytags ) || return
 
 	# base code
@@ -363,7 +378,8 @@ function GenRpmQf
 		local tag1 type tag2
 		while read tag1 type tag2
 		do
-			if [[ ! "$tag1" =~ '#' ]]
+			local tst_comment=$( echo "$tag1" | grep '#' )
+			if [ -z "$tst_comment" ]
 			then
 			SearchTag $tag1 || {
 				case "$type" in
@@ -427,7 +443,7 @@ function check_i18ndomains
 {
 	Debug '(check_i18ndomains)'
 	rpm --query --i18ndomains /dev/null rpm > /dev/null 2>&1
-	if [ $? -eq 0 ]
+	if [ "$?" -eq 0 ]
 	then
 		i18ndomains='--i18ndomains /dev/null'
 	else
@@ -482,7 +498,7 @@ function Main
 	CommandLineParsing "$@" || return
 	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
 
-	Debug "rpmrebuild version $VERSION"
+	Debug "rpmrebuild version $VERSION : $@"
 
 	processing_init || return
 	check_i18ndomains
@@ -544,14 +560,15 @@ function Main
 ###############################################################################
 
 Main "$@"
-local st=$?	# save status
+st=$?	# save status
 
 # in debug mode , we do not clean temp files
 if [ -z "$debug" ]
 then
 	RmDir "$RPMREBUILD_TMPDIR"
 else
-	Debug "workdir : $RPMREBUILD_TMPDIR"
+	Debug "workdir : $TMPDIR_WORK"
+	ls -altr $TMPDIR_WORK
 fi
 exit $st
 
