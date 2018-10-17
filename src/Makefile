@@ -115,7 +115,7 @@ install:
 
 	$(MKDIR)                                 $(TARGET_LIB)
 	$(INSTALL_RUN) $(LIB_SCRIPTS)            $(TARGET_LIB)
-	$(INSTALL_RO) $(INCLUDE_SCRIPTS) 	$(TARGET_LIB)
+	$(INSTALL_RO) $(INCLUDE_SCRIPTS) Version $(TARGET_LIB)
 	$(InstallManPages)
 	$(InstallLocales)
 	$(MAKE) -C plugins $@
