@@ -69,6 +69,19 @@
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
     <hr />
+    Fri Oct 19 2018  Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1">2.14-1</a>
+    <ul>
+	    <li>ajout d'une liste de tag optionneles, pour permettre l'utilisation sur de vieilles versions de rpm</li>
+	    <li>ajout dependance a setarch</li>
+	    <li>ajout de code de debug (appels de fonctions)</li>
+	    <li>utilisation de variables locales pour éviter les conflits</li>
+	    <li>re-ecriture de la regle html des Makefile</li>
+	    <li>suppression du fichier VERSION (utilise Version)</li>
+	    <li>ajout de commentaires dans rpmrebuild_rpmqf.src pour eviter les problemes apres filtrage par GenRpmQf</li>
+	    <li>test du support par awk de la fonction non posix lshift (qf_spec_requires_raw)</li>
+	    <li>correctifs pour rpm 3.x (redhat 6.x), merci Francesco</li>
+    </ul>
+    <hr />
     Wed Sep 12 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.13-1" id="v2.13-1">2.13-1</a>
     <ul>
       <li>ajout de la gestion des tags rpm recommends / supplements</li>

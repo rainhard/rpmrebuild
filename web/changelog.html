@@ -15,6 +15,7 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.14-1">2.14-1</a></li>
       <li><a href="#v2.13-1">2.13-1</a></li>
       <li><a href="#v2.12-1">2.12-1</a></li>
       <li><a href="#v2.11-3">2.11-3</a></li>
@@ -68,6 +69,19 @@
       <li><a href="#v0.2">0.2</a></li>
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
+    <hr />
+    Fri Oct 19 2018  Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1">2.14-1</a>
+    <ul>
+	    <li>add list of optional tags, to allow rpmrebuild work with old rpm versions</li>
+	    <li>add dependency on setarch</li>
+	    <li>add debug code (calls on functions)</li>
+	    <li>use local variables to avoid conflicts</li>
+	    <li>rewrite html target in Makefile</li>
+	    <li>suppress VERSION (use Version)</li>
+	    <li>add comments in rpmrebuild_rpmqf.src to avoid bad syntax after GenRpmQf</li>
+	    <li>test if awk support non-posix lshift (qf_spec_requires_raw)</li>
+	    <li>workaround for redhat 6.x / rpm 3.x, merci Francesco</li>
+    </ul>
     <hr />
     Wed Sep 12 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.13-1" id="v2.13-1">2.13-1</a>
     <ul>
