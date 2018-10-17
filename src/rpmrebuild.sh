@@ -467,12 +467,12 @@ function Main
 	MY_LIB_DIR=`dirname $0` || return
 	source $MY_LIB_DIR/rpmrebuild_lib.src	 || return
 
-	# get VERSION
-	GetVersion
-
 	# create tempory directories before any work/test
 	RmDir "$RPMREBUILD_TMPDIR" || return
 	Mkdir_p $TMPDIR_WORK       || return
+
+	# get VERSION
+	GetVersion
 
 	FIC_SPEC=$TMPDIR_WORK/spec
 	FILES_IN=$TMPDIR_WORK/files.in
