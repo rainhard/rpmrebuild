@@ -1,3 +1,4 @@
+* 2018-10-19 : release 2.14, compatibility with old rpm releases
 * 2018-09-12 : release 2.13, RECOMMENDS/SUPPLEMENTS rpm tag
 * 2018-07-20 : release 2.12, Handle Requires(pre,post,preun,postun)
 * 2013-11-22 : release 2.11, option install

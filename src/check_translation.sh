@@ -6,12 +6,14 @@
 cd  locale
 for trans in *
 do
-	# check syntaxe for include
-	source $trans/rpmrebuild.lang
+	if [ -d "$trans" ]
+	then
+		# check syntaxe for include
+		source $trans/rpmrebuild.lang
 
-	# build tags
-	cut -f1 -d= $trans/rpmrebuild.lang > check.$trans
-
+		# build tags
+		cut -f1 -d= $trans/rpmrebuild.lang > check.$trans
+	fi
 done
 
 # reference is the english translation
@@ -20,6 +22,7 @@ for f in check.*
 do
 	if [ $f != $ref ]
 	then
+		echo "---------------- $f -----------------"
 		diff $f $ref
 	fi
 

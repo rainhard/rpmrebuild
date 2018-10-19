@@ -1,3 +1,14 @@
+* Fri Oct 19 2018 <gerbier@users.sourceforge.net> 2.14-1
+- add list of optional tags, to allow rpmrebuild work with old rpm versions
+- add dependency on setarch
+- add debug code (calls on functions)
+- use local variables to avoid conflicts
+- rewrite html target in Makefile
+- suppress VERSION (use Version)
+- add comments in rpmrebuild_rpmqf.src to avoid bad syntax after GenRpmQf
+- test if awk support non-posix lshift (qf_spec_requires_raw)
+- workaround for redhat 6.x / rpm 3.x, thanks Francesco
+
 * Wed Sep 12 2018 <gerbier@users.sourceforge.net> 2.13-1
 - can handle recommends / supplements rpm tags
 

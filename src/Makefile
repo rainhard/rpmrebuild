@@ -37,6 +37,7 @@ INCLUDE_SCRIPTS :=       \
    rpmrebuild_rpmqf.src  \
    rpmrebuild_parser.src \
    spec_func.src         \
+   optional_tags.cfg
 
 MANPAGES_BASE :=        \
    rpmrebuild.1         \
@@ -51,6 +52,9 @@ MANPAGES := $(foreach lang,$(LANGS),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
 LOCALES := $(foreach lang,$(LANGS),$(addprefix locale/$(lang)/,$(LOCALE_BASE)))
 
 MANPAGES_SRC := $(addsuffix .in,$(MANPAGES))
+
+MANPAGES_DEF := $(foreach lang,$(LANG_DEF),$(addprefix man/$(lang)/,$(MANPAGES_BASE)))
+HTML_PAGES=$(MANPAGES_DEF:.1=.1.html)
 
 DOC_FILES :=      \
    AUTHORS        \
@@ -95,7 +99,7 @@ define Spec
    }
 endef
 
-all: rpmrebuild.spec VERSION $(MANPAGES) 
+all: rpmrebuild.spec $(MANPAGES)
 	$(MAKE) -C plugins $@
 
 rpmrebuild.spec: rpmrebuild.spc Version Release Changelog 
@@ -105,17 +109,13 @@ rpmrebuild.spec: rpmrebuild.spc Version Release Changelog
 $(MANPAGES): %: %.in $(TOP_DIR)/Version
 	$(MakeManPage)
 
-VERSION: Version
-	$(RM) $@
-	read VERSION < $< && echo "VERSION='$$VERSION'" > $@ || { $(RM) $@; exit 1; }
-
 install:
 	$(MKDIR)                                  $(TARGET_DIR)
 	$(INSTALL_RUN) $(SCRIPTS)                 $(TARGET_DIR)
 
 	$(MKDIR)                                 $(TARGET_LIB)
 	$(INSTALL_RUN) $(LIB_SCRIPTS)            $(TARGET_LIB)
-	$(INSTALL_RO) $(INCLUDE_SCRIPTS) VERSION $(TARGET_LIB)
+	$(INSTALL_RO) $(INCLUDE_SCRIPTS) Version $(TARGET_LIB)
 	$(InstallManPages)
 	$(InstallLocales)
 	$(MAKE) -C plugins $@
@@ -133,14 +133,19 @@ rpmbuild:	tar
 
 clean: unexpand
 	$(RMDIR) $(ROOT) $(RPM_BUILD_DIR)
-	$(RM)    VERSION rpmrebuild.spec *.rpm rpmrebuild.tar.gz rpmrebuild.tar.gz.sig
+	$(RM)    rpmrebuild.spec *.rpm rpmrebuild.tar.gz rpmrebuild.tar.gz.sig
 	$(RM)    $(MANPAGES)
+	$(RM)    $(HTML_PAGES)
 	$(MAKE) -C plugins $@
 
 man: $(MANPAGES)
+	$(MAKE) -C plugins $@
 
-html:
-	./faire_doc.sh
+$(HTML_PAGES) : $(MANPAGES_DEF)
+
+html: man $(HTML_PAGES)
+	cp $(HTML_PAGES) ../web
+	$(MAKE) -C plugins $@
 
 # build all packages
 alldist: rpmbuild dist html

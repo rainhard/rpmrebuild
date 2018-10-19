@@ -18,6 +18,14 @@
 # common functions for all scripts
 ###############################################################################
 
+function Debug
+{
+	if [ -n "$debug" ]
+	then
+		echo -e "DEBUG: $@" 1>&2
+	fi
+}
+###############################################################################
 function Echo
 {
 	echo -e "$@" 1>&2
@@ -85,6 +93,19 @@ function Mkdir_p
 	mkdir -p $Dir
 	# test result
 	if [ -d $Dir ]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+###############################################################################
+# the decode_requires function in spec_func.src uses gnu awk syntax
+# not posix
+function TestAwk
+{
+	local tst=$( echo 1 | awk '{ print lshift($1,1) }' 2> /dev/null )
+	if [ -n "$tst" ] && [ "$tst" -eq '2' ]
 	then
 		return 0
 	else

@@ -95,7 +95,8 @@ Can't be used with \fB\-\-change\-files\fP.
 verbose output
 .TP 
 \fB\-\-debug\fP
-for debugging purposes : do not remove temporary files at end of work
+for debugging purposes : do not remove temporary files at end of work.
+also force verbose mode
 .TP 
 \fB\-V, \-\-version\fP
 output version information and exit.

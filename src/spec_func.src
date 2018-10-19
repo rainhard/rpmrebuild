@@ -48,10 +48,12 @@ function spec_md5_compat_digest
 }
 
 ###############################################################################
+# the i18ndomains option for rpm does not exists in old release
+# the variable is set by check_i18ndomains function
 function spec_query
 {
 	rpm_qf=$( $1 )
-	local RPM_QUERY="rpm --query --i18ndomains /dev/null $package_flag --queryformat "
+	local RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
 	$RPM_QUERY "$rpm_qf" $PAQUET || return
 	return 0
 }
@@ -99,8 +101,16 @@ function spec_requires
 	# Comment out Requires with rpmlib()
 	local sed_requires='/Requires[[:space:]]*:[[:space:]]*rpmlib(.*)/s/^/#/'
 	[ "X$autorequire" = "Xyes" ] && sed_requires="$sed_requires$sed_comment"
-	spec_query qf_spec_requires_raw | decode_requires \
+	TestAwk
+	if [ "$?" -eq 0 ]
+	then
+		# current code using awk to decode
+		spec_query qf_spec_requires_raw | decode_requires \
 	    | sed -e "$sed_requires" || return
+	else
+		# old code without awk for old distributions
+		spec_query qf_spec_requires | sed -e "$sed_requires" || return
+	fi
 	return 0
 }
 
@@ -142,6 +152,7 @@ function decode_requires
 
 function SpecGeneration
 {
+	Debug '(SpecGeneration)'
 	# Comment Out every string
 	local sed_comment=';s/^/#/'
 
@@ -172,6 +183,7 @@ function SpecGeneration
 
 function spec_concatenate
 {
+	Debug '(spec_concatenate)'
 	# duplicate all percent
 	local sed_double_percent='s/%/%%/g'
 
