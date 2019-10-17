@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ###############################################################################
 #   uniq.plug
 #      it's a part of the rpmrebuild project

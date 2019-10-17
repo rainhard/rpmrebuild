@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ###############################################################################
 #   nodoc.sh
 #      it's a part of the rpmrebuild project

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # to be used when reveive a bug report to check tags against popt
 
 # edit report and remove all but rpm tags

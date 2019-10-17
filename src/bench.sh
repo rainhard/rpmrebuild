@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # this script test rpmrebuild on all installed packages
 # it must be started as root
 # internal use for developpers

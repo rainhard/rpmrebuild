@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # conversion des fichier man francais entre iso-latin et utf8
 # $Id$
 

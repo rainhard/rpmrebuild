@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # main doc
 make man
 for m in man/en/*.1

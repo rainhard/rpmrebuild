@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 ###############################################################################
 #   demofiles.sh
 #      it's a part of the rpmrebuild project

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ###############################################################################
 #   rpmrebuild_files.sh 
 #      it's a part of the rpmrebuild project

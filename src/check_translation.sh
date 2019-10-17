@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # a tool to check is translation files are ok
 # can be sourced ?
 # same tag on all translations

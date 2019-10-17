@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # search for unused rpm tags rpmrebuild
 # the idea is to check if we miss some important tag
 

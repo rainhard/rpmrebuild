@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # E Gerbier
 # convert man page into html page
 

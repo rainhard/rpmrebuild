@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ###############################################################################
 #   set_tag.sh
 #      it's a part of the rpmrebuild project
