@@ -1,3 +1,6 @@
+* Tue Oct 15 2019 <gerbier@users.sourceforge.net> 2.15-1
+- fix error on rpmrebuild_files.sh line 204 (verify tag)
+
 * Fri Oct 19 2018 <gerbier@users.sourceforge.net> 2.14-1
 - add list of optional tags, to allow rpmrebuild work with old rpm versions
 - add dependency on setarch

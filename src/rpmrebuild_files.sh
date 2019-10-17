@@ -199,27 +199,33 @@ while :; do
 	verify_par=""
 	non_verify_par=""
 	Bit=1
-	file_verify="0$file_verify" # make it octal for shell
-	for verify_flag in $VERIFY_FLAGS; do
-		if [ $[$file_verify & $Bit] -eq 0 ]; then
-			non_verify_par="$non_verify_par$verify_flag "
-		else
-			verify_par="$verify_par$verify_flag "
-		fi
-		Bit=$[ $Bit << 1 ]
-	done
+	if [ "$file_verify" = "(none)" ]
+	then
+		# no file_verify
+		verify_str=""
+	else
+		file_verify="0$file_verify" # make it octal for shell
+		for verify_flag in $VERIFY_FLAGS; do
+			if [ $[$file_verify & $Bit] -eq 0 ]; then
+				non_verify_par="$non_verify_par$verify_flag "
+			else
+				verify_par="$verify_par$verify_flag "
+			fi
+			Bit=$[ $Bit << 1 ]
+		done
 
-	# if bit after last verify bit is off I assume that 
-	# %verify( ...) was used
-	# otherwise I assume %verify(not ...) was used. 
-	if [ $[$file_verify & $Bit] -eq 0 ]; then ## Use "verify_par"
-		# If verify_par not empty, set verify_str to %verify($verify_par)
-		# Strip last character from verify_par
-		verify_str="${verify_par:+%verify(${verify_par%?}) }" 
-	else # Use "non_verify_par
-		# If non_verify_par not empty, set verify_str to %verify(not $verify_par)
-		# Strip last character from non_verify_par
-		verify_str="${non_verify_par:+%verify(not ${non_verify_par%?}) }" 
+		# if bit after last verify bit is off I assume that
+		# %verify( ...) was used
+		# otherwise I assume %verify(not ...) was used.
+		if [ $[$file_verify & $Bit] -eq 0 ]; then ## Use "verify_par"
+			# If verify_par not empty, set verify_str to %verify($verify_par)
+			# Strip last character from verify_par
+			verify_str="${verify_par:+%verify(${verify_par%?}) }"
+		else # Use "non_verify_par
+			# If non_verify_par not empty, set verify_str to %verify(not $verify_par)
+			# Strip last character from non_verify_par
+			verify_str="${non_verify_par:+%verify(not ${non_verify_par%?}) }"
+		fi
 	fi
 
 	# test for jokers in file : globing seems not to work
