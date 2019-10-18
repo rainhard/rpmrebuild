@@ -1,6 +1,7 @@
 * Tue Oct 17 2019 <gerbier@users.sourceforge.net> 2.15-1
 - fix error on rpmrebuild_files.sh line 204 (verify tag)
 - use env in shebang to avoid path problemes (/bin versus /usr/bin)
+- updated htmc doc (features, usage)
 
 * Fri Oct 19 2018 <gerbier@users.sourceforge.net> 2.14-1
 - add list of optional tags, to allow rpmrebuild work with old rpm versions

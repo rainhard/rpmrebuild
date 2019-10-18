@@ -13,29 +13,39 @@
   <body>
     <div>
       <h1>utilisation de rpmrebuild</h1>
-      
-      voici quelques utilisations basiques de rpmrebuild
-      
-      <h2>reconstruire un package rpm depuis un package installé</h2>
-      
+
+      <h2>utilisations basiques</h2>
+      aucune connaissance nécessaire sur la fabrication des rpm
+
+      <h3>reconstruire un package rpm depuis un package installé</h3>
+
       vous ne trouvez plus le fichier rpm que vous avez utilisé ?<br />
-      re-faites-le avec la commande <code>rpmrebuild nom_du_package</code>
-      
-      <h2>changements de fichiers</h2>
-      
+      re-fabriquez-le avec la commande <code>rpmrebuild nom_du_package</code>
+
+      <h2>utilisations avancées</h2>
+      Vous devez connaitre la syntaxe des fichier specs (lisez le RPM-HOWTO, ou allez sur <a href="http://www.rpm.org">rpm.org</a>)
+
+      <h3>changements dans un fichier</h3>
       Vous avez modifié un fichier de configuration et vous voulez distribuer votre version ?<br />
-      
       utilisez la même commande : <code>rpmrebuild nom_du_package</code>, parce que rpmrebuild fabrique le package à partir des fichiers installés 
-      
-      <h2>ajouter ou supprimer un fichier</h2>
-      
-      Vous devez connaitre un minimum la syntaxe des fichiers "spec" (consulter le RPM-HOWTO, ou <a href="http://www.rpm.org">rpm.org</a>).<br />
+
+      <h3>ajouter ou supprimer un fichier</h3>
       Ajouter le fichier ou supprimez le dans le repertoire désiré<br />
-      lancez la commande <code>rpmrebuild -e nom_du_package</code>. rpmrebuild va ouvrir dans votre éditeur favori le fichier "spec", ce qui vous permettra de modifier les fichiers de la section "%files"
-      
+      lancez la commande <code>rpmrebuild -e nom_du_package</code>. rpmrebuild va ouvrir dans votre éditeur favori le fichier "spec", 
+      ce qui vous permettra de modifier les fichiers de la section "%files"
+
+      <h3>conseils</h3>
+      <ul>
+	<li>rpmrebuild n'a pas besoin d'être lancé en général sous le compte root, mais vous devez l'être si certains fichiers du package sont protégés ( droits unix 0600)</li>
+	<li>le fichier specfile est supprimé après utilisation. Pour le conserver, utilisez l'option -s</li>
+	<li>les fichier rpm sont contruits dans le repertoire par defaut de la distribution (par example, sur Redhat/Centos/fedora, sur /usr/src/redhat/RPMS).<br />
+	mais vous pouvez le changer avec l'option -d ou avec le fichier ~/.rpmmacros ( "%_topdir your_dir")</li>
+	<li>rpmrebuild a de nombreuses options, consultez-les avec la commande <em>man rpmrebuild</em> ou <em>rpmrebuild --help</em></li>
+      </ul>
+
       <h2>plus de documentation</h2>
       consultez la page de <a href="rpmrebuild.1.html">manuel</a> (section EXAMPLES)
-      
+
       <hr />
       <a href="index.fr.html">retour à la page principale</a>
     </div>

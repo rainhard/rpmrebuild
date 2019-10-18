@@ -13,27 +13,41 @@
   <body>
     <div>
       <h1>rpmrebuild's use</h1>
-      
-      <h2>just rebuild an rpm package from an installed package</h2>
-      
+
+      <h2>basic use</h2>
+      no need of rpm building knowledge
+
+      <h3>just rebuild an rpm package from an installed package</h3>
+
       you do not find the rpm file ?<br />
       just type <code>rpmrebuild package_name</code>
-      
-      <h2>changes in a file</h2>
+
+      <h2>advanced use</h2>
+      you need to have basic knowledge on rpm spec file syntax ( read the RPM-HOWTO, or go to <a href="http://www.rpm.org">rpm.org</a>)
+
+      <h3>changes in a file</h3>
       you have changed a configuration file to match your needs, and want to distribute your changes ?<br />
       yo will use the same command : <code>rpmrebuild package_name</code>, because rpmrebuild build 
       the package from the installed files.
-      
-      <h2>add a file</h2>
+
+      <h3>add a file</h3>
       want to add a file to a package ?<br />
-      you need to know the specfile syntaxe ( read the RPM-HOWTO, or go to <a href="http://www.rpm.org">rpm.org</a>).<br />
       Put the file on the wanted directory.<br />
       you will use <code>rpmrebuild -e package_name</code>. rpmrebuild will open the specfile in your favorite editor and
       allow you to add the wanted file in the "%files" section.
-      
+
+      <h3>advices</h3>
+      <ul>
+	<li>rpmrebuild do not need explicitly to be run on root superuser, but you have to be root if some files are root-protected (unix perms 0600)</li>
+	<li>the specfile is deleted after use. If you want to keep it, use -s option</li>
+	<li>the rpm files are build on "natural" location (for example, on Redhat/Centos/fedora, on /usr/src/redhat/RPMS, by default).<br />
+	but you may change this with -d option or with ~/.rpmmacros file (add "%_topdir your_dir")</li>
+	<li>rpmrebuild has numerous options, check them with <em>man rpmrebuild</em> or <em>rpmrebuild --help</em></li>
+      </ul>
+
       <h2>more documentation</h2>
       you can have a look at rpmrebuild <a href="rpmrebuild.1.html">man page</a> (EXAMPLES section)
-      
+
       <hr />
       <a href="index.html">back to main page</a>
     </div>

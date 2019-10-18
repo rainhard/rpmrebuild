@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
-    
+    <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.6.0" />
     <title>fonctionnalités de rpmrebuild</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="Author" content="Gerbier" />
-    <link rev="made" href="mailto:gerbier@users.sourceforge.net" />
     <link rel="stylesheet" type="text/css" href="project.css" />
   </head>
   <body>
@@ -17,64 +15,51 @@
       
       <h2>resumé</h2>
       
-      rpmrebuild permet de reconstruire un package rpm à partir des donnée installées (base rpm + fichiers)<br />
+      rpmrebuild permet de reconstruire un package rpm à partir d'un autre rpm
       <br />
-      (Sur debian, le logiciel equivalent est dpkg-repack)
+      notes :
+      <ul>
+	      <li>les anciennes version de rpm fournissaient l'option '--repackage', mais elle a été supprimée depuis quelques années.</li>
+	      <li>Sur debian/ubuntu, la commande équivalente est dpkg-repack.</li>
+	      <li>Vous pouvez trouver des exemples d'utilisation sur la page <a href="usage.html">usage</a></li>
+      </ul>
       <hr />
       
-      <h2>utilisation</h2>
+      <h2>fonctions de base</h2>
       <ul>
-	<li>depuis la version 0.5, il devrait fonctionner sur n'importe quelle distribution basée sur rpm.</li>
-	<li>en utilisation de base, rpmrebuild ne nécessite aucune connaissance sur la fabrication des rpm</li>
+	<li>depuis la version 0.5, il devrait fonctionner sur n'importe quelle distribution basée sur rpm, cat il ne necessite que peu dependances (bash, awk).</li>
+	<li>en utilisation de base, rpmrebuild ne nécessite aucune connaissance sur la fabrication des rpm. Il suffit de taper <em>rpmrebuild package_name</em></li>
       </ul>
+      <hr />
       
-      <h3>perte du package rpm</h3>
-      
-      C'etait le but initial : fabriquer un rpm à partir des meta-données de la base rpm et des fichiers installés.<br /> 
-      Commande : <em>rpmrebuild package_name</em> 
-      
-      <h3>fabriquer un package modifié</h3>
-      
-      Vous avez installé un package, vous avez modifié sa configuration, et vous voulez distribuer cette version 
-      distribuer sur d'autres machines : il suffit de lancer la même commande : <em>rpmrebuild package_name</em> 
+      <h2>fonctions avancées</h2>
+      Elles nécessitent quelques connaissances sur les fichiers spec.
 
-      <h3>modifier le fichier spec</h3>
-
-      Une utilisation avancée, pour les utilisateurs connaissant le format des fichiers spec, permet d'editer au vol
-      le fichier spec : <em>rpmrebuild -e package_name</em>
-
-      <h3>plugins</h3>
-
-      les plugins permettent d'automatiser des modifications sur le fichier spec.
-      
-      <h2>conseils</h2>
-      
+      <br />
+      Vous pouuvez fabriquer un fichier rpm à partir de :
       <ul>
-	      <li>rpmrebuild ne nécessite pas en général d'être lancé sour le compte "root", 
-	      mais seulement si certains fichiers sont protégés, en lecture uniquement pour root. </li>
-	
-	<li>le fichier spec est détruit après usage, pour le conserver, utiliser l'option -s</li>
-	
-	<li>le repertoire de construction des packages depends de la distribution (par exemple sur Redhat : /usr/src/redhat/RPMS).<br />
-	vous pouvez le modifier avec l'option -d ou en utilisant un fichier  ~/.rpmmacros (avec une ligne "%_topdir repertoire_rpm")</li>
-	
-	<li>rpmrebuild a de nombreuses autres options, vous pouvez les consulter avec <em>man rpmrebuild</em> ou <em>rpmrebuild --help</em></li>
+	<li>d'un package rpm installé</li>
+	<li>d'un autre fichier rpm, avec l'option -p</li>
       </ul>
-      
-      <h3>autres possibilités</h3>
-      certaines versions de rpm offrent (ou plutot offraient) une option "repackage", mais 
+
+      Rpmrebuild travaille en 2 étapes :
       <ol>
-	      <li>cette option ne semble plus exister</li>
-	      <li>cette option necessitait de desinstaller le package (pas toujours possible)</li>
+	<li>d'abord il fabrique un fichier spec</li>
+	<li>ensuite il utilise la commande rpmbuild pour générer le fichier rpm</li>
       </ol>
+      Le principal interet est de modifier le fichier spec, pour construire un package rpm different.
+
+      <h3>interactif</h3>
+      Vous pouvez editer et modifier le fichier spec "au vol" avec la commande : <em>rpmrebuild -e package_name</em>
+      
+      <h3>batch</h3>
+      les <a href="plugins.html">Plugins</a> permettent d'automatiser les changements sur un fichier spec.
 
       <hr />
-      
       <address>
       <a href="mailto:gerbier@users.sourceforge.net">Eric Gerbier</a>
       </address><br />
-      page modifiée le 2012-07-10<br />
-      <a href="index.fr.html">retour à la page principale</a>
+      page changed on 2019-10-18<br />
     </div>
   </body>
 </html>
