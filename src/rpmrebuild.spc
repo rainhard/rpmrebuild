@@ -5,6 +5,8 @@
 # define binary flags
 %define is_rpm3 %test_ver %rpm_ver 3
 
+%define __brp_mangle_shebangs echo "no shebang change"
+
 # The Summary: line should be expanded to about here -----^
 Summary: A tool to build rpm file from rpm database
 Summary(fr): Un outil pour construire un package depuis une base rpm
