@@ -495,12 +495,12 @@ function Main
 	source $MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang
 	
 	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
+	processing_init || return
 	CommandLineParsing "$@" || return
 	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
 
 	Debug "rpmrebuild version $VERSION : $@"
 
-	processing_init || return
 	check_i18ndomains
 
 	# generate rpm query file 
