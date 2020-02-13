@@ -4,6 +4,7 @@
 - updated htmc doc (features, usage)
 - avoid shebang translation for rpmrebuild packages (__brp_mangle_shebangs macro)
 - fix bug on change-spec-preamble (move processing_init before CommandLineParsing) thanks Nerijus
+- fix cpio problem : add --no-absolute-filenames option
 
 * Fri Oct 19 2018 <gerbier@users.sourceforge.net> 2.14-1
 - add list of optional tags, to allow rpmrebuild work with old rpm versions

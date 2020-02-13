@@ -118,7 +118,7 @@ function RpmUnpack
 	rpm2cpio ${PAQUET} > $CPIO_TEMP                     || return
 	rm    --force --recursive $BUILDROOT                || return
 	Mkdir_p                   $BUILDROOT                || return
-	(cd $BUILDROOT && cpio --quiet -idmu ) < $CPIO_TEMP || return
+	(cd $BUILDROOT && cpio --quiet -idmu --no-absolute-filenames ) < $CPIO_TEMP || return
 	rm --force $CPIO_TEMP                               || return
 	# Process ghost files
 	/bin/bash $MY_LIB_DIR/rpmrebuild_ghost.sh $BUILDROOT < $FILES_IN || return
