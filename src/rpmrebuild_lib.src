@@ -28,22 +28,41 @@ function Debug
 ###############################################################################
 function Echo
 {
-	echo -e "$@" 1>&2
+	echo -e "$@"
 }
 ###############################################################################
-function Error
-{
-	Echo "$0: ERROR: $@"
-}
-###############################################################################
-
-function Warning
+# common low level code for Error and Warning functions
+function Logger
 {
 	# screen
-	Echo "$0: WARNING: $@"
+	Echo "$0: $@" 1>&2
 	# for optionnal bug report
-	echo -e "$0: WARNING: $@" >> $RPMREBUILD_BUGREPORT
+	echo -e "$0: $@" >> $RPMREBUILD_BUGREPORT
 
+}
+###############################################################################
+# to be used after a return code test
+# propagate error code
+# replace line as
+# foo || return
+# by
+# foo || Error "pb foo" || return
+function Error
+{
+	ret=$?
+	Logger "ERROR: $@"
+	return $ret
+}
+###############################################################################
+function Warning
+{
+	Logger "WARNING: $@"
+}
+###############################################################################
+function Critical
+{
+	Error $@
+	exit 1
 }
 ###############################################################################
 
@@ -63,7 +82,7 @@ function AskYesNo
 function RmDir
 {
 	[ $# -ne 1 -o "x$1" = "x" ] && {
-		Echo "Usage: RmDir <dir>"
+		Warning "Usage: RmDir <dir>"
 		return 1
 	}
 	# to ensure tmpdir is really emptied by rm -rf
@@ -85,7 +104,7 @@ function RmDir
 function Mkdir_p
 {
 	[ $# -ne 1 -o "x$1" = "x" ] && {
-		Echo "Usage: Mkdir_p <dir>"
+		Warning "Usage: Mkdir_p <dir>"
 		return 1
 	}
 	local Dir
