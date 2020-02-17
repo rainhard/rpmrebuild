@@ -37,7 +37,7 @@ function SpecEdit
 {
 	Debug '(SpecEdit)'
 	[ $# -ne 1 -o "x$1" = "x" ] && {
-		Echo "Usage: $0 SpecEdit <file>"
+		Error "Usage: $0 SpecEdit <file>"
 		return 1
 	}
 	# -e option : edit the spec file
@@ -45,6 +45,7 @@ function SpecEdit
 	${VISUAL:-${EDITOR:-vi}} $File
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
+		export Aborted
 		Echo "Aborted."
 	        return 1
 	}
@@ -66,7 +67,11 @@ function QuestionsToUser
 	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, continue
 	[ "X$spec_only" = "Xyes" ] && return 0 ## spec only mode, no questions
 
-	AskYesNo "$WantContinue" || return
+	AskYesNo "$WantContinue" || {
+		Aborted="yes"
+		export Aborted
+		return 0
+	}
 	local RELEASE_ORIG="$(spec_query qf_spec_release )"
 	[ -z "$RELEASE_NEW" ] && \
 	AskYesNo "$WantChangeRelease" && {
@@ -115,10 +120,10 @@ function RpmUnpack
 	}
 	local CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
 	rm --force $CPIO_TEMP                               || return
-	rpm2cpio ${PAQUET} > $CPIO_TEMP                     || return
+	rpm2cpio ${PAQUET} > $CPIO_TEMP                     || Error "RpmUnpack: rpm2cpio" || return
 	rm    --force --recursive $BUILDROOT                || return
 	Mkdir_p                   $BUILDROOT                || return
-	(cd $BUILDROOT && cpio --quiet -idmu --no-absolute-filenames ) < $CPIO_TEMP || return
+	(cd $BUILDROOT && cpio --quiet -idmu --no-absolute-filenames ) < $CPIO_TEMP || Error "RpmUnpack: cpio" || return
 	rm --force $CPIO_TEMP                               || return
 	# Process ghost files
 	/bin/bash $MY_LIB_DIR/rpmrebuild_ghost.sh $BUILDROOT < $FILES_IN || return
@@ -132,13 +137,13 @@ function CreateBuildRoot
         if [ "x$package_flag" = "x" ]; then
 		# installed package
 		if [ "X$need_change_files" = "Xyes" ]; then
-			/bin/bash $MY_LIB_DIR/rpmrebuild_buildroot.sh $BUILDROOT < $FILES_IN || return
+			/bin/bash $MY_LIB_DIR/rpmrebuild_buildroot.sh $BUILDROOT < $FILES_IN || Error "CreateBuildRoot: rpmrebuild_buildroot.sh $BUILDROOT" || return
 		else
 			: # Do nothing (avoid a copy)
 		fi
 	else
 		# rpm file
-        	RpmUnpack || return
+		RpmUnpack || Error "CreateBuildRoot: RpmUnpack" || return
 	fi 
 	return 0
 }
@@ -203,7 +208,7 @@ function RpmBuild
 	fi
 	eval $change_arch $BUILDCMD --define "'buildroot $BUILDROOT'" $rpm_defines -bb $rpm_verbose $additional ${FIC_SPEC} || {
    		Error "package '${PAQUET}' $BuildFailed"
-   		return 1
+		return 1
 	}
 	
 	return 0
@@ -234,7 +239,7 @@ function RpmFileName
 	RPMFILENAME="${rpmdir}/${RPMFILENAME}"
 	if [ ! -f "${RPMFILENAME}" ]
 	then
-		Warning "$FileNotFound rpm $RPMFILENAME"
+		Error "$FileNotFound rpm $RPMFILENAME"
 		ls -ltr ${rpmdir}/${pac_arch}/${PAQUET}*
 		return 1
 	fi
@@ -271,7 +276,7 @@ function Installation
 		return 0
 	else
 		Error "package '${PAQUET}' $InstallCannot"
-		return 1;
+		return 1
 	fi
 }
 ###############################################################################
@@ -279,7 +284,7 @@ function Installation
 function Processing
 {
 	Debug '(Processing)'
-	local Aborted="no"
+	#local Aborted="no"
 	local MsgFail
 
 	source $RPMREBUILD_PROCESSING && return 0
@@ -314,6 +319,9 @@ function SendBugReport
 {
 	Debug '(SendBugReport)'
 	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, skip report
+
+	[ -s $RPMREBUILD_BUGREPORT ] || return 0 ## empty report
+
 	AskYesNo "$WantSendBugReport" || return
 	# build default mail address 
 	local from="${USER}@${HOSTNAME}"
@@ -432,7 +440,6 @@ function CheckTags
 	if [ $errors -ge 1 ] 
 	then
 		Warning "$CannotWork"
-		SendBugReport
 		return 1
 	fi
 }
@@ -464,12 +471,13 @@ function Main
 	export RPMREBUILD_TMPDIR
 	TMPDIR_WORK=$RPMREBUILD_TMPDIR/work
 
-	MY_LIB_DIR=`dirname $0` || return
-	source $MY_LIB_DIR/rpmrebuild_lib.src	 || return
+	MY_LIB_DIR=`dirname $0` || ( echo "ERROR rpmrebuild.sh dirname $0"; exit 1)
+	MY_BASENAME=`basename $0`
+	source $MY_LIB_DIR/rpmrebuild_lib.src    || ( echo "ERROR rpmrebuild.sh source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
 	# create tempory directories before any work/test
-	RmDir "$RPMREBUILD_TMPDIR" || return
-	Mkdir_p $TMPDIR_WORK       || return
+	RmDir "$RPMREBUILD_TMPDIR" || Error "RmDir $RPMREBUILD_TMPDIR" || return
+	Mkdir_p $TMPDIR_WORK       || Error "Mkdir_p $TMPDIR_WORK" || return
 
 	# get VERSION
 	GetVersion
@@ -480,9 +488,9 @@ function Main
 	# plugins for fs modification  (--change-files)
 	BUILDROOT=$TMPDIR_WORK/root
 
-	source $MY_LIB_DIR/rpmrebuild_parser.src || return
-	source $MY_LIB_DIR/spec_func.src         || return
-	source $MY_LIB_DIR/processing_func.src   || return
+	source $MY_LIB_DIR/rpmrebuild_parser.src || Error "source $MY_LIB_DIR/rpmrebuild_parser.src" || return
+	source $MY_LIB_DIR/spec_func.src         || Error "source $MY_LIB_DIR/spec_func.src" || return
+	source $MY_LIB_DIR/processing_func.src   || Error "source $MY_LIB_DIR/processing_func.src" || return
 
 	# check language
 	case "$LANG" in
@@ -538,21 +546,21 @@ function Main
 
 	if [ "X$spec_only" = "Xyes" ]; then
 		BUILDROOT="/"
-		SpecGeneration   || return
-		Processing       || return
+		SpecGeneration   || Error "SpecGeneration" || return
+		Processing       || Error "Processing" || return
 	else
-		SpecGeneration   || return
-		CreateBuildRoot  || return
-		Processing       || return
-		CheckArch	 || return
-		RpmBuild         || return
-		RpmFileName      || return
+		SpecGeneration   || Error "SpecGeneration" || return
+		CreateBuildRoot  || Error "CreateBuildRoot" || return
+		Processing       || Error "Processing" || return
+		CheckArch	 || Error "CheckArch" || return
+		RpmBuild         || Error "RpmBuild" || return
+		RpmFileName      || Error "RpmFileName" || return
 		echo "result: ${RPMFILENAME}"
 		if [ -z "$NOTESTINSTALL" ]; then
-			InstallationTest || return
+			InstallationTest || Error "InstallationTest" || return
 		fi
 		if [ -n "$package_install" ]; then
-			Installation || return
+			Installation || Error "Installation" || return
 		fi
 	fi
 	return 0
@@ -562,6 +570,12 @@ function Main
 Main "$@"
 st=$?	# save status
 
+# bug report ?
+if [ "X$Aborted" = "Xno" ]
+then
+	SendBugReport
+fi
+
 # in debug mode , we do not clean temp files
 if [ -z "$debug" ]
 then
@@ -570,6 +584,7 @@ else
 	Debug "workdir : $TMPDIR_WORK"
 	ls -altr $TMPDIR_WORK
 fi
+
 exit $st
 
 #####################################

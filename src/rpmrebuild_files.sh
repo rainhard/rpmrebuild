@@ -42,8 +42,9 @@
 # it is used in the 3 scripts : rpmrebuild_files.sh rpmrebuild_ghost.sh rpmrebuild_buildroot.sh
 ################################################################
 
-MY_LIB_DIR=`dirname $0` || return
-source $MY_LIB_DIR/rpmrebuild_lib.src    || return
+MY_LIB_DIR=`dirname $0` || ( echo "ERROR $0 dirname $0"; exit 1)
+MY_BASENAME=`basename $0`
+source $MY_LIB_DIR/rpmrebuild_lib.src    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
 FFLAGS="d c s m n g"
 d_val="%doc "      # doc flag
@@ -233,7 +234,7 @@ while :; do
 	if [ "X$RPMREBUILD_WARNING" = "Xyes" ]; then
 		case "$file" in
 			*[*?]*)
-				cat <<-WARN_TXT 1>&2 || exit
+				cat <<-WARN_TXT 1>&2 || Critical "$MY_BASENAME cat"
 				
 				-------------------------------- WARNING ------------------------------------------
 				file named $file contains globbing characters
@@ -245,5 +246,5 @@ while :; do
 	fi
 
 	echo "${miss_str}${lang_str}${dir_str}${fflags_str}${attr_str}${caps_str}${verify_str}\"${file}\""
-done || exit
+done || Critical "$MY_BASENAME done"
 exit 0

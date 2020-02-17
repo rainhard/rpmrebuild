@@ -72,7 +72,7 @@ function processing_spec_change
 {
 	local Func="processing_spec_change"
 	[ $# -ne 1 -o "x$1" = "x" ] && {
-		echo "Usage: $0 $Func <operation>" 1>&2
+		Error "Usage: $0 $Func <operation>"
 		return 1
 	}
 
@@ -232,7 +232,7 @@ function processing_spec_change
 
 		Xchange-spec-whole | \
 		Xedit-whole)
-			$Func "concatenate" || return
+			$Func "concatenate" || Error "processing_spec_change $Func concatenate" || return
 			SPEC_IN=$FIC_SPEC.$spec_index
 			spec_index=$[spec_index + 1]
 			SPEC_OUT=$FIC_SPEC.$spec_index
@@ -330,11 +330,11 @@ function CreateProcessing
 	local cmd
 	case "X$operation" in
 		Xfini)
-			processing_fini || return
+			processing_fini || Error "CreateProcessing processing_fini" || return
 		;;
 
 		Xchange-spec-whole | Xedit-whole)
-			processing_spec_change "$operation" || return
+			processing_spec_change "$operation" || Error "CreateProcessing processing_spec_change" || return
 		;;
 
 		Xchange-spec-* | Xedit-*)
@@ -342,7 +342,7 @@ function CreateProcessing
 				Error "'$LONG_OPTION' $ForbidenOption"
 				return 1
 			fi
-			processing_spec_change "$operation" || return
+			processing_spec_change "$operation" || Error "CreateProcessing processing_spec_change" || return
 		;;
 
 		Xchange-files)
@@ -363,6 +363,6 @@ function CreateProcessing
 			Error "CreateProcessing: $UnknownOperation : '$operation'"
 			return 1
 		;;
-	esac || return
+	esac || Error "CreateProcessing: esac" || return
 	return 0
 }

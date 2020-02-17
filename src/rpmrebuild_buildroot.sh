@@ -36,13 +36,13 @@
 # rpmrebuild_files.sh rpmrebuild_ghost.sh rpmrebuild_buildroot.sh
 ################################################################
 
-[ $# -ne 1 -o "x$1" = "x" ] && {
-	echo "Usage: $0 <buildroot>" 1>&2
-	exit 1
-}
+MY_LIB_DIR=`dirname $0` || ( echo "ERROR $0 dirname $0"; exit 1)
+MY_BASENAME=`basename $0`
+source $MY_LIB_DIR/rpmrebuild_lib.src    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
-MY_LIB_DIR=`dirname $0` || return
-source $MY_LIB_DIR/rpmrebuild_lib.src    || return
+[ $# -ne 1 -o "x$1" = "x" ] && {
+	Critical "Usage: $0 <buildroot>"
+}
 
 BuildRoot="$1"
 
@@ -72,16 +72,16 @@ while :; do
 			# of the string.
 			# result will be 4 permissions characters
 			file_perm="${file_perm#${not_perm}}"
-			Mkdir_p $BuildRoot/$file || exit
-			chmod $file_perm $BuildRoot/$file || exit
+			Mkdir_p $BuildRoot/$file || Critical "$MY_BASENAME Mkdir_p $BuildRoot/$file"
+			chmod $file_perm $BuildRoot/$file || Critical "$MY_BASENAME chmod $file_perm $BuildRoot/$file"
 		;;
 
 		*)
 			# Not directory
 			DirName=${file%/*}
-			Mkdir_p $BuildRoot/$DirName || exit
-			cp --preserve --no-dereference $file $BuildRoot/$file || exit
+			Mkdir_p $BuildRoot/$DirName || Critical "$MY_BASENAME Mkdir_p $BuildRoot/$DirName"
+			cp --preserve --no-dereference $file $BuildRoot/$file || Critical "$MY_BASENAME cp --preserve $file"
 		;;
-	esac || exit
-done || exit
+	esac || Critical "$MY_BASENAME esac"
+done || Critical "$MY_BASENAME done"
 exit 0
