@@ -37,7 +37,7 @@ function SpecEdit
 {
 	Debug '(SpecEdit)'
 	[ $# -ne 1 -o "x$1" = "x" ] && {
-		Error "Usage: $0 SpecEdit <file>"
+		Error "(SpecEdit) Usage: $0 SpecEdit <file>"
 		return 1
 	}
 	# -e option : edit the spec file
@@ -90,7 +90,7 @@ function IsPackageInstalled
 	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
-		Error "${PAQUET} $PackageNotInstalled"
+		Error "(IsPackageInstalled) ${PAQUET} $PackageNotInstalled"
 		return 1
 	else
 		# find it : one or more ?
@@ -101,7 +101,7 @@ function IsPackageInstalled
 			;;
 
 			*)
-			Error "$PackageTooMuch '${PAQUET}':\n$output"
+				Error "(IsPackageInstalled) $PackageTooMuch '${PAQUET}':\n$output"
 			return 1
 			;;
 		esac 
@@ -115,15 +115,15 @@ function RpmUnpack
 	Debug '(RpmUnpack)'
 	# do not install files on /
 	[ "x$BUILDROOT" = "x/" ] && {
-		Error "$BuildRootError" 
+		Error "(RpmUnpack) $BuildRootError"
         	return 1
 	}
 	local CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
 	rm --force $CPIO_TEMP                               || return
-	rpm2cpio ${PAQUET} > $CPIO_TEMP                     || Error "RpmUnpack: rpm2cpio" || return
+	rpm2cpio ${PAQUET} > $CPIO_TEMP                     || Error "(RpmUnpack) rpm2cpio" || return
 	rm    --force --recursive $BUILDROOT                || return
 	Mkdir_p                   $BUILDROOT                || return
-	(cd $BUILDROOT && cpio --quiet -idmu --no-absolute-filenames ) < $CPIO_TEMP || Error "RpmUnpack: cpio" || return
+	(cd $BUILDROOT && cpio --quiet -idmu --no-absolute-filenames ) < $CPIO_TEMP || Error "(RpmUnpack) cpio" || return
 	rm --force $CPIO_TEMP                               || return
 	# Process ghost files
 	/bin/bash $MY_LIB_DIR/rpmrebuild_ghost.sh $BUILDROOT < $FILES_IN || return
@@ -137,13 +137,13 @@ function CreateBuildRoot
         if [ "x$package_flag" = "x" ]; then
 		# installed package
 		if [ "X$need_change_files" = "Xyes" ]; then
-			/bin/bash $MY_LIB_DIR/rpmrebuild_buildroot.sh $BUILDROOT < $FILES_IN || Error "CreateBuildRoot: rpmrebuild_buildroot.sh $BUILDROOT" || return
+			/bin/bash $MY_LIB_DIR/rpmrebuild_buildroot.sh $BUILDROOT < $FILES_IN || Error "(CreateBuildRoot) rpmrebuild_buildroot.sh $BUILDROOT" || return
 		else
 			: # Do nothing (avoid a copy)
 		fi
 	else
 		# rpm file
-		RpmUnpack || Error "CreateBuildRoot: RpmUnpack" || return
+		RpmUnpack || Error "(CreateBuildRoot) RpmUnpack" || return
 	fi 
 	return 0
 }
@@ -207,7 +207,7 @@ function RpmBuild
 		ln -s / $BUILDROOT || return
 	fi
 	eval $change_arch $BUILDCMD --define "'buildroot $BUILDROOT'" $rpm_defines -bb $rpm_verbose $additional ${FIC_SPEC} || {
-   		Error "package '${PAQUET}' $BuildFailed"
+		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
 		return 1
 	}
 	
@@ -239,7 +239,7 @@ function RpmFileName
 	RPMFILENAME="${rpmdir}/${RPMFILENAME}"
 	if [ ! -f "${RPMFILENAME}" ]
 	then
-		Error "$FileNotFound rpm $RPMFILENAME"
+		Error "(RpmFileName) $FileNotFound rpm $RPMFILENAME"
 		ls -ltr ${rpmdir}/${pac_arch}/${PAQUET}*
 		return 1
 	fi
@@ -254,7 +254,7 @@ function InstallationTest
 	# installation test
 	# force is necessary to avoid the message : already installed
 	rpm -U --test --force ${RPMFILENAME} || {
-		Error "package '${PAQUET}' $TestFailed"
+		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
 		return 1
 	}
 	Debug "(InstallationTest) test install ${PAQUET} ok"
@@ -270,12 +270,12 @@ function Installation
 	if [ "$ID" -eq 0 ]
 	then
 		rpm -Uvh --force ${RPMFILENAME} || {
-			Error "package '${PAQUET}' $InstallFailed"
+			Error "(Installation) package '${PAQUET}' $InstallFailed"
 			return 1
 		}
 		return 0
 	else
-		Error "package '${PAQUET}' $InstallCannot"
+		Error "(Installation) package '${PAQUET}' $InstallCannot"
 		return 1
 	fi
 }
@@ -290,9 +290,9 @@ function Processing
 	source $RPMREBUILD_PROCESSING && return 0
 
 	if [ "X$need_change_spec" = "Xyes" -o "X$need_change_files" = "Xyes" ]; then
-		[ "X$Aborted" = "Xyes" ] || Error "package '$PAQUET' $ModificationFailed."
+		[ "X$Aborted" = "Xyes" ] || Error "(Processing) package '$PAQUET' $ModificationFailed."
 	else
-		Error "package '$PAQUET' $SpecFailed."
+		Error "(Processing) package '$PAQUET' $SpecFailed."
 	fi
 	return 1
 }

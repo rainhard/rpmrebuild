@@ -54,7 +54,7 @@ function spec_query
 {
 	rpm_qf=$( $1 )
 	local RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
-	$RPM_QUERY "$rpm_qf" $PAQUET || Error "spec_query $rpm_qf" || return
+	$RPM_QUERY "$rpm_qf" $PAQUET || Error "(spec_query) $rpm_qf" || return
 	return 0
 }
 
@@ -62,8 +62,8 @@ function spec_query
 function spec_files
 {
 	rm -f $FILES_IN || Erro "spec_files rm $FILES_IN" || return
-	spec_query qf_spec_files > $FILES_IN || Error "spec_files spec_query qf_spec_files" || return
-	/bin/bash $MY_LIB_DIR/rpmrebuild_files.sh < $FILES_IN || Error "spec_files rpmrebuild_files.sh" || return
+	spec_query qf_spec_files > $FILES_IN || Error "(spec_files) spec_query qf_spec_files" || return
+	/bin/bash $MY_LIB_DIR/rpmrebuild_files.sh < $FILES_IN || Error "(spec_files) rpmrebuild_files.sh" || return
 	return 0
 }
 
@@ -75,9 +75,9 @@ Release:       $RELEASE_NEW
 	}"
 
 	if [ "x$RELEASE_NEW" = "x" ]; then
-		spec_query qf_spec_preamble                         || Error "spec_query qf_spec_preamble" || return
+		spec_query qf_spec_preamble                         || Error "(spec_preamble) spec_query qf_spec_preamble" || return
 	else
-		spec_query qf_spec_preamble | sed -e "$sed_release" || Error "spec_query qf_spec_preamble with sed" || return
+		spec_query qf_spec_preamble | sed -e "$sed_release" || Error "(spec_preamble) spec_query qf_spec_preamble with sed" || return
 	fi
 }
 
@@ -89,7 +89,7 @@ function spec_provides
 	# Comment out Provides with pgp()
 	local sed_provides='/Provides[[:space:]]*:[[:space:]]*gpg(.*)/s/^/#/'
 	[ "X$autoprovide" = "Xyes" ] && sed_provides="$sed_provides$sed_comment"
-	spec_query qf_spec_provides | sed -e "$sed_provides" || Error "spec_query qf_spec_provides" || return
+	spec_query qf_spec_provides | sed -e "$sed_provides" || Error "(spec_provides) spec_query qf_spec_provides" || return
 	return 0
 }
 
@@ -106,10 +106,10 @@ function spec_requires
 	then
 		# current code using awk to decode
 		spec_query qf_spec_requires_raw | decode_requires \
-	    | sed -e "$sed_requires" || Error "spec_query qf_spec_requires_raw" || return
+			| sed -e "$sed_requires" || Error "(spec_requires) spec_query qf_spec_requires_raw" || return
 	else
 		# old code without awk for old distributions
-		spec_query qf_spec_requires | sed -e "$sed_requires" || Error "spec_query qf_spec_requires" || return
+		spec_query qf_spec_requires | sed -e "$sed_requires" || Error "(spec_requires) spec_query qf_spec_requires" || return
 	fi
 	return 0
 }
@@ -157,26 +157,26 @@ function SpecGeneration
 	local sed_comment=';s/^/#/'
 
 	local i=1
-	spec_preamble                  > $SPEC_PREAMBLE.$i      || Error "SpecGeneration spec_preamble" || return
-	spec_query qf_spec_conflicts    > $SPEC_CONFLICTS.$i    || Error "SpecGeneration qf_spec_conflicts" || return
-	spec_query qf_spec_obsoletes    > $SPEC_OBSOLETES.$i    || Error "SpecGeneration qf_spec_obsoletes" || return
-	spec_provides                  > $SPEC_PROVIDES.$i      || Error "SpecGeneration spec_provides" || return
-	spec_requires                  > $SPEC_REQUIRES.$i      || Error "SpecGeneration spec_requires" || return
-	spec_query qf_spec_suggest	> $SPEC_SUGGESTS.$i     || Error "SpecGeneration qf_spec_suggest" || return
-	spec_query qf_spec_enhance	> $SPEC_ENHANCES.$i     || Error "SpecGeneration qf_spec_enhance" || return
-	spec_query qf_spec_recommends	> $SPEC_RECOMMENDS.$i   || Error "SpecGeneration qf_spec_recommends" || return
-	spec_query qf_spec_supplements	> $SPEC_SUPPLEMENTS.$i  || Error "SpecGeneration qf_spec_supplements" || return
-	spec_query qf_spec_description  > $SPEC_DESCRIPTION.$i  || Error "SpecGeneration qf_spec_description" || return
-	spec_files                      > $SPEC_FILES.$i        || Error "SpecGeneration spec_files" || return
-	spec_query qf_spec_triggers     > $SPEC_TRIGGERS.$i     || Error "SpecGeneration qf_spec_triggers" || return
-	spec_query qf_spec_pre          > $SPEC_PRE.$i          || Error "SpecGeneration qf_spec_pre" || return
-	spec_query qf_spec_pretrans     > $SPEC_PRETRANS.$i     || Error "SpecGeneration qf_spec_pretrans" || return
-	spec_query qf_spec_post         > $SPEC_POST.$i         || Error "SpecGeneration qf_spec_post" || return
-	spec_query qf_spec_posttrans    > $SPEC_POSTTRANS.$i    || Error "SpecGeneration qf_spec_posttrans" || return
-	spec_query qf_spec_preun        > $SPEC_PREUN.$i        || Error "SpecGeneration qf_spec_preun" || return
-	spec_query qf_spec_postun       > $SPEC_POSTUN.$i       || Error "SpecGeneration qf_spec_postun" || return
-	spec_query qf_spec_verifyscript > $SPEC_VERIFYSCRIPT.$i || Error "SpecGeneration qf_spec_verifyscript" || return
-	spec_query qf_spec_changelog    > $SPEC_CHANGELOG.$i    || Error "SpecGeneration qf_spec_changelog" || return
+	spec_preamble                  > $SPEC_PREAMBLE.$i      || Error "(SpecGeneration) spec_preamble" || return
+	spec_query qf_spec_conflicts    > $SPEC_CONFLICTS.$i    || Error "(SpecGeneration) qf_spec_conflicts" || return
+	spec_query qf_spec_obsoletes    > $SPEC_OBSOLETES.$i    || Error "(SpecGeneration) qf_spec_obsoletes" || return
+	spec_provides                  > $SPEC_PROVIDES.$i      || Error "(SpecGeneration) spec_provides" || return
+	spec_requires                  > $SPEC_REQUIRES.$i      || Error "(SpecGeneration) spec_requires" || return
+	spec_query qf_spec_suggest	> $SPEC_SUGGESTS.$i     || Error "(SpecGeneration) qf_spec_suggest" || return
+	spec_query qf_spec_enhance	> $SPEC_ENHANCES.$i     || Error "(SpecGeneration) qf_spec_enhance" || return
+	spec_query qf_spec_recommends	> $SPEC_RECOMMENDS.$i   || Error "(SpecGeneration) qf_spec_recommends" || return
+	spec_query qf_spec_supplements	> $SPEC_SUPPLEMENTS.$i  || Error "(SpecGeneration) qf_spec_supplements" || return
+	spec_query qf_spec_description  > $SPEC_DESCRIPTION.$i  || Error "(SpecGeneration) qf_spec_description" || return
+	spec_files                      > $SPEC_FILES.$i        || Error "(SpecGeneration) spec_files" || return
+	spec_query qf_spec_triggers     > $SPEC_TRIGGERS.$i     || Error "(SpecGeneration) qf_spec_triggers" || return
+	spec_query qf_spec_pre          > $SPEC_PRE.$i          || Error "(SpecGeneration) qf_spec_pre" || return
+	spec_query qf_spec_pretrans     > $SPEC_PRETRANS.$i     || Error "(SpecGeneration) qf_spec_pretrans" || return
+	spec_query qf_spec_post         > $SPEC_POST.$i         || Error "(SpecGeneration) qf_spec_post" || return
+	spec_query qf_spec_posttrans    > $SPEC_POSTTRANS.$i    || Error "(SpecGeneration) qf_spec_posttrans" || return
+	spec_query qf_spec_preun        > $SPEC_PREUN.$i        || Error "(SpecGeneration) qf_spec_preun" || return
+	spec_query qf_spec_postun       > $SPEC_POSTUN.$i       || Error "(SpecGeneration) qf_spec_postun" || return
+	spec_query qf_spec_verifyscript > $SPEC_VERIFYSCRIPT.$i || Error "(SpecGeneration) qf_spec_verifyscript" || return
+	spec_query qf_spec_changelog    > $SPEC_CHANGELOG.$i    || Error "(SpecGeneration) qf_spec_changelog" || return
 
 	return 0
 }
@@ -195,9 +195,9 @@ function spec_concatenate
 	else
 		echo "BuildRoot: $BUILDROOT" || return
 	fi       
-	spec_auto_prov || Error "spec_concatenate spec_auto_prov" || return
-	spec_auto_req  || Error "spec_concatenate spec_auto_req" || return
-	spec_md5_compat_digest || Error "spec_concatenate spec_md5_compat_digest" || return
+	spec_auto_prov || Error "(spec_concatenate) spec_auto_prov" || return
+	spec_auto_req  || Error "(spec_concatenate) spec_auto_req" || return
+	spec_md5_compat_digest || Error "(spec_concatenate) spec_md5_compat_digest" || return
 
 	cat <<-SPEC_DEFS || return
 		# Do not try autogenerate prereq/conflicts/obsoletes and check files
@@ -221,7 +221,7 @@ function spec_concatenate
 		$SPEC_ENHANCES.$si_enhances         \
 		$SPEC_RECOMMENDS.$si_recommends     \
 		$SPEC_SUPPLEMENTS.$si_supplements   \
-	|| Error "spec_concatenate sed1 error" || return
+		|| Error "(spec_concatenate) sed1 error" || return
 
 	echo                   || return
 	echo	"%description" || return
@@ -259,7 +259,7 @@ function spec_concatenate
 		$SPEC_PREUN.$si_preun               \
 		$SPEC_POSTUN.$si_postun             \
 		$SPEC_VERIFYSCRIPT.$si_verifyscript \
-	|| Error "spec_concatenate sed2 error" || return
+		|| Error "(spec_concatenate) sed2 error" || return
 
 	echo "%changelog" || return
 	sed -e "$sed_double_percent"                \

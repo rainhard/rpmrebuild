@@ -1131,7 +1131,7 @@ function ProcessLongOptions
 					# find in plugin dir
 					INCLUDE_FILE="$RPMREBUILD_PLUGINS_DIR/$OPTARG"
 				else 
-					Error "$FileNotFound : '$OPTARG'"
+					Error "(ProcessLongOptions) $FileNotFound : '$OPTARG'"
 					return 1
 				fi
 				Include || return
@@ -1205,7 +1205,7 @@ function ProcessLongOptions
 			;;
 
 			*)
-				Error "$InternalError: LONG_OPTION='$LONG_OPTION'"
+				Error "(ProcessLongOptions) $InternalError: LONG_OPTION='$LONG_OPTION'"
 				return 1
 			;;
 		esac || return
@@ -1315,7 +1315,7 @@ function CommandLineParsing
 	shift $((OPTIND - 1))
 	case $# in
    		0)
-			Error "$PackageArgumentMissing"
+			Error "(CommandLineParsing) $PackageArgumentMissing"
 			Try_Help
 			return 1
    		;;
@@ -1336,18 +1336,18 @@ function CommandLineParsing
 					if [ $? -eq 0 ]; then
 							: #ok
 					else
-						Error "$NotAnRpm '$PAQUET'"
+						Error "(CommandLineParsing) $NotAnRpm '$PAQUET'"
 						return 1
 					fi
 				else
-					Error "$FileNotFound '$PAQUET'"
+					Error "(CommandLineParsing) $FileNotFound '$PAQUET'"
 					return 1
 				fi
       			fi
 		;;
 
 		*)
-			Error "$PackageMultiple"
+			Error "(CommandLineParsing) $PackageMultiple"
 			Try_Help
 			return 1
 		;;
@@ -1364,7 +1364,7 @@ function CommandLineParsing
 		# Yeah, a bit ugly, but simple and seems to work...
 		Mkdir_p "$rpmdir" # Not check exit status here
 		rpmdir="$(cd $rpmdir && echo $PWD)" || {
-			Error "$CannotChdir '$rpmdir'"
+			Error "(CommandLineParsing) $CannotChdir '$rpmdir'"
 			return 1
 		}
 	fi
