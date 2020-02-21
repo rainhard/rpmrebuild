@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.6.0" />
+  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.7.28" />
   <title>rpmrebuild changelog</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="Author" content="Gerbier" />
@@ -15,6 +15,7 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.15-1">2.15-1</a></li>
       <li><a href="#v2.14-1">2.14-1</a></li>
       <li><a href="#v2.13-1">2.13-1</a></li>
       <li><a href="#v2.12-1">2.12-1</a></li>
@@ -70,17 +71,29 @@
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
     <hr />
-    Fri Oct 19 2018  Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1">2.14-1</a>
+    Fri Feb 21 2020 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.15-1" id="v2.15-1">2.15-1</a>
     <ul>
-	    <li>add list of optional tags, to allow rpmrebuild work with old rpm versions</li>
-	    <li>add dependency on setarch</li>
-	    <li>add debug code (calls on functions)</li>
-	    <li>use local variables to avoid conflicts</li>
-	    <li>rewrite html target in Makefile</li>
-	    <li>suppress VERSION (use Version)</li>
-	    <li>add comments in rpmrebuild_rpmqf.src to avoid bad syntax after GenRpmQf</li>
-	    <li>test if awk support non-posix lshift (qf_spec_requires_raw)</li>
-	    <li>workaround for redhat 6.x / rpm 3.x, merci Francesco</li>
+      <li>fix error on rpmrebuild_files.sh line 204 (verify tag)</li>
+      <li>use env in shebang to avoid path problemes (/bin versus /usr/bin)</li>
+      <li>updated html doc (features, usage)</li>
+      <li>avoid shebang translation for rpmrebuild packages (__brp_mangle_shebangs macro)</li>
+      <li>fix bug on change-spec-preamble (move processing_init before CommandLineParsing) thanks Nerijus</li>
+      <li>fix cpio problem : add --no-absolute-filenames option</li>
+      <li>better diagnostic on internal error</li>
+    </ul>
+
+    <hr />
+    Fri Oct 19 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1" id="v2.14-1">2.14-1</a>
+    <ul>
+      <li>add list of optional tags, to allow rpmrebuild work with old rpm versions</li>
+      <li>add dependency on setarch</li>
+      <li>add debug code (calls on functions)</li>
+      <li>use local variables to avoid conflicts</li>
+      <li>rewrite html target in Makefile</li>
+      <li>suppress VERSION (use Version)</li>
+      <li>add comments in rpmrebuild_rpmqf.src to avoid bad syntax after GenRpmQf</li>
+      <li>test if awk support non-posix lshift (qf_spec_requires_raw)</li>
+      <li>workaround for redhat 6.x / rpm 3.x, merci Francesco</li>
     </ul>
     <hr />
     Wed Sep 12 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.13-1" id="v2.13-1">2.13-1</a>

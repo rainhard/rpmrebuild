@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.6.0" />
+  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.7.28" />
   <title>rpmrebuild changelog</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="Author" content="Gerbier" />
@@ -15,6 +15,8 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.15-1">2.15-1</a></li>
+      <li><a href="#v2.14-1">2.14-1</a></li>
       <li><a href="#v2.13-1">2.13-1</a></li>
       <li><a href="#v2.12-1">2.12-1</a></li>
       <li><a href="#v2.11-3">2.11-3</a></li>
@@ -69,17 +71,29 @@
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
     <hr />
-    Fri Oct 19 2018  Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1">2.14-1</a>
+    Fri Feb 21 2020 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.15-1" id="v2.15-1">2.15-1</a>
     <ul>
-	    <li>ajout d'une liste de tag optionneles, pour permettre l'utilisation sur de vieilles versions de rpm</li>
-	    <li>ajout dependance a setarch</li>
-	    <li>ajout de code de debug (appels de fonctions)</li>
-	    <li>utilisation de variables locales pour éviter les conflits</li>
-	    <li>re-ecriture de la regle html des Makefile</li>
-	    <li>suppression du fichier VERSION (utilise Version)</li>
-	    <li>ajout de commentaires dans rpmrebuild_rpmqf.src pour eviter les problemes apres filtrage par GenRpmQf</li>
-	    <li>test du support par awk de la fonction non posix lshift (qf_spec_requires_raw)</li>
-	    <li>correctifs pour rpm 3.x (redhat 6.x), merci Francesco</li>
+      <li>correction de bug dans rpmrebuild_files.sh ligne 204 (verify tag)</li>
+      <li>utilise env dans le shebang pour eviter les problemes de path (/bin versus /usr/bin)</li>
+      <li>mise a jour de la doc html (features, usage)</li>
+      <li>modif du spec pour conserver le shebang pendant le rpmrebuild (__brp_mangle_shebangs macro)</li>
+      <li>correction de bug dans change-spec-preamble (deplacement de processing_init avant CommandLineParsing),merci Nerijus</li>
+      <li>correction de problem sur cpio : ajout de l'option --no-absolute-filenames</li>
+      <li>ajout de diagnostics en cas d'erreur</li>
+    </ul>
+    <hr />
+
+    Fri Oct 19 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1" id="v2.14-1">2.14-1</a>
+    <ul>
+      <li>ajout d'une liste de tag optionneles, pour permettre l'utilisation sur de vieilles versions de rpm</li>
+      <li>ajout dependance a setarch</li>
+      <li>ajout de code de debug (appels de fonctions)</li>
+      <li>utilisation de variables locales pour éviter les conflits</li>
+      <li>re-ecriture de la regle html des Makefile</li>
+      <li>suppression du fichier VERSION (utilise Version)</li>
+      <li>ajout de commentaires dans rpmrebuild_rpmqf.src pour eviter les problemes apres filtrage par GenRpmQf</li>
+      <li>test du support par awk de la fonction non posix lshift (qf_spec_requires_raw)</li>
+      <li>correctifs pour rpm 3.x (redhat 6.x), merci Francesco</li>
     </ul>
     <hr />
     Wed Sep 12 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.13-1" id="v2.13-1">2.13-1</a>
