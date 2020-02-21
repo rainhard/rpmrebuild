@@ -9,6 +9,12 @@ web/index*
 web/changelog*
 web/news*
 
+make alldist
+
+git status
+git push
+git push --tags
+
 publication :
 web site
 news sourceforge
