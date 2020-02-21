@@ -84,8 +84,10 @@ echo '%|REQUIRENAME?{[Requires:      %{REQUIRENAME} %{REQUIREFLAGS:depflags} %{R
 # Similar to qf_spec_requires, but includes an undecoded REQUIREFLAGS, and does
 #  not include the "Requires:" string.
 # Intended to allow further decoding of REQUIREFLAGS .
+# use comma separator because REQUIRENAME may contain spaces : (wpa_supplicant >= 1:1.1 or iwd)
+# the separator must be the same used in decode_requires awk
 function qf_spec_requires_raw {
-echo '%|REQUIRENAME?{[%{REQUIRENAME} %{REQUIREFLAGS} %{REQUIREFLAGS:depflags} %{REQUIREVERSION}\n]}|'
+echo '%|REQUIRENAME?{[%{REQUIRENAME},%{REQUIREFLAGS},%{REQUIREFLAGS:depflags},%{REQUIREVERSION}\n]}|'
 }
 
 function qf_spec_suggest {

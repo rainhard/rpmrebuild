@@ -118,7 +118,8 @@ function decode_requires
 {
 	# Decode the REQUIREFLAGS bits to dependency attributes.
 	# Bits are defined in lib/rpmlib.h in the rpm source code.
-	awk '
+	# separator must be the same as in qf_spec_requires_raw
+	awk -F, '
 	    BEGIN {
 		PRE    = lshift(1,  9);
 		POST   = lshift(1, 10);
