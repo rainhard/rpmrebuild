@@ -1,0 +1,17 @@
+problem
+-------
+in some cases, rpmrebuild fails without error message
+
+why
+---
+many pb are detected by return code test like : foo || return
+but foo may not display any error message
+
+answer
+------
+the idea is to write something like :
+foo || Error " ..." || return
+
+
+Error output will follow the template : 
+file: (function) message
