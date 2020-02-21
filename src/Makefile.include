@@ -50,8 +50,8 @@ endef
 
 # rules to convert man page into html pages
 %.1.html: %.1
-	faire_doc2.sh $< $@
+	./faire_doc2.sh $< $@
 
 %.1.html: %.1rrp
-	faire_doc2.sh $< $@
+	./faire_doc2.sh $< $@
 
