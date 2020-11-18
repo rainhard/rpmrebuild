@@ -1281,7 +1281,7 @@ function CommandLineParsing
 					*)
                    				LONG_OPTION="$OPTARG"
                    				if [ $OPTIND -le $# ]; then
-                      					eval OPTARG=\$$OPTIND
+							eval OPTARG=\${$OPTIND}
                       					OPTARG_EXIST=1
 							OPTIND_INCR=1
                    				else
