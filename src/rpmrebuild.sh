@@ -458,6 +458,25 @@ function check_i18ndomains
 	fi
 }
 ##############################################################
+# in debug mode , we do not clean temp files
+function clean_exit
+{
+	if [ -z "$debug" ]
+	then
+		RmDir "$RPMREBUILD_TMPDIR"
+	else
+		Debug "workdir : $TMPDIR_WORK"
+		ls -altr $TMPDIR_WORK
+	fi
+}
+##############################################################
+# on signal clean as usual
+function sig_prgm
+{
+	clean_exit
+	exit 1
+}
+##############################################################
 # Main Part                                                  #
 ##############################################################
 # shell pour refabriquer un fichier rpm a partir de la base rpm
@@ -567,6 +586,8 @@ function Main
 }
 ###############################################################################
 
+trap 'sig_prgm' 1 2 3 15
+
 Main "$@"
 st=$?	# save status
 
@@ -577,13 +598,7 @@ then
 fi
 
 # in debug mode , we do not clean temp files
-if [ -z "$debug" ]
-then
-	RmDir "$RPMREBUILD_TMPDIR"
-else
-	Debug "workdir : $TMPDIR_WORK"
-	ls -altr $TMPDIR_WORK
-fi
+clean_exit
 
 exit $st
 
