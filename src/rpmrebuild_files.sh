@@ -42,9 +42,9 @@
 # it is used in the 3 scripts : rpmrebuild_files.sh rpmrebuild_ghost.sh rpmrebuild_buildroot.sh
 ################################################################
 
-MY_LIB_DIR=`dirname $0` || ( echo "ERROR $0 dirname $0"; exit 1)
-MY_BASENAME=`basename $0`
-source $MY_LIB_DIR/rpmrebuild_lib.src    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
+MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR $0 dirname $0"; exit 1)
+MY_BASENAME=$( basename "$0" )
+source "$MY_LIB_DIR/rpmrebuild_lib.src"    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
 FFLAGS="d c s m n g"
 d_val="%doc "      # doc flag
@@ -88,7 +88,7 @@ while :; do
 	#[ -n "$wild" ] && file=$(echo "$file"|sed 's/\*/\\*/')
 	# quick and portable
 	case "x$file" in
-		x*\**) file=$(echo "$file" | sed 's/\*/\\*/');;
+		x*\**) file=${file//\*/\\*} ;;
 		x*) ;;
 	esac
 	miss_str=""
@@ -184,7 +184,7 @@ while :; do
 
 	# %caps handling
 	if [ "X$RPMREBUILD_CAP_FROM_FS" = "Xyes" ]; then
-		file_cap=$(  getcap $file | cut -f2 -d= )
+		file_cap=$(  getcap "$file" | cut -f2 -d= )
 	else
 		# get capability from rpm query
 		[ "X$file_cap" = "X(none)" ] && file_cap=""
@@ -207,18 +207,18 @@ while :; do
 	else
 		file_verify="0$file_verify" # make it octal for shell
 		for verify_flag in $VERIFY_FLAGS; do
-			if [ $[$file_verify & $Bit] -eq 0 ]; then
+			if [ $(( file_verify & Bit )) -eq 0 ]; then
 				non_verify_par="$non_verify_par$verify_flag "
 			else
 				verify_par="$verify_par$verify_flag "
 			fi
-			Bit=$[ $Bit << 1 ]
+			Bit=$(( Bit << 1 ))
 		done
 
 		# if bit after last verify bit is off I assume that
 		# %verify( ...) was used
 		# otherwise I assume %verify(not ...) was used.
-		if [ $[$file_verify & $Bit] -eq 0 ]; then ## Use "verify_par"
+		if [ $(( file_verify & Bit )) -eq 0 ]; then ## Use "verify_par"
 			# If verify_par not empty, set verify_str to %verify($verify_par)
 			# Strip last character from verify_par
 			verify_str="${verify_par:+%verify(${verify_par%?}) }"

@@ -11,7 +11,7 @@ liste=$(rpm --querytags)
 
 for tag in $liste
 do
-	rep=$( grep $tag $fic )
+	rep=$( grep "$tag" "$fic" )
 	if [ -z "$rep" ]
 	then
 		echo "#$tag"

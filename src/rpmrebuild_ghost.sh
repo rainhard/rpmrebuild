@@ -38,13 +38,14 @@
 # rpmrebuild_files.sh rpmrebuild_ghost.sh rpmrebuild_buildroot.sh
 ################################################################
 
-MY_LIB_DIR=`dirname $0` || ( echo "ERROR $0 dirname $0"; exit 1)
-MY_BASENAME=`basename $0`
-source $MY_LIB_DIR/rpmrebuild_lib.src    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
+MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR $0 dirname $0"; exit 1)
+MY_BASENAME=$( basename "$0" )
+source "$MY_LIB_DIR/rpmrebuild_lib.src"    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
-[ $# -ne 1 -o "x$1" = "x" ] && {
+if [ $# -ne 1 ] || [ "x$1" = "x" ]
+then
 	Critical "Usage: $0 <buildroot>"
-}
+fi
 
 BuildRoot="$1"
 
@@ -77,16 +78,16 @@ while :; do
 	case "X$file_type" in
 		Xd*)
 			# Directory. Ghost directory ?
-			Mkdir_p $File || Critical "$MY_BASENAME Mkdir_p $File"
+			Mkdir_p "$File" || Critical "$MY_BASENAME Mkdir_p $File"
 		;;
 
 		*)
 			# Not directory
 			#  Just in case dir for ghost file not exist create it
 			DirName=${File%/*}
-			Mkdir_p $DirName || Critical "$MY_BASENAME Mkdir_p $DirName"
+			Mkdir_p "$DirName" || Critical "$MY_BASENAME Mkdir_p $DirName"
 			# Create file itself
-			> $File || Critical "$MY_BASENAME create $File"
+			> "$File" || Critical "$MY_BASENAME create $File"
 		;;
 	esac || Critical "$MY_BASENAME esac"
 done || Critical "$MY_BASENAME done"

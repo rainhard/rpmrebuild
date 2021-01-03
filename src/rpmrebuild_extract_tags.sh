@@ -45,4 +45,4 @@ awk '
 		line = new_line
 		pos_begin = index(line, "%{")
 	}
-}' < $1 | sort -u
+}' < "$1" | sort -u

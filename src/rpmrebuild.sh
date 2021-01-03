@@ -25,7 +25,7 @@ function GetVersion
 {
 	if [ -f "$MY_LIB_DIR/Version" ]
 	then
-		VERSION=$( cat $MY_LIB_DIR/Version )
+		VERSION=$( cat "$MY_LIB_DIR"/Version )
 	else
 		Warning "(GetVersion) $FileNotFound Version"
 	fi
@@ -36,13 +36,14 @@ function GetVersion
 function SpecEdit
 {
 	Debug '(SpecEdit)'
-	[ $# -ne 1 -o "x$1" = "x" ] && {
+	if [ $# -ne 1 ] || [  "x$1" = "x" ]
+	then
 		Error "(SpecEdit) Usage: $0 SpecEdit <file>"
 		return 1
-	}
+	fi
 	# -e option : edit the spec file
 	local File=$1
-	${VISUAL:-${EDITOR:-vi}} $File
+	${VISUAL:-${EDITOR:-vi}} "$File"
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
 		export Aborted
@@ -56,7 +57,7 @@ function SpecEdit
 function VerifyPackage
 {
 	Debug "(VerifyPackage) ${PAQUET}"
-	rpm --verify --nodeps ${PAQUET} # Don't return here, st=1 - verify fail 
+	rpm --verify --nodeps "$PAQUET" # Don't return here, st=1 - verify fail
 	return 0
 }
 ###############################################################################
@@ -86,7 +87,7 @@ function IsPackageInstalled
 {
 	Debug '(IsPackageInstalled)'
 	# test if package exists
-	local output="$( rpm --query ${PAQUET} 2>&1 )" # Don't return here - use output
+	local output=$( rpm --query "${PAQUET}" 2>&1 ) # Don't return here - use output
 	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
@@ -119,14 +120,14 @@ function RpmUnpack
         	return 1
 	}
 	local CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
-	rm --force $CPIO_TEMP                               || return
-	rpm2cpio ${PAQUET} > $CPIO_TEMP                     || Error "(RpmUnpack) rpm2cpio" || return
-	rm    --force --recursive $BUILDROOT                || return
-	Mkdir_p                   $BUILDROOT                || return
-	(cd $BUILDROOT && cpio --quiet -idmu --no-absolute-filenames ) < $CPIO_TEMP || Error "(RpmUnpack) cpio" || return
-	rm --force $CPIO_TEMP                               || return
+	rm --force "$CPIO_TEMP"                               || return
+	rpm2cpio "${PAQUET}" > "$CPIO_TEMP"                     || Error "(RpmUnpack) rpm2cpio" || return
+	rm    --force --recursive "$BUILDROOT"                || return
+	Mkdir_p                   "$BUILDROOT"                || return
+	(cd "$BUILDROOT" && cpio --quiet -idmu --no-absolute-filenames ) < "$CPIO_TEMP" || Error "(RpmUnpack) cpio" || return
+	rm --force "$CPIO_TEMP"                               || return
 	# Process ghost files
-	/bin/bash $MY_LIB_DIR/rpmrebuild_ghost.sh $BUILDROOT < $FILES_IN || return
+	/bin/bash "$MY_LIB_DIR"/rpmrebuild_ghost.sh "$BUILDROOT" < "$FILES_IN" || return
 	return 0
 }
 ###############################################################################
@@ -137,7 +138,7 @@ function CreateBuildRoot
         if [ "x$package_flag" = "x" ]; then
 		# installed package
 		if [ "X$need_change_files" = "Xyes" ]; then
-			/bin/bash $MY_LIB_DIR/rpmrebuild_buildroot.sh $BUILDROOT < $FILES_IN || Error "(CreateBuildRoot) rpmrebuild_buildroot.sh $BUILDROOT" || return
+			/bin/bash "$MY_LIB_DIR"/rpmrebuild_buildroot.sh "$BUILDROOT" < "$FILES_IN" || Error "(CreateBuildRoot) rpmrebuild_buildroot.sh $BUILDROOT" || return
 		else
 			: # Do nothing (avoid a copy)
 		fi
@@ -167,7 +168,7 @@ function CheckArch
 	# pac_arch is got from RpmArch
 	RpmArch
 	case $pac_arch in
-	$cur_arch) 
+	"$cur_arch")
 		change_arch="";;
 	noarch)
 		change_arch="";;
@@ -202,9 +203,9 @@ function RpmBuild
 	if [ "x$BUILDROOT" = "x/" ]; then
 		BUILDROOT="$RPMREBUILD_TMPDIR/my_root"
 		# Just in case previous link is here
-		rm -f $BUILDROOT || return
+		rm -f "$BUILDROOT" || return
 		# Trick rpm (I hope :)
-		ln -s / $BUILDROOT || return
+		ln -s / "$BUILDROOT" || return
 	fi
 	eval $change_arch $BUILDCMD --define "'buildroot $BUILDROOT'" $rpm_defines -bb $rpm_verbose $additional ${FIC_SPEC} || {
 		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
@@ -225,7 +226,7 @@ function RpmFileName
 
 	# workaround for redhat 6.x / rpm 3.x
 	local arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
-	if [ $arch = "(none)" ]
+	if [ "$arch" = "(none)" ]
 	then
 		Debug '    workaround for rpm 3.x'
 		# get info from original paquet
@@ -240,7 +241,7 @@ function RpmFileName
 	if [ ! -f "${RPMFILENAME}" ]
 	then
 		Error "(RpmFileName) $FileNotFound rpm $RPMFILENAME"
-		ls -ltr ${rpmdir}/${pac_arch}/${PAQUET}*
+		ls -ltr "${rpmdir}/${pac_arch}/${PAQUET}*"
 		return 1
 	fi
 	return 0
@@ -253,7 +254,7 @@ function InstallationTest
 	Debug '(InstallationTest)'
 	# installation test
 	# force is necessary to avoid the message : already installed
-	rpm -U --test --force ${RPMFILENAME} || {
+	rpm -U --test --force "${RPMFILENAME}" || {
 		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
 		return 1
 	}
@@ -269,7 +270,7 @@ function Installation
 	local ID=$( id -u )
 	if [ "$ID" -eq 0 ]
 	then
-		rpm -Uvh --force ${RPMFILENAME} || {
+		rpm -Uvh --force "${RPMFILENAME}" || {
 			Error "(Installation) package '${PAQUET}' $InstallFailed"
 			return 1
 		}
@@ -287,9 +288,9 @@ function Processing
 	#local Aborted="no"
 	local MsgFail
 
-	source $RPMREBUILD_PROCESSING && return 0
+	source "$RPMREBUILD_PROCESSING" && return 0
 
-	if [ "X$need_change_spec" = "Xyes" -o "X$need_change_files" = "Xyes" ]; then
+	if [ "X$need_change_spec" = "Xyes" ] || [ "X$need_change_files" = "Xyes" ]; then
 		[ "X$Aborted" = "Xyes" ] || Error "(Processing) package '$PAQUET' $ModificationFailed."
 	else
 		Error "(Processing) package '$PAQUET' $SpecFailed."
@@ -320,7 +321,7 @@ function SendBugReport
 	Debug '(SendBugReport)'
 	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, skip report
 
-	[ -s $RPMREBUILD_BUGREPORT ] || return 0 ## empty report
+	[ -s "$RPMREBUILD_BUGREPORT" ] || return 0 ## empty report
 
 	AskYesNo "$WantSendBugReport" || return
 	# build default mail address 
@@ -329,12 +330,12 @@ function SendBugReport
 		echo -n "$EnterEmail"
 		read from
 	}
-	GetInformations $from >> $RPMREBUILD_BUGREPORT 2>&1
+	GetInformations "$from" >> "$RPMREBUILD_BUGREPORT" 2>&1
 	AskYesNo "$WantEditReport" && {
-		${VISUAL:-${EDITOR:-vi}} $RPMREBUILD_BUGREPORT
+		${VISUAL:-${EDITOR:-vi}} "$RPMREBUILD_BUGREPORT"
 	}
 	AskYesNo "$WantStillSend" && {
-		mail -s "[rpmrebuild] bug report" rpmrebuild-bugreport@lists.sourceforge.net < $RPMREBUILD_BUGREPORT
+		mail -s "[rpmrebuild] bug report" rpmrebuild-bugreport@lists.sourceforge.net < "$RPMREBUILD_BUGREPORT"
 	}
 	return
 }
@@ -361,9 +362,9 @@ function ChangeRpmQf
 	Debug "(ChangeRpmQf) $1"
 	local SED_PAR=$1
 	local input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
-	si_rpmqf=$[si_rpmqf + 1]
+	si_rpmqf=$(( si_rpmqf + 1 ))
 	local output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
-	sed -e "$SED_PAR" < $input_rpmqf > $output_rpmqf
+	sed -e "$SED_PAR" < "$input_rpmqf" > "$output_rpmqf"
 
 	return 0
 }
@@ -378,7 +379,7 @@ function GenRpmQf
 	RPM_TAGS=$( rpm --querytags ) || return
 
 	# base code
-	cp $MY_LIB_DIR/rpmrebuild_rpmqf.src $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	cp "${MY_LIB_DIR}"/rpmrebuild_rpmqf.src "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf
 
 	local optional_file=$MY_LIB_DIR/optional_tags.cfg
 	if [ -f "$optional_file" ]
@@ -389,7 +390,7 @@ function GenRpmQf
 			local tst_comment=$( echo "$tag1" | grep '#' )
 			if [ -z "$tst_comment" ]
 			then
-			SearchTag $tag1 || {
+			SearchTag "$tag1" || {
 				case "$type" in
 				d_line)
 					ChangeRpmQf "/%{$tag1}/d"
@@ -401,7 +402,7 @@ function GenRpmQf
 					;;
 				replacedby)
 					#Echo "tag1=$tag1 type=$type tag2=$tag2"
-					[ -n "$tag2" ] && SearchTag $tag2 && ChangeRpmQf "s/$tag1/$tag2/g" && Echo "(GenRpmQf) $ReplaceTag $tag1 => $tag2"
+					[ -n "$tag2" ] && SearchTag "$tag2" && ChangeRpmQf "s/$tag1/$tag2/g" && Echo "(GenRpmQf) $ReplaceTag $tag1 => $tag2"
 					;;
 				*)
 					Warning "(GenRpmQf) $UnknownType $type"
@@ -410,7 +411,7 @@ function GenRpmQf
 
 			}
 			fi
-		done < $optional_file
+		done < "$optional_file"
 	else
 		Warning "(GenRpmQf) $FileNotFound $optional_file"
 	fi
@@ -426,18 +427,18 @@ function CheckTags
 	Debug '(CheckTags)'
 	# list of used tags
 	#Echo "(CheckTags) search tags in rpmrebuild_rpmqf.src.$si_rpmqf"
-	local rpmrebuild_tags=$( $MY_LIB_DIR/rpmrebuild_extract_tags.sh $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf )
+	local rpmrebuild_tags=$( "${MY_LIB_DIR}"/rpmrebuild_extract_tags.sh "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf )
 
 	# check for all rpmrebuild tags
 	local errors=0
 	for tag in $rpmrebuild_tags
 	do
-		SearchTag $tag || {
+		SearchTag "$tag" || {
 			Warning "(CheckTags) $MissingTag $tag"
-			let errors="$errors + 1"
+			errors=$(( errors + 1 ))
 		}
 	done
-	if [ $errors -ge 1 ] 
+	if [ "$errors" -ge 1 ]
 	then
 		Warning "$CannotWork"
 		return 1
@@ -466,7 +467,7 @@ function clean_exit
 		RmDir "$RPMREBUILD_TMPDIR"
 	else
 		Debug "workdir : $TMPDIR_WORK"
-		ls -altr $TMPDIR_WORK
+		ls -altr "$TMPDIR_WORK"
 	fi
 }
 ##############################################################
@@ -485,31 +486,31 @@ function sig_prgm
 function Main
 {
 	RPMREBUILD_TMPDIR=${RPMREBUILD_TMPDIR:-~/.tmp/rpmrebuild.$$}
-	RPMREBUILD_BUGREPORT=$RPMREBUILD_TMPDIR/bugreport
+	RPMREBUILD_BUGREPORT=${RPMREBUILD_TMPDIR}/bugreport
 	export RPMREBUILD_BUGREPORT
 	export RPMREBUILD_TMPDIR
-	TMPDIR_WORK=$RPMREBUILD_TMPDIR/work
+	TMPDIR_WORK=${RPMREBUILD_TMPDIR}/work
 
-	MY_LIB_DIR=`dirname $0` || ( echo "ERROR rpmrebuild.sh dirname $0"; exit 1)
-	MY_BASENAME=`basename $0`
-	source $MY_LIB_DIR/rpmrebuild_lib.src    || ( echo "ERROR rpmrebuild.sh source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
+	MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR rpmrebuild.sh dirname $0"; exit 1)
+	MY_BASENAME=$( basename "$0" )
+	source "${MY_LIB_DIR}/rpmrebuild_lib.src"    || ( echo "ERROR rpmrebuild.sh source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
 	# create tempory directories before any work/test
 	RmDir "$RPMREBUILD_TMPDIR" || Error "RmDir $RPMREBUILD_TMPDIR" || return
-	Mkdir_p $TMPDIR_WORK       || Error "Mkdir_p $TMPDIR_WORK" || return
+	Mkdir_p "$TMPDIR_WORK"     || Error "Mkdir_p $TMPDIR_WORK" || return
 
 	# get VERSION
 	GetVersion
 
-	FIC_SPEC=$TMPDIR_WORK/spec
-	FILES_IN=$TMPDIR_WORK/files.in
+	FIC_SPEC=${TMPDIR_WORK}/spec
+	FILES_IN=${TMPDIR_WORK}/files.in
 	# I need it here just in case user specify 
 	# plugins for fs modification  (--change-files)
-	BUILDROOT=$TMPDIR_WORK/root
+	BUILDROOT=${TMPDIR_WORK}/root
 
-	source $MY_LIB_DIR/rpmrebuild_parser.src || Error "source $MY_LIB_DIR/rpmrebuild_parser.src" || return
-	source $MY_LIB_DIR/spec_func.src         || Error "source $MY_LIB_DIR/spec_func.src" || return
-	source $MY_LIB_DIR/processing_func.src   || Error "source $MY_LIB_DIR/processing_func.src" || return
+	source "$MY_LIB_DIR"/rpmrebuild_parser.src || Error "source $MY_LIB_DIR/rpmrebuild_parser.src" || return
+	source "$MY_LIB_DIR"/spec_func.src         || Error "source $MY_LIB_DIR/spec_func.src" || return
+	source "$MY_LIB_DIR"/processing_func.src   || Error "source $MY_LIB_DIR/processing_func.src" || return
 
 	# check language
 	case "$LANG" in
@@ -519,7 +520,7 @@ function Main
 		*)  real_lang=en;;
 	esac
 	# load translation file
-	source $MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang
+	source "$MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang"
 	
 	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
 	processing_init || return
@@ -535,7 +536,7 @@ function Main
 	# check it
 	CheckTags || return
 	# and load it
-	source $TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf   || return
+	source "${TMPDIR_WORK}/rpmrebuild_rpmqf.src.$si_rpmqf"   || return
 
 	export RPMREBUILD_PLUGINS_DIR=${MY_LIB_DIR}/plugins
 

@@ -71,10 +71,11 @@ function processing_init
 function processing_spec_change
 {
 	local Func="processing_spec_change"
-	[ $# -ne 1 -o "x$1" = "x" ] && {
+	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	then
 		Error "(processing_spec_change) Usage: $0 $Func <operation>"
 		return 1
-	}
+	fi
 
 	need_change_spec="yes"
 
@@ -93,140 +94,140 @@ function processing_spec_change
 		Xchange-spec-changelog | \
 		Xedit-changelog)
 			SPEC_IN=$SPEC_CHANGELOG.$si_changelog
-			si_changelog=$[si_changelog + 1]
+			si_changelog=$(( si_changelog + 1 ))
 			SPEC_OUT=$SPEC_CHANGELOG.$si_changelog
 		;;
 
 		Xchange-spec-conflicts | \
 		Xedit-conflicts)
 			SPEC_IN=$SPEC_CONFLICTS.$si_conflicts
-			si_conflicts=$[si_conflicts + 1]
+			si_conflicts=$(( si_conflicts + 1 ))
 			SPEC_OUT=$SPEC_CONFLICTS.$si_conflicts
 		;;
 
 		Xchange-spec-description | \
 		Xedit-description)
 			SPEC_IN=$SPEC_DESCRIPTION.$si_description
-			si_description=$[si_description + 1]
+			si_description=$(( si_description + 1 ))
 			SPEC_OUT=$SPEC_DESCRIPTION.$si_description
 		;;
 
 		Xchange-spec-files | \
 		Xedit-files)
 			SPEC_IN=$SPEC_FILES.$si_files
-			si_files=$[si_files + 1]
+			si_files=$(( si_files + 1 ))
 			SPEC_OUT=$SPEC_FILES.$si_files
 		;;
 
 		Xchange-spec-obsoletes | \
 		Xedit-obsoletes)
 			SPEC_IN=$SPEC_OBSOLETES.$si_obsoletes
-			si_obsoletes=$[si_obsoletes + 1]
+			si_obsoletes=$(( si_obsoletes + 1 ))
 			SPEC_OUT=$SPEC_OBSOLETES.$si_obsoletes
 		;;
 
 		Xchange-spec-post | \
 		Xedit-post)
 			SPEC_IN=$SPEC_POST.$si_post
-			si_post=$[si_post + 1]
+			si_post=$(( si_post + 1 ))
 			SPEC_OUT=$SPEC_POST.$si_post
 		;;
 
 		Xchange-spec-posttrans | \
 		Xedit-posttrans)
 			SPEC_IN=$SPEC_POSTTRANS.$si_posttrans
-			si_posttrans=$[si_posttrans + 1]
+			si_posttrans=$(( si_posttrans + 1 ))
 			SPEC_OUT=$SPEC_POSTTRANS.$si_posttrans
 		;;
 
 		Xchange-spec-postun | \
 		Xedit-postun)
 			SPEC_IN=$SPEC_POSTUN.$si_postun
-			si_postun=$[si_postun + 1]
+			si_postun=$(( si_postun + 1 ))
 			SPEC_OUT=$SPEC_POSTUN.$si_postun
 		;;
 
 		Xchange-spec-pre | \
 		Xedit-pre)
 			SPEC_IN=$SPEC_PRE.$si_pre
-			si_pre=$[si_pre + 1]
+			si_pre=$(( si_pre + 1 ))
 			SPEC_OUT=$SPEC_PRE.$si_pre
 		;;
 
 		Xchange-spec-pretrans | \
 		Xedit-pretrans)
 			SPEC_IN=$SPEC_PRETRANS.$si_pretrans
-			si_pretrans=$[si_pretrans + 1]
+			si_pretrans=$(( si_pretrans + 1 ))
 			SPEC_OUT=$SPEC_PRETRANS.$si_pretrans
 		;;
 
 		Xchange-spec-preamble | \
 		Xedit-preamble)
 			SPEC_IN=$SPEC_PREAMBLE.$si_preamble
-			si_preamble=$[si_preamble + 1]
+			si_preamble=$(( si_preamble + 1 ))
 			SPEC_OUT=$SPEC_PREAMBLE.$si_preamble
 		;;
 
 		Xchange-spec-preun | \
 		Xedit-preun)
 			SPEC_IN=$SPEC_PREUN.$si_preun
-			si_preun=$[si_preun + 1]
+			si_preun=$(( si_preun + 1 ))
 			SPEC_OUT=$SPEC_PREUN.$si_preun
 		;;
 
 		Xchange-spec-provides | \
 		Xedit-provides)
 			SPEC_IN=$SPEC_PROVIDES.$si_provides
-			si_provides=$[si_provides + 1]
+			si_provides=$(( si_provides + 1 ))
 			SPEC_OUT=$SPEC_PROVIDES.$si_provides
 		;;
 
 		Xchange-spec-requires | \
 		Xedit-requires)
 			SPEC_IN=$SPEC_REQUIRES.$si_requires
-			si_requires=$[si_requires + 1]
+			si_requires=$(( si_requires + 1 ))
 			SPEC_OUT=$SPEC_REQUIRES.$si_requires
 		;;
 
 		Xchange-spec-suggests | \
 		Xedit-suggests)
 			SPEC_IN=$SPEC_SUGGESTS.$si_suggests
-			si_suggests=$[si_suggests + 1]
+			si_suggests=$(( si_suggests + 1 ))
 			SPEC_OUT=$SPEC_SUGGESTS.$si_suggests
 		;;
 
 		Xchange-spec-enhances | \
 		Xedit-enhances)
 			SPEC_IN=$SPEC_ENHANCES.$si_enhances
-			si_enhances=$[si_enhances + 1]
+			si_enhances=$(( si_enhances + 1 ))
 			SPEC_OUT=$SPEC_ENHANCES.$si_enhances
 		;;
 
 		Xchange-spec-recommends | \
 		Xedit-recommends)
 			SPEC_IN=$SPEC_RECOMMENDS.$si_recommends
-			si_recommends=$[si_recommends + 1]
+			si_recommends=$(( si_recommends + 1 ))
 			SPEC_OUT=$SPEC_RECOMMENDS.$si_recommends
 		;;
 
 		Xchange-spec-supplements | \
 		Xedit-supplements)
 			SPEC_IN=$SPEC_SUPPLEMENTS.$si_supplements
-			si_supplements=$[si_supplements + 1]
+			si_supplements=$(( si_supplements + 1 ))
 			SPEC_OUT=$SPEC_SUPPLEMENTS.$si_supplements
 		;;
 
 		Xchange-spec-triggers | \
 		Xedit-triggers)
 			SPEC_IN=$SPEC_TRIGGERS.$si_triggers
-			si_triggers=$[si_triggers + 1]
+			si_triggers=$(( si_triggers + 1 ))
 			SPEC_OUT=$SPEC_TRIGGERS.$si_triggers
 		;;
 
 		Xchange-spec-verifyscript | \
 		Xedit-verifyscript)
 			SPEC_IN=$SPEC_VERIFYSCRIPT.$si_verifyscript
-			si_verifyscript=$[si_verifyscript + 1]
+			si_verifyscript=$(( si_verifyscript + 1 ))
 			SPEC_OUT=$SPEC_VERIFYSCRIPT.$si_verifyscript
 		;;
 
@@ -234,7 +235,7 @@ function processing_spec_change
 		Xedit-whole)
 			$Func "concatenate" || Error "(processing_spec_change) $Func concatenate" || return
 			SPEC_IN=$FIC_SPEC.$spec_index
-			spec_index=$[spec_index + 1]
+			spec_index=$(( spec_index + 1 ))
 			SPEC_OUT=$FIC_SPEC.$spec_index
 		;;
 
@@ -246,7 +247,7 @@ function processing_spec_change
 
 	case "X$operation" in
 		Xchange-spec-*)
-			cat <<-CMD_CHANGE >> $Output || return
+			cat <<-CMD_CHANGE >> "$Output" || return
 				# $operation
 				( 
 				   PATH="\$RPMREBUILD_PLUGINS_DIR:\$PATH" &&
@@ -258,18 +259,18 @@ function processing_spec_change
 		;;
 
 		Xedit-*)
-			cat <<-CMD_EDIT >> $Output || return
+			cat <<-CMD_EDIT >> "$Output" || return
 				# $operation
-				   cp -f $SPEC_IN $SPEC_OUT || return
-				   SpecEdit $SPEC_OUT       || return
+				   cp -f "$SPEC_IN" "$SPEC_OUT" || return
+				   SpecEdit "$SPEC_OUT"       || return
 			
 			CMD_EDIT
 		;;
 
 		Xconcatenate)
-			cat <<-CMD_CONCATENATE >> $Output || return
+			cat <<-CMD_CONCATENATE >> "$Output" || return
 				# $operation
-				   spec_concatenate > $SPEC_OUT || return
+				   spec_concatenate > "$SPEC_OUT" || return
 			CMD_CONCATENATE
 
 		;;
@@ -310,7 +311,7 @@ function processing_fini
 		esac || return
 	fi
 
-	cat <<-CMD_FINI >> $Output || return
+	cat <<-CMD_FINI >> "$Output" || return
 	# fini
 	   $cmd || return
 	CMD_FINI
@@ -320,10 +321,11 @@ function processing_fini
 
 function CreateProcessing
 {
-	[ $# -ne 1 -o "x$1" = "x" ] && {
+	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	then
 		Error "(CreateProcessing) <operation>"
 		return 1
-	}
+	fi
 
 	local operation="$1"
 	local Output="$RPMREBUILD_PROCESSING"
@@ -347,7 +349,7 @@ function CreateProcessing
 
 		Xchange-files)
 			need_change_files="yes"
-			cat <<-CMD_FILES >> $Output || return
+			cat <<-CMD_FILES >> "$Output" || return
 			# $operation
 			(
 			   PATH="\$RPMREBUILD_PLUGINS_DIR:\$PATH" &&

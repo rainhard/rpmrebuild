@@ -81,14 +81,15 @@ function AskYesNo
 ###############################################################################
 function RmDir
 {
-	[ $# -ne 1 -o "x$1" = "x" ] && {
+	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	then
 		Warning "Usage: RmDir <dir>"
 		return 1
-	}
+	fi
 	# to ensure tmpdir is really emptied by rm -rf
 	local Dir
 	Dir="$1"
-	if [ -d $Dir ]
+	if [ -d "$Dir" ]
 	then
 		rm -rf "$Dir" 2>/dev/null && return
 		chmod -R 700 "$Dir" 2>/dev/null  # no return here !!!
@@ -103,15 +104,16 @@ function RmDir
 # is not allways the same
 function Mkdir_p
 {
-	[ $# -ne 1 -o "x$1" = "x" ] && {
+	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	then
 		Warning "Usage: Mkdir_p <dir>"
 		return 1
-	}
+	fi
 	local Dir
 	Dir="$1"
-	mkdir -p $Dir
+	mkdir -p "$Dir"
 	# test result
-	if [ -d $Dir ]
+	if [ -d "$Dir" ]
 	then
 		return 0
 	else

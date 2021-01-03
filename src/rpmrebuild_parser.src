@@ -122,15 +122,15 @@ options:
 ###############################################################################
 function List_Plugins
 {
-	local plugindir=$( dirname $0)/plugins
-	for f in $plugindir/*.plug
+	local plugindir=$( dirname "$0" )/plugins
+	for f in "$plugindir"/*.plug
 	do
-		local plug=$(basename $f)
+		local plug=$( basename "$f" )
 		# use man to force localisation
 		# line number may vary
 		#text=$(man $plug | awk 'NR==7{print}' )
 		# filter by name of plugin
-		local text=$(man $plug | awk "/$plug +- /{print}" )
+		local text=$(man "$plug" | awk "/$plug +- /{print}" )
 		if [ -n "$text" ]
 		then
 			echo "$text"
@@ -164,7 +164,7 @@ function RequeredArgument
 	[ "x$SHORT_OPTION" = "x-" ] || return 0  # we use short option,
                                                  	 # do nothing
 	if [ "$OPTARG_EXIST" ]; then
-		[ "$OPTIND_INCR" ] && OPTIND=$[OPTIND + 1]
+		[ "$OPTIND_INCR" ] && OPTIND=$(( OPTIND + 1 ))
 		return 0
 	fi
 
@@ -191,7 +191,7 @@ function Include
 				ProcessLongOptions || return
 				;;
 		esac || return
-	done < $INCLUDE_FILE
+	done < "$INCLUDE_FILE"
 }
 ###############################################################################
 function ProcessLongOptions
@@ -1245,30 +1245,30 @@ function CommandLineParsing
 	while getopts "5a:bc:d:D:ef:hi:Iklm:npPRrs:vVwy:-:" opt; do
 		OPTIND_INCR=""
 		case "$opt" in
-			5) LONG_OPTION=md5-compat-digest;;
-			a) LONG_OPTION=additional;;
-			b) LONG_OPTION=batch;;
-			c) LONG_OPTION=comment-missing;;
-			d) LONG_OPTION=dir;;
-			D) LONG_OPTION=define;;
-			e) LONG_OPTION=edit-spec;;
-			f) LONG_OPTION=filter;;
-			i) LONG_OPTION=include;;
-			I) LONG_OPTION=install;;
-			k) LONG_OPTION=keep-perm;;
-			l) LONG_OPTION=list-plugin;;
-			m) LONG_OPTION=modify;;    
-			n) LONG_OPTION=notest-install;;
-			p) LONG_OPTION=package;;
-			P) LONG_OPTION=autoprovide;;
-			r) LONG_OPTION=release;;
-			R) LONG_OPTION=autorequire;;
-			s) LONG_OPTION=spec-only;;
-			h) LONG_OPTION=help;;
-			v) LONG_OPTION=verbose;;
-			V) LONG_OPTION=version;;
-			w) LONG_OPTION=warning;;
-			y) LONG_OPTION=verify;;
+			5) LONG_OPTION="md5-compat-digest";;
+			a) LONG_OPTION="additional";;
+			b) LONG_OPTION="batch";;
+			c) LONG_OPTION="comment-missing";;
+			d) LONG_OPTION="dir";;
+			D) LONG_OPTION="define";;
+			e) LONG_OPTION="edit-spec";;
+			f) LONG_OPTION="filter";;
+			i) LONG_OPTION="include";;
+			I) LONG_OPTION="install";;
+			k) LONG_OPTION="keep-perm";;
+			l) LONG_OPTION="list-plugin";;
+			m) LONG_OPTION="modify";;
+			n) LONG_OPTION="notest-install";;
+			p) LONG_OPTION="package";;
+			P) LONG_OPTION="autoprovide";;
+			r) LONG_OPTION="release";;
+			R) LONG_OPTION="autorequire";;
+			s) LONG_OPTION="spec-only";;
+			h) LONG_OPTION="help";;
+			v) LONG_OPTION="verbose";;
+			V) LONG_OPTION="version";;
+			w) LONG_OPTION="warning";;
+			y) LONG_OPTION="verify";;
 
                 	-)
 	        		case "x$OPTARG" in
@@ -1307,10 +1307,11 @@ function CommandLineParsing
 	CheckOptions
 
 	CreateProcessing "fini" || return
-	[ "X$spec_only" = "Xyes" -a "X$need_change_files" = "Xyes" ] && {
+	if [ "X$spec_only" = "Xyes" ] && [ "X$need_change_files" = "Xyes" ]
+	then
 		Echo "$NotCompatibleOption '--spec_only' , '--change-files'"
 		return 1
-	}
+	fi
 
 	shift $((OPTIND - 1))
 	case $# in
@@ -1323,16 +1324,16 @@ function CommandLineParsing
    		1) # One argument, it's ok
       			PAQUET="$1"
       			if [ "x$package_flag" = "x" ]; then
-         			PAQUET_NAME=$( basename $PAQUET )
+				PAQUET_NAME=$( basename "$PAQUET" )
       			else
 				# argument should be a file
-				if [ -f $PAQUET ]; then
-					PAQUET_NAME=$( basename $PAQUET)
+				if [ -f "$PAQUET" ]; then
+					PAQUET_NAME=$( basename "$PAQUET" )
 					# check if it is an rpm file
 					# rem : 'file' sometimes does not return 
 					# "RPM" because some other magic triggers
 					# before the RPM magic check runs
-					tst_rpm=$( rpm -qp $PAQUET  2>/dev/null )
+					tst_rpm=$( rpm -qp "$PAQUET" 2>/dev/null )
 					if [ $? -eq 0 ]; then
 							: #ok
 					else
@@ -1363,7 +1364,7 @@ function CommandLineParsing
 		# Let us find it's absolute path.
 		# Yeah, a bit ugly, but simple and seems to work...
 		Mkdir_p "$rpmdir" # Not check exit status here
-		rpmdir="$(cd $rpmdir && echo $PWD)" || {
+		rpmdir="$( cd "$rpmdir" && echo "$PWD" )" || {
 			Error "(CommandLineParsing) $CannotChdir '$rpmdir'"
 			return 1
 		}
