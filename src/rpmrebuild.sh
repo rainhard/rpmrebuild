@@ -201,7 +201,7 @@ function RpmBuild
 	# so I have to provide define on the command line
 	# Worse, it disallow buildroot "/", so I have to trick it.
 	if [ "x$BUILDROOT" = "x/" ]; then
-		BUILDROOT="$RPMREBUILD_TMPDIR/my_root"
+		BUILDROOT="${RPMREBUILD_TMPDIR}/my_root"
 		# Just in case previous link is here
 		rm -f "$BUILDROOT" || return
 		# Trick rpm (I hope :)

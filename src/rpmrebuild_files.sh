@@ -81,6 +81,11 @@ while :; do
 	read file_cap
 	read file
 
+	# on fedora 33, centos 7, 8, the root directory "/" is owned by filesystem package
+	# but for rpmrebuild, BUILDROOT is juste a symlink, not a directory (cf RpmBuild in rpmrebuild.sh)
+	# so the build fails, the only simple way is to skip the root directory
+	[ "$file" = "/" ] && continue
+
 	# bash 2 syntaxe
 	#[[ $file = *\** ]] && file=$(echo "$file"|sed 's/\*/\\*/')
 	# bash 1 but with a fork (grep)
