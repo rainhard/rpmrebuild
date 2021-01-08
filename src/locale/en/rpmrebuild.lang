@@ -11,6 +11,7 @@ ForbidenOption='can not be specified after --change-spec-whole/--edit-spec-whole
 InternalError='Internal error'
 InstallFailed="the install failed"
 InstallCannot="you must be root to install package"
+LinkFailed='symbolic link failed'
 MissingTag='can not find rpm tag'
 ModificationFailed='modification failed'
 MoreInformation='For more information, try '

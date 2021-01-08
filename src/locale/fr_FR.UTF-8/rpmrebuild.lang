@@ -11,6 +11,7 @@ ForbidenOption="ne peut être spécifié après les options --change-spec-whole/
 InternalError="erreur interne"
 InstallFailed="l'installation a échoué"
 InstallCannot="vous devez être root pour installer le package"
+LinkFailed='lien symbolique a echoué'
 MissingTag="impossible de trouver le tag rpm"
 ModificationFailed="la modification a échoué"
 MoreInformation="pour plus d'information, tapez"

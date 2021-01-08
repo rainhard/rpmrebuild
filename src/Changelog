@@ -1,6 +1,8 @@
 * Sun Nov 22 2020 <gerbier@users.sourceforge.net> 2.16-1
 - fix bug if more than 10 args (thanks Dmitry V. Levin)
 - add signal trapping to clean directory
+- fix warnings from shellcheck
+- fix problem when rebuild filesystem package (builroot not a directory)
 
 * Fri Feb 21 2020 <gerbier@users.sourceforge.net> 2.15-1
 - fix error on rpmrebuild_files.sh line 204 (verify tag)

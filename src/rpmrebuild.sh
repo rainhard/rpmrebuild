@@ -200,12 +200,21 @@ function RpmBuild
 	# rpm 4.6 ignore BuildRoot in the spec file, 
 	# so I have to provide define on the command line
 	# Worse, it disallow buildroot "/", so I have to trick it.
+	# a first easy answer is with a symbolic link
+	# but it fails for filesystem package who owned / directory
+	# this is fixed in rpmrebuild_files.sh
+	# another may be with : mount --bind -o ro / $BUILDROOT
+	# but if does not work if not superuser
+	# and need also to mount all other filesystems (/usr /var ...)
 	if [ "x$BUILDROOT" = "x/" ]; then
-		BUILDROOT="$RPMREBUILD_TMPDIR/my_root"
+		BUILDROOT="${RPMREBUILD_TMPDIR}/my_root"
 		# Just in case previous link is here
 		rm -f "$BUILDROOT" || return
 		# Trick rpm (I hope :)
-		ln -s / "$BUILDROOT" || return
+		ln -s / "$BUILDROOT" || {
+			Error "(RpmBuild) ${BUILDROOT} $LinkFailed"
+			return 1
+		}
 	fi
 	eval $change_arch $BUILDCMD --define "'buildroot $BUILDROOT'" $rpm_defines -bb $rpm_verbose $additional ${FIC_SPEC} || {
 		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
