@@ -63,15 +63,15 @@ like( $out, qr/is not an rpm file/, 'not an rpm file' ) or diag("out=$out\n");
 
 # 8 package
 $out = `$cmd afick-doc 2>&1`;
-like( $out, qr/result:.*afick-doc.*rpm/, 'rpm package' ) or diag("out=$out\n");
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm package (afick-doc)' ) or diag("out=$out\n");
 
 # 9 file
 $out = `$cmd -p ../test/afick-doc-3.7.0-1.noarch.rpm 2>&1`;
-like( $out, qr/result:.*afick-doc.*rpm/, 'rpm file' ) or diag("out=$out\n");
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm file (afick-doc)' ) or diag("out=$out\n");
 
 # 10 filesystem (user)
 $out = `$cmd filesystem 2>&1`;
-like( $out, qr/error: Not a directory.*my_root/, 'filesystem (user)' ) or diag("out=$out\n");
+like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (user)' ) or diag("out=$out\n");
 
 # 11 filesystem (root)
 $out = `sudo $cmd filesystem 2>&1`;
