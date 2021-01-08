@@ -3,6 +3,7 @@
 - add signal trapping to clean directory
 - fix warnings from shellcheck
 - fix problem when rebuild filesystem package (builroot not a directory)
+- fix installation test for kernel and multi-arch packages
 
 * Fri Feb 21 2020 <gerbier@users.sourceforge.net> 2.15-1
 - fix error on rpmrebuild_files.sh line 204 (verify tag)

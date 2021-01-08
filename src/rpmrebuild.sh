@@ -263,10 +263,23 @@ function InstallationTest
 	Debug '(InstallationTest)'
 	# installation test
 	# force is necessary to avoid the message : already installed
-	rpm -U --test --force "${RPMFILENAME}" || {
-		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
-		return 1
-	}
+	# -U or -i option ? : -U does work if only a version is installed
+	# get package name
+	local package_name=$( rpm -qp --queryformat '%{NAME}' ${RPMFILENAME} )
+	local nb=$( rpm -q ${package_name} | wc -l )
+	if [ "$nb" -eq 1 ]
+	then
+		rpm -U --test --force "${RPMFILENAME}" || {
+			Error "(InstallationTest) package '${PAQUET}' $TestFailed"
+			return 1
+		}
+	else
+		Debug "multi-installed package"
+		rpm -i --test --force "${RPMFILENAME}" || {
+			Error "(InstallationTest) package '${PAQUET}' $TestFailed"
+			return 1
+		}
+	fi
 	Debug "(InstallationTest) test install ${PAQUET} ok"
 	return 0
 }
