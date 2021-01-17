@@ -273,7 +273,7 @@ function InstallationTest
 	# installation test
 	# force is necessary to avoid the message : already installed
 	local rpm_options='--test --force'
-	local nb=( IsMultiInstall )
+	local nb=$( IsMultiInstall )
 	if [ "$nb" -le 1 ]
 	then
 		rpm_options="$rpm_options -U"
@@ -298,7 +298,7 @@ function Installation
 	if [ "$ID" -eq 0 ]
 	then
 		local rpm_options='-v -h --force'
-		local nb=( IsMultiInstall )
+		local nb=$( IsMultiInstall )
 		if [ "$nb" -le 1 ]
 		then
 			rpm_options="$rpm_options -U"
