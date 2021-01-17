@@ -85,7 +85,7 @@ function bench {
 	echo "  pb cpio : $pbmagic"
 	echo "  pb dep  : $pbdep"
 	echo "  pb arch : $pbarch"
-	echo "  pb dir  : $pnotdir"
+	echo "  pb dir  : $pbnotdir"
 	echo "full log on $LOG"
 	echo "-------------------------------------------------------"
 }
@@ -94,19 +94,29 @@ function bench {
 # main
 ############################################################
 
-tmpdir=/tmp/rpmrebuild
-
-if [ -d $tmpdir ]
+# check root
+ID=$( id -u )
+if [ "$ID" -ne 0 ]
 then
-	echo "remove old repository $tmpdir"
-	mkdir -p $tmpdir
+	echo "should run as root"
+	exit 1
 fi
 
-LOG=rpmrebuild_bench.log
+LOG="$(pwd)/rpmrebuild_bench.log"
 if [ -f $LOG ]
 then
 	mv $LOG $LOG.old
 fi
+
+tmpdir=/tmp/rpmrebuild
+if [ -d $tmpdir ]
+then
+	echo "find $tmpdir : check if another run"
+	exit 1
+fi
+mkdir -p $tmpdir
+
+
 
 # to have standardize error messages
 export LC_ALL=POSIX
