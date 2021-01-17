@@ -22,7 +22,9 @@ function bench {
 	do
 		let seen="$seen + 1"
 		echo -n "$seen/$max $pac "
-		output=$( nice rpmrebuild -b -k  -y no -c yes -d $tmpdir $pac  2>&1 )
+		localtmpdir=${tmpdir}/$$
+		mkdir $localtmpdir
+		output=$( nice rpmrebuild -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
@@ -71,9 +73,9 @@ function bench {
 				list_bad="$list_bad $pac"
 			fi
 		fi
-		#rm -f ${pac}.spec
+
 		# remove new rpm files to avoid file system full
-		rm -f $tmpdir/i386/* $tmpdir/i586/* $tmpdir/i686/* $tmpdir/noarch/* $tmpdir/x86_64/* 2> /dev/null
+		rm -rf $localtmpdir
 	done
 
 	# clean temporary directories
@@ -108,7 +110,7 @@ then
 	mv $LOG $LOG.old
 fi
 
-tmpdir=/tmp/rpmrebuild
+export tmpdir=/tmp/rpmrebuild
 if [ -d $tmpdir ]
 then
 	echo "find $tmpdir : check if another run"
