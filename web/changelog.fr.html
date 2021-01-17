@@ -15,6 +15,7 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.16-1">2.16-1</a></li>
       <li><a href="#v2.15-1">2.15-1</a></li>
       <li><a href="#v2.14-1">2.14-1</a></li>
       <li><a href="#v2.13-1">2.13-1</a></li>
@@ -71,6 +72,15 @@
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
     <hr />
+    Sun Jan 17 2021 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.16-1" id="v2.16-1">2.16-1</a>
+    <ul>
+      <li>correction de bug si plus de 10 arguments (merci Dmitry V. Levin)</li>
+      <li>ajout de gestion de signaux pour le nettoyage des repertoires temporaires</li>
+      <li>analyse du code avec shellcheck et suppression des avertissements</li>
+      <li>correction de bug sur la contruction du paquet filesystem (builroot n'est pas un repertoire)</li>
+      <li>correcton de bug sur le test et l'installation des paquets en plusieurs version (kernel, gpg-key multi-arch)</li>
+    </ul>
+    <hr />
     Fri Feb 21 2020 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.15-1" id="v2.15-1">2.15-1</a>
     <ul>
       <li>correction de bug dans rpmrebuild_files.sh ligne 204 (verify tag)</li>
@@ -83,7 +93,6 @@
       <li>correction de bug sur les dependances conditionnelles (avec des espaces)</li>
     </ul>
     <hr />
-
     Fri Oct 19 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1" id="v2.14-1">2.14-1</a>
     <ul>
       <li>ajout d'une liste de tag optionneles, pour permettre l'utilisation sur de vieilles versions de rpm</li>

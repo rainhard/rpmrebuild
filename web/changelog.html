@@ -15,6 +15,7 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.16-1">2.16-1</a></li>
       <li><a href="#v2.15-1">2.15-1</a></li>
       <li><a href="#v2.14-1">2.14-1</a></li>
       <li><a href="#v2.13-1">2.13-1</a></li>
@@ -71,6 +72,15 @@
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
     <hr />
+    Sun Jan 17 2021 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.16-1" id="v2.16-1">2.16-1</a>
+    <ul>
+      <li>fix bug if more than 10 args (thanks Dmitry V. Levin)</li>
+      <li>add signal trapping to clean directory</li>
+      <li>fix warnings from shellcheck</li>
+      <li>fix problem when rebuild filesystem package (builroot not a directory)</li>
+      <li>fix installation test for kernel and multi-arch packages</li>
+    </ul>
+    <hr />
     Fri Feb 21 2020 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.15-1" id="v2.15-1">2.15-1</a>
     <ul>
       <li>fix error on rpmrebuild_files.sh line 204 (verify tag)</li>
@@ -82,7 +92,6 @@
       <li>better diagnostic on internal error</li>
       <li>fix bug on conditional requires (with space)</li>
     </ul>
-
     <hr />
     Fri Oct 19 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1" id="v2.14-1">2.14-1</a>
     <ul>
