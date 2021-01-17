@@ -257,29 +257,34 @@ function RpmFileName
 }
 
 ###############################################################################
+# -U or -i option ? : -U does work if only a version is installed
+function IsMultiInstall
+{
+	# get package name
+	local package_name=$( rpm -qp --queryformat '%{NAME}' ${RPMFILENAME} )
+	# count installs
+	rpm -q ${package_name} 2> /dev/null | wc -l
+}
+###############################################################################
 # test if build package can be installed
 function InstallationTest
 {
 	Debug '(InstallationTest)'
 	# installation test
 	# force is necessary to avoid the message : already installed
-	# -U or -i option ? : -U does work if only a version is installed
-	# get package name
-	local package_name=$( rpm -qp --queryformat '%{NAME}' ${RPMFILENAME} )
-	local nb=$( rpm -q ${package_name} | wc -l )
-	if [ "$nb" -eq 1 ]
+	local rpm_options='--test --force'
+	local nb=( IsMultiInstall )
+	if [ "$nb" -le 1 ]
 	then
-		rpm -U --test --force "${RPMFILENAME}" || {
-			Error "(InstallationTest) package '${PAQUET}' $TestFailed"
-			return 1
-		}
+		rpm_options="$rpm_options -U"
 	else
 		Debug "multi-installed package"
-		rpm -i --test --force "${RPMFILENAME}" || {
-			Error "(InstallationTest) package '${PAQUET}' $TestFailed"
-			return 1
-		}
+		rpm_options="$rpm_options -i"
 	fi
+	rpm ${rpm_options} "${RPMFILENAME}" || {
+		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
+		return 1
+	}
 	Debug "(InstallationTest) test install ${PAQUET} ok"
 	return 0
 }
@@ -292,7 +297,15 @@ function Installation
 	local ID=$( id -u )
 	if [ "$ID" -eq 0 ]
 	then
-		rpm -Uvh --force "${RPMFILENAME}" || {
+		local rpm_options='-v -h --force'
+		local nb=( IsMultiInstall )
+		if [ "$nb" -le 1 ]
+		then
+			rpm_options="$rpm_options -U"
+		else
+			rpm_options="$rpm_options -i"
+		fi
+		rpm ${rpm_options} "${RPMFILENAME}" || {
 			Error "(Installation) package '${PAQUET}' $InstallFailed"
 			return 1
 		}
