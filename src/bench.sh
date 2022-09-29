@@ -16,7 +16,13 @@ function bench {
 	pbdep=0
 	pbarch=0
 	pbnotdir=0
+	pbchangelog=0
 	list_bad=''
+	list_bad_dep=''
+	list_bad_magic=''
+	list_bad_arch=''
+	list_bad_dir=''
+	list_bad_changelog=''
 
 	for pac in $list
 	do
@@ -24,7 +30,7 @@ function bench {
 		echo -n "$seen/$max $pac "
 		localtmpdir=${tmpdir}/$$
 		mkdir $localtmpdir
-		output=$( nice rpmrebuild -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
+		output=$( nice ./rpmrebuild -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
@@ -47,25 +53,31 @@ function bench {
 				echo "NOTOK (Failed dependencies)"
 				echo "  $output"
 				let pbdep="$pbdep + 1"
+				list_bad_dep="$list_bad_dep $pac"
 			elif [ -n "$changelog" ]
 			then
 				echo "NOTOK (changelog not in descending chronological order)"
 				echo "  $output"
+				let pbchangelog="$pbchangelog + 1"
+				list_bad_changelog="$list_bad_changelog $pac"
 			elif [ -n "$cpio" ]
 			then
 				echo "NOTOK (cpio: Bad magic)"
 				echo "  $output"
 				let pbmagic="$pbmagic + 1"
+				list_bad_magic="$list_bad_magic $pac"
 			elif [ -n "$arch" ]
 			then
 				echo "NOTOK (Arch dependent binaries)"
 				echo "  $output"
 				let pbarch="$pbarch + 1"
+				list_bad_arch="$list_bad_arch $pac"
 			elif [ -n "$notdir" ]
 			then
 				echo "NOTOK (Not a directory)"
 				echo "  $output"
 				let pbnotdir="$pbnotdir + 1"
+				list_bad_dir="$list_bad_dir $pac"
 			else
 				echo "KO"
 				echo "  $output"
@@ -83,11 +95,12 @@ function bench {
 
 	echo "-------------------------------------------------------"
 	echo "$notok failed build on $seen packages"
-	echo "$bad bad build : $list_bad"
-	echo "  pb cpio : $pbmagic"
-	echo "  pb dep  : $pbdep"
-	echo "  pb arch : $pbarch"
-	echo "  pb dir  : $pbnotdir"
+	echo "  pb cpio : $pbmagic ($list_bad_magic)"
+	echo "  pb dep  : $pbdep ($list_bad_dep)"
+	echo "  pb arch : $pbarch ($list_bad_arch)"
+	echo "  pb dir  : $pbnotdir ($list_bad_dir)"
+	echo "  pb changelog  : $pbchangelog ($list_bad_changelog)"
+	echo "  others  : $bad ($list_bad)"
 	echo "full log on $LOG"
 	echo "-------------------------------------------------------"
 }
