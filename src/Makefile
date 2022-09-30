@@ -147,6 +147,9 @@ html: man $(HTML_PAGES)
 	cp $(HTML_PAGES) ../web
 	$(MAKE) -C plugins $@
 
+check: $(LIB_SCRIPTS) $(INCLUDE_SCRIPTS)
+	./shellcheck.sh
+
 # build all packages
 alldist: rpmbuild dist html
 
