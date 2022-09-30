@@ -12,7 +12,7 @@ function bench {
 	localtmpdir=${tmpdir}/$$
 	mkdir $localtmpdir
 	localoutput="${output_dir}/${pac}.output"
-	nice ./rpmrebuild -b -k  -y no -c yes -d $localtmpdir $pac  > ${localoutput} 2>&1
+	nice ./rpmrebuild.sh -b -k  -y no -c yes -d $localtmpdir $pac  > ${localoutput} 2>&1
 	irep=$?
 	if [ $irep -eq 0 ]
 	then

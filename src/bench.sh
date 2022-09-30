@@ -30,7 +30,7 @@ function bench {
 		echo -n "$seen/$max $pac "
 		localtmpdir=${tmpdir}/$$
 		mkdir $localtmpdir
-		output=$( nice ./rpmrebuild -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
+		output=$( nice ./rpmrebuild.sh -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
