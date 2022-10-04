@@ -19,7 +19,7 @@ then
 	then
 		echo "--------------- $src => $dest -------------------------"
 
-		echo '<?xml version="1.0" encoding="utf-8"?' > $dest
+		#echo '<?xml version="1.0" encoding="utf-8"?' > $dest
 		# man en html
 		#man2html $src | grep -v "Content-type:" | grep -v "Return to Main Contents" | sed -e 's!http://localhost/cgi-bin/man/man2html!!g' -e 's!/man/man2html!!g' -e 's!\?[1-8]+!!g' -e 's!<A HREF="">man2html</A>!man2html!g' -e 's/<DL COMPACT>/<DL>/g'    >> $dest
 		man2html $src | grep -v "Content-type:" | grep -v "Return to Main Contents" | sed -e 's/<DL COMPACT>/<DL>/g' | ./see_also.pl >> $dest
