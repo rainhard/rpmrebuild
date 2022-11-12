@@ -31,7 +31,7 @@ options:
    -D, --define=<define>        $UsageDefine
    -e, --edit-spec              $UsageEditSpec
    -f, --filter=<command>       $UsageFilter
-   -i, --includes=<file>        $UsageInclude
+   -i, --include=<file>         $UsageInclude
    -I, --install                $UsageInstall
    -k, --keep-perm              $UsageKeepPerm
        --pug-from-fs            $UsagePugFs

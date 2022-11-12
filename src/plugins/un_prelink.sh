@@ -60,7 +60,7 @@ fi
 case $LONG_OPTION in
 	change-files)
 		;;
-	*)	msg "should be called from LONG_OPTION=change-file";
+	*)	msg "should be called from LONG_OPTION=change-files";
 		syntaxe
 	;;
 esac
