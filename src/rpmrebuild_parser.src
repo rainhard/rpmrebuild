@@ -1062,7 +1062,7 @@ function ProcessLongOptions
 					;;
 
                            		*)
-						RPMREBUILD_COMMENT_MISSING="yes"
+						RPMREBUILD_COMMENT_MISSING="no"
 					;;
 				esac
 			;;
