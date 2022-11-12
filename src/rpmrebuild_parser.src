@@ -1235,6 +1235,7 @@ function CommandLineParsing
 
 	export RPMREBUILD_COMMENT_MISSING="no"
 	export RPMREBUILD_PUG_FROM_FS="no"
+	export RPMREBUILD_CAP_FROM_FS="no"
 	export RPMREBUILD_WARNING="no"
 
 	PAQUET=""
