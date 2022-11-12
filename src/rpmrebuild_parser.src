@@ -1243,7 +1243,7 @@ function CommandLineParsing
 
 	export LONG_OPTION
 
-	while getopts "5a:bc:d:D:ef:hi:Iklm:npPRrs:vVwy:-:" opt; do
+	while getopts "5a:bc:d:D:ef:hi:Iklm:npPRr:s:vVwy:-:" opt; do
 		OPTIND_INCR=""
 		case "$opt" in
 			5) LONG_OPTION="md5-compat-digest";;
