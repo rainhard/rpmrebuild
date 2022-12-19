@@ -7,7 +7,5 @@ what now ?
 - something about package signature ?
 (detect passed signature with SIGGPG, ask for new one .)
 
-- add install option
-
 --------------------------------------------------------
 fix shell syntax with http://www.shellcheck.net/

@@ -74,9 +74,70 @@ $out = `$cmd filesystem 2>&1`;
 like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (user)' ) or diag("out=$out\n");
 
 # 11 filesystem (root)
+# works on mageia, not on fedora because filesystem contains /proc
 $out = `sudo $cmd filesystem 2>&1`;
 like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (root)' ) or diag("out=$out\n");
 
+# --cap-from-fs
+$out = `$cmd --cap-from-fs rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'cap-from-fs' ) or diag("out=$out\n");
+
+# --cap-from-db
+$out = `$cmd --cap-from-db rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'cap-from-db' ) or diag("out=$out\n");
+
+# --comment-missing
+$out = `$cmd --comment-missing=yes rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'comment-missing yes' ) or diag("out=$out\n");
+$out = `$cmd --comment-missing=no rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'comment-missing no' ) or diag("out=$out\n");
+
+# --notest-install
+$out = `$cmd --notest-install rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'notest-install' ) or diag("out=$out\n");
+
+# --pug-from-db
+$out = `$cmd --pug-from-db rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'pug-from-db' ) or diag("out=$out\n");
+
+# --pug-from-fs
+$out = `$cmd --pug-from-fs rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'pug-from-fs' ) or diag("out=$out\n");
+
+# --autoprovide
+$out = `$cmd --autoprovide rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'autoprovide' ) or diag("out=$out\n");
+
+# --autorequire
+$out = `$cmd --autorequire rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'autorequire' ) or diag("out=$out\n");
+
+# --release
+$out = `$cmd --release=test rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'release' ) or diag("out=$out\n");
+
+# --debug
+$out = `$cmd --debug rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'debug' ) or diag("out=$out\n");
+
+# --verify
+$out = `$cmd --verify=y rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'verify yes' ) or diag("out=$out\n");
+$out = `$cmd --verify=n rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'verify no' ) or diag("out=$out\n");
+
+# --list-plugin
+$out = `$cmd --list-plugin rpmrebuild 2>&1`;
+like( $out, qr/demo.plug/, 'list-plugin' ) or diag("out=$out\n");
+
+# --warning
+$out = `$cmd --warning rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'warning' ) or diag("out=$out\n");
+
+# --spec-only
+$out = `$cmd ----spec-only=/tmp/rpmrebuild.spec rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'warning' ) or diag("out=$out\n");
+#
 # capabilities
 # rpmrebuild iputils
 
