@@ -43,7 +43,7 @@ will apply plugin to files, then build the package
 
 .SH "AUTHORS"
 .LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
+Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
 .SH "NOTES"

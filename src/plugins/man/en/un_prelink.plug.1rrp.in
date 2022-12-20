@@ -42,7 +42,7 @@ to build apache package with not prelinked binaries
 
 .SH "AUTHORS"
 .LP 
-Eric Gerbier <gerbier@users.sourceforge.net>, based on code from Han Holl
+Eric Gerbier <eric.gerbier@tutanota.com>, based on code from Han Holl
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
 

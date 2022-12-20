@@ -5,7 +5,7 @@
 #
 #    Copyright (C) 2002, 2003, 2013 by Valery Reznic
 #    Bug reports to: valery_reznic@users.sourceforge.net
-#      or          : gerbier@users.sourceforge.net
+#      or          : eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify

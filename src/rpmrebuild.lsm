@@ -9,7 +9,7 @@ Description:    rpmrebuild creates spec files used by the Red Hat Package Manage
 		existing one.
 Keywords:       RPM, spec file, package, packaging, automated build,
                 development, utility, LSM
-Author:         gerbier@users.sourceforge.net (Eric Gerbier)
+Author:         eric.gerbier@tutanota.com (Eric Gerbier)
 		valery_reznic@users.sourceforge.net (Valery Reznic)
 Primary-site:   http://rpmrebuild.sourceforge.net
 		90 ko rpmrebuild-2.16-1.noarch.rpm

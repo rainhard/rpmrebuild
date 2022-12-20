@@ -2,7 +2,7 @@
 ###############################################################################
 #
 #    Copyright (C) 2006 by Eric Gerbier
-#    Bug reports to: gerbier@users.sourceforge.net
+#    Bug reports to: eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify

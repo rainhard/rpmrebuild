@@ -41,7 +41,7 @@ rpmrebuild \-\-include compat_digest.plug apache
 
 .SH "AUTHORS"
 .LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
+Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
 

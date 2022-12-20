@@ -159,7 +159,7 @@ installed. Please note, that \fBmakewhatis\fP should be run
 before newly installed manpages will be available for \fB'man \-k rrp'
 .SH "AUTHORS"
 .LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
+Eric Gerbier <eric.gerbier@tutanota.com>
 .br 
 Valery Reznic <valery_reznic@users.sourceforge.net>
 .TP 

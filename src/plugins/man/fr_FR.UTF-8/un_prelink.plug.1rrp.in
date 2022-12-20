@@ -40,7 +40,7 @@ reconstruit le package apache sans prelink
 
 .SH "AUTHORS"
 .LP 
-Eric Gerbier <gerbier@users.sourceforge.net>, 
+Eric Gerbier <eric.gerbier@tutanota.com>, 
 à partir de code fourni par Han Holl
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
