@@ -161,7 +161,7 @@ function AmbiguousOption
 ###############################################################################
 function RequeredArgument
 {
-	[ "x$SHORT_OPTION" = "x-" ] || return 0  # we use short option,
+	[ "$SHORT_OPTION" = '-' ] || return 0  # we use short option,
                                                  	 # do nothing
 	if [ "$OPTARG_EXIST" ]; then
 		[ "$OPTIND_INCR" ] && OPTIND=$(( OPTIND + 1 ))
@@ -178,12 +178,12 @@ function Include
 	while :; do 
 		read LONG_OPTION OPTARG || break
 		OPTARG_EXIST="$OPTARG"
-		case "x$LONG_OPTION" in
-			x#*)
+		case "$LONG_OPTION" in
+			"#*")
 				: # comment, do nothing 
 				;;
 
-			x)
+			'')
 				: # empty, do nothing
 				;;
 
@@ -1056,8 +1056,8 @@ function ProcessLongOptions
 
 			comment-missing)
 				RequeredArgument || return
-				case "x$OPTARG" in
-			   		x[yY]*)
+				case "$OPTARG" in
+			   		[yY]*)
 						RPMREBUILD_COMMENT_MISSING="yes"
 					;;
 
@@ -1185,8 +1185,8 @@ function ProcessLongOptions
 
 			verify)
 				RequeredArgument || return
-				case "x$OPTARG" in
-			   		x[yY]*) verify="yes";;
+				case "$OPTARG" in
+			   		[yY]*) verify="yes";;
                            		*)      verify="no";;
 				esac
 			;;
@@ -1272,8 +1272,8 @@ function CommandLineParsing
 			y) LONG_OPTION="verify";;
 
                 	-)
-	        		case "x$OPTARG" in
-					x*=*)
+	        		case "$OPTARG" in
+					*=*)
 						LONG_OPTION=${OPTARG%%=*}
 						OPTARG=${OPTARG#*=}
 						OPTARG_EXIST=1
@@ -1301,14 +1301,14 @@ function CommandLineParsing
 
 		# Get "full" long option
 		ProcessLongOptions || return
-		[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
+		[ -z "$NEED_EXIT" ] || return $NEED_EXIT
 	done || return
 
 	# controls
 	CheckOptions
 
 	CreateProcessing "fini" || return
-	if [ "X$spec_only" = "Xyes" ] && [ "X$need_change_files" = "Xyes" ]
+	if [ "$spec_only" = "yes" ] && [ "$need_change_files" = "yes" ]
 	then
 		Echo "$NotCompatibleOption '--spec_only' , '--change-files'"
 		return 1
@@ -1324,7 +1324,7 @@ function CommandLineParsing
 
    		1) # One argument, it's ok
       			PAQUET="$1"
-      			if [ "x$package_flag" = "x" ]; then
+      			if [ -z "$package_flag" ]; then
 				PAQUET_NAME=$( basename "$PAQUET" )
       			else
 				# argument should be a file
@@ -1355,7 +1355,7 @@ function CommandLineParsing
 		;;
 	esac || return
 
-	if [ "x$rpmdir" = "x" ]; then
+	if [ -z "$rpmdir" ]; then
 		# There is no rpmdir specified 
 		# Let us find native rpmdir value
 		# (with respect to defines)

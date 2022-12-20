@@ -36,7 +36,7 @@ function GetVersion
 function SpecEdit
 {
 	Debug '(SpecEdit)'
-	if [ $# -ne 1 ] || [  "x$1" = "x" ]
+	if [ $# -ne 1 ] || [  -z "$1" ]
 	then
 		Error "(SpecEdit) Usage: $0 SpecEdit <file>"
 		return 1
@@ -65,8 +65,8 @@ function VerifyPackage
 function QuestionsToUser
 {
 	Debug '(QuestionsToUser)'
-	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, continue
-	[ "X$spec_only" = "Xyes" ] && return 0 ## spec only mode, no questions
+	[ "$batch"     = "yes" ] && return 0 ## batch mode, continue
+	[ "$spec_only" = "yes" ] && return 0 ## spec only mode, no questions
 
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
@@ -115,7 +115,7 @@ function RpmUnpack
 {
 	Debug '(RpmUnpack)'
 	# do not install files on /
-	[ "x$BUILDROOT" = "x/" ] && {
+	[ "$BUILDROOT" = "/" ] && {
 		Error "(RpmUnpack) $BuildRootError"
         	return 1
 	}
@@ -135,9 +135,9 @@ function RpmUnpack
 function CreateBuildRoot
 {
 	Debug '(CreateBuildRoot)'
-        if [ "x$package_flag" = "x" ]; then
+        if [ -z "$package_flag" ]; then
 		# installed package
-		if [ "X$need_change_files" = "Xyes" ]; then
+		if [ "$need_change_files" = "yes" ]; then
 			/bin/bash "$MY_LIB_DIR"/rpmrebuild_buildroot.sh "$BUILDROOT" < "$FILES_IN" || Error "(CreateBuildRoot) rpmrebuild_buildroot.sh $BUILDROOT" || return
 		else
 			: # Do nothing (avoid a copy)
@@ -206,7 +206,7 @@ function RpmBuild
 	# another may be with : mount --bind -o ro / $BUILDROOT
 	# but if does not work if not superuser
 	# and need also to mount all other filesystems (/usr /var ...)
-	if [ "x$BUILDROOT" = "x/" ]; then
+	if [ "$BUILDROOT" = "/" ]; then
 		BUILDROOT="${RPMREBUILD_TMPDIR}/my_root"
 		# Just in case previous link is here
 		rm -f "$BUILDROOT" || return
@@ -325,8 +325,8 @@ function Processing
 
 	source "$RPMREBUILD_PROCESSING" && return 0
 
-	if [ "X$need_change_spec" = "Xyes" ] || [ "X$need_change_files" = "Xyes" ]; then
-		[ "X$Aborted" = "Xyes" ] || Error "(Processing) package '$PAQUET' $ModificationFailed."
+	if [ "$need_change_spec" = "yes" ] || [ "$need_change_files" = "yes" ]; then
+		[ "$Aborted" = "yes" ] || Error "(Processing) package '$PAQUET' $ModificationFailed."
 	else
 		Error "(Processing) package '$PAQUET' $SpecFailed."
 	fi
@@ -354,7 +354,7 @@ function GetInformations
 function SendBugReport
 {
 	Debug '(SendBugReport)'
-	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, skip report
+	[ "$batch"     = "yes" ] && return 0 ## batch mode, skip report
 
 	[ -s "$RPMREBUILD_BUGREPORT" ] || return 0 ## empty report
 
@@ -560,7 +560,7 @@ function Main
 	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
 	processing_init || return
 	CommandLineParsing "$@" || return
-	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
+	[ -z "$NEED_EXIT" ] || return $NEED_EXIT
 
 	Debug "rpmrebuild version $VERSION : $@"
 
@@ -578,18 +578,18 @@ function Main
 	# to solve problems of bad date
 	export LC_TIME=POSIX
 
-	if [ "x$package_flag" = "x" ]; then
-   		[ "X$need_change_files" = "Xyes" ] || BUILDROOT="/"
+	if [ -z "$package_flag" ]; then
+		[ "$need_change_files" = "yes" ] || BUILDROOT="/"
    		IsPackageInstalled || return
-   		if [ "X$verify" = "Xyes" ]; then
-      			out=$(VerifyPackage) || return
-      			if [ -n "$out" ]; then
+		if [ "$verify" = "yes" ]; then
+			out=$(VerifyPackage) || return
+			if [ -n "$out" ]; then
 		 		Warning "$FilesModified\n$out"
 		 		QuestionsToUser || return
-      			fi
-   		else # NoVerify
+			fi
+		else # NoVerify
 			:
-   		fi
+		fi
 	else
 		:
 		# When rebuilding package from .rpm file it's just native
@@ -599,7 +599,7 @@ function Main
 		#RPMREBUILD_PUG_FROM_FS="no"  # Be sure use perm, owner, group from the pkg query.
 	fi
 
-	if [ "X$spec_only" = "Xyes" ]; then
+	if [ "$spec_only" = "yes" ]; then
 		BUILDROOT="/"
 		SpecGeneration   || Error "SpecGeneration" || return
 		Processing       || Error "Processing" || return
@@ -628,7 +628,7 @@ Main "$@"
 st=$?	# save status
 
 # bug report ?
-if [ "X$Aborted" = "Xno" ]
+if [ "$Aborted" = "no" ]
 then
 	SendBugReport
 fi

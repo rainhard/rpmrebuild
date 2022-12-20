@@ -40,7 +40,7 @@ MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR $0 dirname $0"; exit 1)
 MY_BASENAME=$( basename "$0" )
 source "$MY_LIB_DIR/rpmrebuild_lib.src"    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
-if [ $# -ne 1 ] || [ "x$1" = "x" ]
+if [ $# -ne 1 ] || [ -z "$1" ]
 then
 	Critical "Usage: $0 <buildroot>"
 fi
@@ -49,7 +49,7 @@ BuildRoot="$1"
 
 while :; do
 	read file_type
-	[ "x$file_type" = "x" ] && break
+	[ -z "$file_type" ] && break
 	read file_flags
 	read file_perm
 	read file_user
@@ -61,8 +61,8 @@ while :; do
 
 	[ -e "$file" ] || continue # File/directory not exist, do nothing
 
-	case "X$file_type" in
-		Xd*)
+	case "$file_type" in
+		d*)
 			# Directory
 			# I don't use --mode for Mkdir, because it doesn't work
 			# when directory already exist.

@@ -148,7 +148,10 @@ $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
 ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
 
 # capabilities
-# rpmrebuild iputils
+# shadow-utils (mageia 8)
+# /usr/bin/newgidmap cap_setgid=ep
+# /usr/bin/newuidmap cap_setuid=ep
+# rpmrebuild iputils ?
 
 # suggests (mandriva)
 # rpmrebuild task-pulseaudio

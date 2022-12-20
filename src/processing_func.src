@@ -71,7 +71,7 @@ function processing_init
 function processing_spec_change
 {
 	local Func="processing_spec_change"
-	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	if [ $# -ne 1 ] || [ -z "$1" ]
 	then
 		Error "(processing_spec_change) Usage: $0 $Func <operation>"
 		return 1
@@ -83,156 +83,156 @@ function processing_spec_change
 	local SPEC_IN SPEC_OUT
 
 
-	case "X$operation" in
-		Xconcatenate)
-			[ "X$spec_concatenated" = "Xyes" ] && return 0
+	case "$operation" in
+		concatenate)
+			[ "$spec_concatenated" = "yes" ] && return 0
 			spec_concatenated="yes"
 			# No need SPEC_IN here
 			SPEC_OUT=$FIC_SPEC.$spec_index
 		;;
 
-		Xchange-spec-changelog | \
-		Xedit-changelog)
+		change-spec-changelog | \
+		edit-changelog)
 			SPEC_IN=$SPEC_CHANGELOG.$si_changelog
 			si_changelog=$(( si_changelog + 1 ))
 			SPEC_OUT=$SPEC_CHANGELOG.$si_changelog
 		;;
 
-		Xchange-spec-conflicts | \
-		Xedit-conflicts)
+		change-spec-conflicts | \
+		edit-conflicts)
 			SPEC_IN=$SPEC_CONFLICTS.$si_conflicts
 			si_conflicts=$(( si_conflicts + 1 ))
 			SPEC_OUT=$SPEC_CONFLICTS.$si_conflicts
 		;;
 
-		Xchange-spec-description | \
-		Xedit-description)
+		change-spec-description | \
+		edit-description)
 			SPEC_IN=$SPEC_DESCRIPTION.$si_description
 			si_description=$(( si_description + 1 ))
 			SPEC_OUT=$SPEC_DESCRIPTION.$si_description
 		;;
 
-		Xchange-spec-files | \
-		Xedit-files)
+		change-spec-files | \
+		edit-files)
 			SPEC_IN=$SPEC_FILES.$si_files
 			si_files=$(( si_files + 1 ))
 			SPEC_OUT=$SPEC_FILES.$si_files
 		;;
 
-		Xchange-spec-obsoletes | \
-		Xedit-obsoletes)
+		change-spec-obsoletes | \
+		edit-obsoletes)
 			SPEC_IN=$SPEC_OBSOLETES.$si_obsoletes
 			si_obsoletes=$(( si_obsoletes + 1 ))
 			SPEC_OUT=$SPEC_OBSOLETES.$si_obsoletes
 		;;
 
-		Xchange-spec-post | \
-		Xedit-post)
+		change-spec-post | \
+		edit-post)
 			SPEC_IN=$SPEC_POST.$si_post
 			si_post=$(( si_post + 1 ))
 			SPEC_OUT=$SPEC_POST.$si_post
 		;;
 
-		Xchange-spec-posttrans | \
-		Xedit-posttrans)
+		change-spec-posttrans | \
+		edit-posttrans)
 			SPEC_IN=$SPEC_POSTTRANS.$si_posttrans
 			si_posttrans=$(( si_posttrans + 1 ))
 			SPEC_OUT=$SPEC_POSTTRANS.$si_posttrans
 		;;
 
-		Xchange-spec-postun | \
-		Xedit-postun)
+		change-spec-postun | \
+		edit-postun)
 			SPEC_IN=$SPEC_POSTUN.$si_postun
 			si_postun=$(( si_postun + 1 ))
 			SPEC_OUT=$SPEC_POSTUN.$si_postun
 		;;
 
-		Xchange-spec-pre | \
-		Xedit-pre)
+		change-spec-pre | \
+		edit-pre)
 			SPEC_IN=$SPEC_PRE.$si_pre
 			si_pre=$(( si_pre + 1 ))
 			SPEC_OUT=$SPEC_PRE.$si_pre
 		;;
 
-		Xchange-spec-pretrans | \
-		Xedit-pretrans)
+		change-spec-pretrans | \
+		edit-pretrans)
 			SPEC_IN=$SPEC_PRETRANS.$si_pretrans
 			si_pretrans=$(( si_pretrans + 1 ))
 			SPEC_OUT=$SPEC_PRETRANS.$si_pretrans
 		;;
 
-		Xchange-spec-preamble | \
-		Xedit-preamble)
+		change-spec-preamble | \
+		edit-preamble)
 			SPEC_IN=$SPEC_PREAMBLE.$si_preamble
 			si_preamble=$(( si_preamble + 1 ))
 			SPEC_OUT=$SPEC_PREAMBLE.$si_preamble
 		;;
 
-		Xchange-spec-preun | \
-		Xedit-preun)
+		change-spec-preun | \
+		edit-preun)
 			SPEC_IN=$SPEC_PREUN.$si_preun
 			si_preun=$(( si_preun + 1 ))
 			SPEC_OUT=$SPEC_PREUN.$si_preun
 		;;
 
-		Xchange-spec-provides | \
-		Xedit-provides)
+		change-spec-provides | \
+		edit-provides)
 			SPEC_IN=$SPEC_PROVIDES.$si_provides
 			si_provides=$(( si_provides + 1 ))
 			SPEC_OUT=$SPEC_PROVIDES.$si_provides
 		;;
 
-		Xchange-spec-requires | \
-		Xedit-requires)
+		change-spec-requires | \
+		edit-requires)
 			SPEC_IN=$SPEC_REQUIRES.$si_requires
 			si_requires=$(( si_requires + 1 ))
 			SPEC_OUT=$SPEC_REQUIRES.$si_requires
 		;;
 
-		Xchange-spec-suggests | \
-		Xedit-suggests)
+		change-spec-suggests | \
+		edit-suggests)
 			SPEC_IN=$SPEC_SUGGESTS.$si_suggests
 			si_suggests=$(( si_suggests + 1 ))
 			SPEC_OUT=$SPEC_SUGGESTS.$si_suggests
 		;;
 
-		Xchange-spec-enhances | \
-		Xedit-enhances)
+		change-spec-enhances | \
+		edit-enhances)
 			SPEC_IN=$SPEC_ENHANCES.$si_enhances
 			si_enhances=$(( si_enhances + 1 ))
 			SPEC_OUT=$SPEC_ENHANCES.$si_enhances
 		;;
 
-		Xchange-spec-recommends | \
-		Xedit-recommends)
+		change-spec-recommends | \
+		edit-recommends)
 			SPEC_IN=$SPEC_RECOMMENDS.$si_recommends
 			si_recommends=$(( si_recommends + 1 ))
 			SPEC_OUT=$SPEC_RECOMMENDS.$si_recommends
 		;;
 
-		Xchange-spec-supplements | \
-		Xedit-supplements)
+		change-spec-supplements | \
+		edit-supplements)
 			SPEC_IN=$SPEC_SUPPLEMENTS.$si_supplements
 			si_supplements=$(( si_supplements + 1 ))
 			SPEC_OUT=$SPEC_SUPPLEMENTS.$si_supplements
 		;;
 
-		Xchange-spec-triggers | \
-		Xedit-triggers)
+		change-spec-triggers | \
+		edit-triggers)
 			SPEC_IN=$SPEC_TRIGGERS.$si_triggers
 			si_triggers=$(( si_triggers + 1 ))
 			SPEC_OUT=$SPEC_TRIGGERS.$si_triggers
 		;;
 
-		Xchange-spec-verifyscript | \
-		Xedit-verifyscript)
+		change-spec-verifyscript | \
+		edit-verifyscript)
 			SPEC_IN=$SPEC_VERIFYSCRIPT.$si_verifyscript
 			si_verifyscript=$(( si_verifyscript + 1 ))
 			SPEC_OUT=$SPEC_VERIFYSCRIPT.$si_verifyscript
 		;;
 
-		Xchange-spec-whole | \
-		Xedit-whole)
+		change-spec-whole | \
+		edit-whole)
 			$Func "concatenate" || Error "(processing_spec_change) $Func concatenate" || return
 			SPEC_IN=$FIC_SPEC.$spec_index
 			spec_index=$(( spec_index + 1 ))
@@ -245,8 +245,8 @@ function processing_spec_change
 		;;
 	esac
 
-	case "X$operation" in
-		Xchange-spec-*)
+	case "$operation" in
+		change-spec-*)
 			cat <<-CMD_CHANGE >> "$Output" || return
 				# $operation
 				( 
@@ -258,7 +258,7 @@ function processing_spec_change
 			CMD_CHANGE
 		;;
 
-		Xedit-*)
+		edit-*)
 			cat <<-CMD_EDIT >> "$Output" || return
 				# $operation
 				   cp -f "$SPEC_IN" "$SPEC_OUT" || return
@@ -267,7 +267,7 @@ function processing_spec_change
 			CMD_EDIT
 		;;
 
-		Xconcatenate)
+		concatenate)
 			cat <<-CMD_CONCATENATE >> "$Output" || return
 				# $operation
 				   spec_concatenate > "$SPEC_OUT" || return
@@ -281,13 +281,13 @@ function processing_spec_change
 function processing_fini
 {
 	local cmd
-	if [ "X$spec_concatenated" = "Xyes" ]; then
-		case "x$specfile" in
-			x) # No spec-only flag
+	if [ "$spec_concatenated" = "yes" ]; then
+		case "$specfile" in
+			'') # No spec-only flag
 				cmd="cp -f $FIC_SPEC.$spec_index $FIC_SPEC"
 			;;
 
-			x-) # Spec-only flag, specfile is stdout
+			'-') # Spec-only flag, specfile is stdout
 				cmd="cat $FIC_SPEC.$spec_index"
 			;;
 
@@ -296,12 +296,12 @@ function processing_fini
 			;;
 			esac || return
 	else
-		case "x$specfile" in
-			x) # No spec-only flag
+		case "$specfile" in
+			'') # No spec-only flag
 				cmd="spec_concatenate > $FIC_SPEC"
 			;;
 
-			x-) # Spec-only flag, specfile is stdout
+			'-') # Spec-only flag, specfile is stdout
 				cmd="spec_concatenate"
 			;;
 
@@ -321,7 +321,7 @@ function processing_fini
 
 function CreateProcessing
 {
-	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	if [ $# -ne 1 ] || [ -z "$1" ]
 	then
 		Error "(CreateProcessing) <operation>"
 		return 1
@@ -330,24 +330,24 @@ function CreateProcessing
 	local operation="$1"
 	local Output="$RPMREBUILD_PROCESSING"
 	local cmd
-	case "X$operation" in
-		Xfini)
+	case "$operation" in
+		fini)
 			processing_fini || Error "(CreateProcessing) processing_fini" || return
 		;;
 
-		Xchange-spec-whole | Xedit-whole)
+		change-spec-whole | edit-whole)
 			processing_spec_change "$operation" || Error "(CreateProcessing) processing_spec_change" || return
 		;;
 
-		Xchange-spec-* | Xedit-*)
-			if [ "X$spec_concatenated" = "Xyes" ]; then
+		change-spec-* | edit-*)
+			if [ "$spec_concatenated" = "yes" ]; then
 				Error "(CreateProcessing) '$LONG_OPTION' $ForbidenOption"
 				return 1
 			fi
 			processing_spec_change "$operation" || Error "(CreateProcessing) processing_spec_change" || return
 		;;
 
-		Xchange-files)
+		change-files)
 			need_change_files="yes"
 			cat <<-CMD_FILES >> "$Output" || return
 			# $operation
