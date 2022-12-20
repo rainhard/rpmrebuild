@@ -26,7 +26,7 @@ use Data::Dumper;
 ## no critic (ProhibitBacktickOperators)
 
 # arguments test
-$ENV{'RPMREBUILD_ROOT_DIR'} = '.';     # force use dev code
+$ENV{'RPMREBUILD_ROOT_DIR'} = q{.};    # force use dev code
 $ENV{'LANG'}                = 'en';    #
 my $cmd = './rpmrebuild -b';
 
@@ -63,20 +63,24 @@ like( $out, qr/is not an rpm file/, 'not an rpm file' ) or diag("out=$out\n");
 
 # 8 package
 $out = `$cmd afick-doc 2>&1`;
-like( $out, qr/result:.*afick-doc.*rpm/, 'rpm package (afick-doc)' ) or diag("out=$out\n");
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm package (afick-doc)' )
+  or diag("out=$out\n");
 
 # 9 file
 $out = `$cmd -p ../test/afick-doc-3.7.0-1.noarch.rpm 2>&1`;
-like( $out, qr/result:.*afick-doc.*rpm/, 'rpm file (afick-doc)' ) or diag("out=$out\n");
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm file (afick-doc)' )
+  or diag("out=$out\n");
 
 # 10 filesystem (user)
 $out = `$cmd filesystem 2>&1`;
-like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (user)' ) or diag("out=$out\n");
+like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (user)' )
+  or diag("out=$out\n");
 
 # 11 filesystem (root)
 # works on mageia, not on fedora because filesystem contains /proc
 $out = `sudo $cmd filesystem 2>&1`;
-like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (root)' ) or diag("out=$out\n");
+like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (root)' )
+  or diag("out=$out\n");
 
 # --cap-from-fs
 $out = `$cmd --cap-from-fs rpmrebuild 2>&1`;
@@ -88,13 +92,16 @@ like( $out, qr/result:.*rpmrebuild.*rpm/, 'cap-from-db' ) or diag("out=$out\n");
 
 # --comment-missing
 $out = `$cmd --comment-missing=yes rpmrebuild 2>&1`;
-like( $out, qr/result:.*rpmrebuild.*rpm/, 'comment-missing yes' ) or diag("out=$out\n");
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'comment-missing yes' )
+  or diag("out=$out\n");
 $out = `$cmd --comment-missing=no rpmrebuild 2>&1`;
-like( $out, qr/result:.*rpmrebuild.*rpm/, 'comment-missing no' ) or diag("out=$out\n");
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'comment-missing no' )
+  or diag("out=$out\n");
 
 # --notest-install
 $out = `$cmd --notest-install rpmrebuild 2>&1`;
-like( $out, qr/result:.*rpmrebuild.*rpm/, 'notest-install' ) or diag("out=$out\n");
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'notest-install' )
+  or diag("out=$out\n");
 
 # --pug-from-db
 $out = `$cmd --pug-from-db rpmrebuild 2>&1`;
@@ -135,9 +142,11 @@ $out = `$cmd --warning rpmrebuild 2>&1`;
 like( $out, qr/result:.*rpmrebuild.*rpm/, 'warning' ) or diag("out=$out\n");
 
 # --spec-only
-$out = `$cmd ----spec-only=/tmp/rpmrebuild.spec rpmrebuild 2>&1`;
-like( $out, qr/result:.*rpmrebuild.*rpm/, 'warning' ) or diag("out=$out\n");
-#
+my $spec = '/tmp/rpmrebuild.spec';
+unlink $spec if ( -e $spec );
+$out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
+ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
+
 # capabilities
 # rpmrebuild iputils
 
