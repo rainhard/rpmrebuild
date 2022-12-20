@@ -71,7 +71,7 @@ UsageWarning="mode avertissement (previent s'il détecte des fichiers contenant 
 UsageVerify='vérifie (rpm -V) le package avant toute opération. (défaut : oui)'
 UsageHelp='affiche cette aide'
 UsageHelpPlugins='affiche une aide sur les options concernant les greffons (plugins)'
-UsageCopyright='Copyright (C) 2002-2007 par Eric Gerbier (<eric.gerbier@tutanota.com>)'
+UsageCopyright='Copyright (C) 2002-2023 par Eric Gerbier (<eric.gerbier@tutanota.com>)'
 UsageLicense='ce programme est distribué sous la license GNU General Public'
 
 UsagePluginChangeFiles='programme pour modifier les fichiers contenus dans le package'
