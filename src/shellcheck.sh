@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # E Gerbier 2022/09/30
 # check shell syntaxe
 

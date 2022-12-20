@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 ###############################################################################
 #    Copyright (C) 2002 by Eric Gerbier
 #    Bug reports to: gerbier@users.sourceforge.net
