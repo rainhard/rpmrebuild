@@ -122,15 +122,18 @@ options:
 ###############################################################################
 function List_Plugins
 {
-	local plugindir=$( dirname "$0" )/plugins
+	local plugindir
+	plugindir=$( dirname "$0" )/plugins
 	for f in "$plugindir"/*.plug
 	do
-		local plug=$( basename "$f" )
+		local plug
+		plug=$( basename "$f" )
 		# use man to force localisation
 		# line number may vary
 		#text=$(man $plug | awk 'NR==7{print}' )
 		# filter by name of plugin
-		local text=$(man "$plug" | awk "/$plug +- /{print}" )
+		local text
+		text=$(man "$plug" | awk "/$plug +- /{print}" )
 		if [ -n "$text" ]
 		then
 			echo "$text"
@@ -1334,7 +1337,7 @@ function CommandLineParsing
 					# rem : 'file' sometimes does not return 
 					# "RPM" because some other magic triggers
 					# before the RPM magic check runs
-					tst_rpm=$( rpm -qp "$PAQUET" 2>/dev/null )
+					rpm -qp "$PAQUET" 2>/dev/null
 					if [ $? -eq 0 ]; then
 							: #ok
 					else

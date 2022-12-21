@@ -125,7 +125,8 @@ function Mkdir_p
 # not posix
 function TestAwk
 {
-	local tst=$( echo 1 | awk '{ print lshift($1,1) }' 2> /dev/null )
+	local tst
+	tst=$( echo 1 | awk '{ print lshift($1,1) }' 2> /dev/null )
 	if [ -n "$tst" ] && [ "$tst" -eq '2' ]
 	then
 		return 0

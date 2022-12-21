@@ -53,7 +53,8 @@ function spec_md5_compat_digest
 function spec_query
 {
 	rpm_qf=$( $1 )
-	local RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
+	local RPM_QUERY
+	RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
 	$RPM_QUERY "$rpm_qf" "$PAQUET" || Error "(spec_query) $rpm_qf" || return
 	return 0
 }
@@ -69,14 +70,14 @@ function spec_files
 
 function spec_preamble
 {
-	# Comment out Orig Release and add New one.
-	local sed_release="/Release[[:space:]]*:/{s/^/#/;a\\
-Release:       $RELEASE_NEW
-	}"
 
 	if [ -z "$RELEASE_NEW" ]; then
 		spec_query qf_spec_preamble                         || Error "(spec_preamble) spec_query qf_spec_preamble" || return
 	else
+		# Comment out Orig Release and add New one.
+		local sed_release="/Release[[:space:]]*:/{s/^/#/;a\\
+Release:       $RELEASE_NEW
+	}"
 		spec_query qf_spec_preamble | sed -e "$sed_release" || Error "(spec_preamble) spec_query qf_spec_preamble with sed" || return
 	fi
 }
