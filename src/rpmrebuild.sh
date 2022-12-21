@@ -563,6 +563,8 @@ function Main
 	[ -z "$NEED_EXIT" ] || return $NEED_EXIT
 
 	Debug "rpmrebuild version $VERSION : $@"
+	environment=$( env | sort )
+	Debug "environment : $environment"
 
 	check_i18ndomains
 
