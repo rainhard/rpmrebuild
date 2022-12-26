@@ -103,6 +103,7 @@ function spec_requires
 	local sed_requires='/Requires[[:space:]]*:[[:space:]]*rpmlib(.*)/s/^/#/'
 	[ "$autorequire" = "yes" ] && sed_requires="$sed_requires$sed_comment"
 	TestAwk
+	# shellcheck disable=SC2181
 	if [ "$?" -eq 0 ]
 	then
 		# current code using awk to decode

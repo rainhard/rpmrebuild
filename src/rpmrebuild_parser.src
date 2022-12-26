@@ -179,7 +179,7 @@ function RequeredArgument
 function Include
 {
 	while :; do 
-		read LONG_OPTION OPTARG || break
+		read -r LONG_OPTION OPTARG || break
 		OPTARG_EXIST="$OPTARG"
 		case "$LONG_OPTION" in
 			"#*")
@@ -1342,6 +1342,7 @@ function CommandLineParsing
 					# "RPM" because some other magic triggers
 					# before the RPM magic check runs
 					rpm -qp "$PAQUET" 2>/dev/null
+					# shellcheck disable=SC2181
 					if [ $? -eq 0 ]; then
 							: #ok
 					else
