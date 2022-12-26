@@ -17,6 +17,8 @@
 #    GNU General Public License for more details.
 #
 ###############################################################################
+# shellcheck disable=SC2181
+#  Check exit code directly with e.g. if mycmd;, not indirectly with $?
 
 # debug 
 #set -x 
@@ -36,13 +38,14 @@ function GetVersion
 function SpecEdit
 {
 	Debug '(SpecEdit)'
-	if [ $# -ne 1 ] || [  -z "$1" ]
+	if [ $# -ne 1 ] || [ -z "$1" ]
 	then
 		Error "(SpecEdit) Usage: $0 SpecEdit <file>"
 		return 1
 	fi
 	# -e option : edit the spec file
-	local File=$1
+	local File
+	File=$1
 	${VISUAL:-${EDITOR:-vi}} "$File"
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
@@ -73,7 +76,8 @@ function QuestionsToUser
 		export Aborted
 		return 0
 	}
-	local RELEASE_ORIG="$(spec_query qf_spec_release )"
+	local RELEASE_ORIG
+	RELEASE_ORIG="$(spec_query qf_spec_release )"
 	[ -z "$RELEASE_NEW" ] && \
 	AskYesNo "$WantChangeRelease" && {
 		echo -n "$EnterRelease $RELEASE_ORIG): "
@@ -87,7 +91,8 @@ function IsPackageInstalled
 {
 	Debug '(IsPackageInstalled)'
 	# test if package exists
-	local output=$( rpm --query "${PAQUET}" 2>&1 ) # Don't return here - use output
+	local output
+	output=$( rpm --query "${PAQUET}" 2>&1 ) # Don't return here - use output
 	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
@@ -95,7 +100,7 @@ function IsPackageInstalled
 		return 1
 	else
 		# find it : one or more ?
-		set -- $output
+		set -- "$output"
 		case $# in
 			1)
 			: # Ok, do nothing
@@ -119,7 +124,8 @@ function RpmUnpack
 		Error "(RpmUnpack) $BuildRootError"
         	return 1
 	}
-	local CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
+	local CPIO_TEMP
+	CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
 	rm --force "$CPIO_TEMP"                               || return
 	rpm2cpio "${PAQUET}" > "$CPIO_TEMP"                     || Error "(RpmUnpack) rpm2cpio" || return
 	rm    --force --recursive "$BUILDROOT"                || return
@@ -163,7 +169,8 @@ function CheckArch
 {
 	Debug '(CheckArch)'
 	# current architecture
-	local cur_arch=$( uname -m)
+	local cur_arch
+	cur_arch=$( uname -m)
 
 	# pac_arch is got from RpmArch
 	RpmArch
@@ -189,12 +196,13 @@ function RpmBuild
 	# rpmrebuild package dependency
 	# for rpm 3.x : use rpm
 	# for rpm 4.x : use rpmbuild
+	local BUILDCMD
 	if [ -x /usr/bin/rpmbuild ]
 	then
-		local BUILDCMD=/usr/bin/rpmbuild
+		BUILDCMD=/usr/bin/rpmbuild
 	else
 
-		local BUILDCMD=rpm
+		BUILDCMD=rpm
 	fi
 
 	# rpm 4.6 ignore BuildRoot in the spec file, 
@@ -228,13 +236,15 @@ function RpmBuild
 function RpmFileName
 {
 	Debug '(RpmFileName)'
-	local QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
+	local QF_RPMFILENAME
+	QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
 	#Debug "    QF_RPMFILENAME=$QF_RPMFILENAME"
 	# from generated specfile
 	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
 
 	# workaround for redhat 6.x / rpm 3.x
-	local arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
+	local arch
+	arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
 	if [ "$arch" = "(none)" ]
 	then
 		Debug '    workaround for rpm 3.x'
@@ -261,9 +271,10 @@ function RpmFileName
 function IsMultiInstall
 {
 	# get package name
-	local package_name=$( rpm -qp --queryformat '%{NAME}' ${RPMFILENAME} )
+	local package_name
+	package_name=$( rpm -qp --queryformat '%{NAME}' "${RPMFILENAME}" )
 	# count installs
-	rpm -q ${package_name} 2> /dev/null | wc -l
+	rpm -q "${package_name}" 2> /dev/null | wc -l
 }
 ###############################################################################
 # test if build package can be installed
@@ -272,8 +283,10 @@ function InstallationTest
 	Debug '(InstallationTest)'
 	# installation test
 	# force is necessary to avoid the message : already installed
-	local rpm_options='--test --force'
-	local nb=$( IsMultiInstall )
+	local rpm_options
+	rpm_options='--test --force'
+	local nb
+	nb=$( IsMultiInstall )
 	if [ "$nb" -le 1 ]
 	then
 		rpm_options="$rpm_options -U"
@@ -294,11 +307,14 @@ function Installation
 {
 	Debug '(Installation)'
 	# chek if root
-	local ID=$( id -u )
+	local ID
+	ID=$( id -u )
 	if [ "$ID" -eq 0 ]
 	then
-		local rpm_options='-v -h --force'
-		local nb=$( IsMultiInstall )
+		local rpm_options
+		rpm_options='-v -h --force'
+		local nb
+		nb=$( IsMultiInstall )
 		if [ "$nb" -le 1 ]
 		then
 			rpm_options="$rpm_options -U"
@@ -320,8 +336,6 @@ function Installation
 function Processing
 {
 	Debug '(Processing)'
-	#local Aborted="no"
-	local MsgFail
 
 	source "$RPMREBUILD_PROCESSING" && return 0
 
@@ -360,7 +374,8 @@ function SendBugReport
 
 	AskYesNo "$WantSendBugReport" || return
 	# build default mail address 
-	local from="${USER}@${HOSTNAME}"
+	local from
+	from="${USER}@${HOSTNAME}"
 	AskYesNo "$WantChangeEmail ($from)" && {
 		echo -n "$EnterEmail"
 		read from
@@ -378,7 +393,8 @@ function SendBugReport
 # search if the given tag exists in current rpm release
 function SearchTag
 {
-	local tag=$1
+	local tag
+	tag=$1
 	for rpm_tag in $RPM_TAGS
 	do
 		if [ "$tag" = "$rpm_tag" ]
@@ -395,10 +411,13 @@ function SearchTag
 function ChangeRpmQf
 {
 	Debug "(ChangeRpmQf) $1"
-	local SED_PAR=$1
-	local input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	local SED_PAR
+	SED_PAR=$1
+	local input_rpmqf
+	input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	si_rpmqf=$(( si_rpmqf + 1 ))
-	local output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	local output_rpmqf
+	output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	sed -e "$SED_PAR" < "$input_rpmqf" > "$output_rpmqf"
 
 	return 0
@@ -416,13 +435,15 @@ function GenRpmQf
 	# base code
 	cp "${MY_LIB_DIR}"/rpmrebuild_rpmqf.src "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf
 
-	local optional_file=$MY_LIB_DIR/optional_tags.cfg
+	local optional_file
+	optional_file=$MY_LIB_DIR/optional_tags.cfg
 	if [ -f "$optional_file" ]
 	then
 		local tag1 type tag2
 		while read tag1 type tag2
 		do
-			local tst_comment=$( echo "$tag1" | grep '#' )
+			local tst_comment
+			tst_comment=$( echo "$tag1" | grep '#' )
 			if [ -z "$tst_comment" ]
 			then
 			SearchTag "$tag1" || {
@@ -462,10 +483,12 @@ function CheckTags
 	Debug '(CheckTags)'
 	# list of used tags
 	#Echo "(CheckTags) search tags in rpmrebuild_rpmqf.src.$si_rpmqf"
-	local rpmrebuild_tags=$( "${MY_LIB_DIR}"/rpmrebuild_extract_tags.sh "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf )
+	local rpmrebuild_tags
+	rpmrebuild_tags=$( "${MY_LIB_DIR}"/rpmrebuild_extract_tags.sh "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf )
 
 	# check for all rpmrebuild tags
-	local errors=0
+	local errors
+	errors=0
 	for tag in $rpmrebuild_tags
 	do
 		SearchTag "$tag" || {
@@ -527,7 +550,6 @@ function Main
 	TMPDIR_WORK=${RPMREBUILD_TMPDIR}/work
 
 	MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR rpmrebuild.sh dirname $0"; exit 1)
-	MY_BASENAME=$( basename "$0" )
 	source "${MY_LIB_DIR}/rpmrebuild_lib.src"    || ( echo "ERROR rpmrebuild.sh source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
 	# create tempory directories before any work/test
@@ -555,14 +577,15 @@ function Main
 		*)  real_lang=en;;
 	esac
 	# load translation file
+	# shellcheck source=locale/en/rpmrebuild.lang
 	source "$MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang"
 	
 	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
 	processing_init || return
 	CommandLineParsing "$@" || return
-	[ -z "$NEED_EXIT" ] || return $NEED_EXIT
+	[ -z "$NEED_EXIT" ] || return "$NEED_EXIT"
 
-	Debug "rpmrebuild version $VERSION : $@"
+	Debug "rpmrebuild version $VERSION : $*"
 	environment=$( env | sort )
 	Debug "environment : $environment"
 
