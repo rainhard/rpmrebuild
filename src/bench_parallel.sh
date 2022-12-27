@@ -12,7 +12,7 @@ function bench {
 	localtmpdir=${tmpdir}/$$
 	mkdir $localtmpdir
 	localoutput="${output_dir}/${pac}.output"
-	nice ./rpmrebuild.sh -b -k  -y no -c yes -d $localtmpdir $pac  > ${localoutput} 2>&1
+	nice ${mypath}/rpmrebuild.sh -b -k  -y no -c yes -d $localtmpdir $pac  > ${localoutput} 2>&1
 	irep=$?
 	if [ $irep -eq 0 ]
 	then
@@ -99,6 +99,13 @@ then
 	exit 1
 fi
 
+mypath=$( dirname $0)
+if [ "$mypath" == '.' ]
+then
+	mypath=$( pwd )
+fi
+export mypath
+
 LOG="$(pwd)/rpmrebuild_bench.log"
 if [ -f $LOG ]
 then
@@ -163,7 +170,7 @@ echo "full log on $LOG"
 echo "-------------------------------------------------------"
 
 # clean temporary directories
-echo "clean temporary directories (o/n) ?"
+echo "clean temporary directories $tmpdir (o/n) ?"
 read rep
 if [ "$rep" == 'o' ]
 then

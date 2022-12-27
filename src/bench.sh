@@ -90,9 +90,6 @@ function bench {
 		rm -rf $localtmpdir
 	done
 
-	# clean temporary directories
-	rm -rf $tmpdir 2> /dev/null
-
 	echo "-------------------------------------------------------"
 	echo "$notok failed build on $seen packages"
 	echo "  pb cpio : $pbmagic ($list_bad_magic)"
@@ -131,9 +128,17 @@ then
 fi
 mkdir -p $tmpdir
 
-
-
 # to have standardize error messages
 export LC_ALL=POSIX
 
 bench 2>&1 | tee $LOG
+
+# clean temporary directories
+echo "clean temporary directories $tmpdir (o/n) ?"
+read rep
+if [ "$rep" == 'o' ]
+then
+	rm -rf $tmpdir 2> /dev/null
+else
+	echo "temporary directories :  $tmpdir"
+fi
