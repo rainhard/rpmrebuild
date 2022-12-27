@@ -19,6 +19,8 @@
 ###############################################################################
 # shellcheck disable=SC2181
 #  Check exit code directly with e.g. if mycmd;, not indirectly with $?
+# shellcheck disable=SC1090
+#  ShellCheck can't follow non-constant source
 
 # debug 
 #set -x 
@@ -81,7 +83,7 @@ function QuestionsToUser
 	[ -z "$RELEASE_NEW" ] && \
 	AskYesNo "$WantChangeRelease" && {
 		echo -n "$EnterRelease $RELEASE_ORIG): "
-		read RELEASE_NEW
+		read -r RELEASE_NEW
 	}
 	return 0
 }
@@ -100,7 +102,8 @@ function IsPackageInstalled
 		return 1
 	else
 		# find it : one or more ?
-		set -- "$output"
+		# shellcheck disable=SC2086
+		set -- $output
 		case $# in
 			1)
 			: # Ok, do nothing
@@ -224,7 +227,7 @@ function RpmBuild
 			return 1
 		}
 	fi
-	eval $change_arch $BUILDCMD --define "'buildroot $BUILDROOT'" $rpm_defines -bb $rpm_verbose $additional ${FIC_SPEC} || {
+	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$rpm_defines" -bb "$rpm_verbose" "$additional" "${FIC_SPEC}" || {
 		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
 		return 1
 	}
@@ -237,14 +240,14 @@ function RpmFileName
 {
 	Debug '(RpmFileName)'
 	local QF_RPMFILENAME
-	QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
+	QF_RPMFILENAME=$(eval "$change_arch" rpm "$rpm_defines" --eval %_rpmfilename) || return
 	#Debug "    QF_RPMFILENAME=$QF_RPMFILENAME"
 	# from generated specfile
-	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
+	RPMFILENAME=$(eval "$change_arch" rpm "$rpm_defines" --specfile --query --queryformat "${QF_RPMFILENAME}" "${FIC_SPEC}") || return
 
 	# workaround for redhat 6.x / rpm 3.x
 	local arch
-	arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
+	arch=$(eval "$change_arch" rpm "$rpm_defines" --specfile --query --queryformat "%{ARCH}"  "${FIC_SPEC}")
 	if [ "$arch" = "(none)" ]
 	then
 		Debug '    workaround for rpm 3.x'
@@ -252,7 +255,7 @@ function RpmFileName
 		# will work if no changes in spec (release ....)
 		#arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
 		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
-		RPMFILENAME=$(eval $change_arch rpm $rpm_defines --query --queryformat "${QF_RPMFILENAME}" ${PAQUET}) || return
+		RPMFILENAME=$(eval "$change_arch" rpm "$rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${PAQUET}") || return
 	fi
 
 	[ -n "$RPMFILENAME" ] || return
@@ -294,6 +297,7 @@ function InstallationTest
 		Debug "multi-installed package"
 		rpm_options="$rpm_options -i"
 	fi
+	# shellcheck disable=SC2086
 	rpm ${rpm_options} "${RPMFILENAME}" || {
 		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
 		return 1
@@ -321,6 +325,7 @@ function Installation
 		else
 			rpm_options="$rpm_options -i"
 		fi
+		# shellcheck disable=SC2086
 		rpm ${rpm_options} "${RPMFILENAME}" || {
 			Error "(Installation) package '${PAQUET}' $InstallFailed"
 			return 1
@@ -378,7 +383,7 @@ function SendBugReport
 	from="${USER}@${HOSTNAME}"
 	AskYesNo "$WantChangeEmail ($from)" && {
 		echo -n "$EnterEmail"
-		read from
+		read -r from
 	}
 	GetInformations "$from" >> "$RPMREBUILD_BUGREPORT" 2>&1
 	AskYesNo "$WantEditReport" && {
@@ -440,7 +445,7 @@ function GenRpmQf
 	if [ -f "$optional_file" ]
 	then
 		local tag1 type tag2
-		while read tag1 type tag2
+		while read -r tag1 type tag2
 		do
 			local tst_comment
 			tst_comment=$( echo "$tag1" | grep '#' )

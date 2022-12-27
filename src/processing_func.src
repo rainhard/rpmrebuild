@@ -274,6 +274,10 @@ function processing_spec_change
 			CMD_CONCATENATE
 
 		;;
+		*)
+			Error "(processing_spec_change) $Func: $UnknownOperation '$operation'"
+			return 1
+		;;
 	esac || return
 	return 0
 }

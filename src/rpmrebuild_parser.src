@@ -178,11 +178,12 @@ function RequeredArgument
 ###############################################################################
 function Include
 {
+	Debug "(Include) $INCLUDE_FILE"
 	while :; do 
 		read -r LONG_OPTION OPTARG || break
 		OPTARG_EXIST="$OPTARG"
 		case "$LONG_OPTION" in
-			"#*")
+			'#'*)
 				: # comment, do nothing 
 				;;
 
