@@ -156,3 +156,31 @@ ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
 # suggests (mandriva)
 # rpmrebuild task-pulseaudio
 
+# plugins
+#########
+
+# nodoc
+$out = `$cmd --change-spec-files="nodoc.sh " afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc' )
+  or diag("out=$out\n");
+$out = `$cmd --include plugins/nodoc.plug afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc include' )
+  or diag("out=$out\n");
+
+# file2pacDep
+$out = `$cmd --include plugins/file2pacDep.plug afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin file2pacDep include' )
+  or diag("out=$out\n");
+
+# compat_digest.plug
+$out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
+  or diag("out=$out\n");
+
+# uniq.plug
+
+# set_tag.plug
+
+# unset_tag.plug
+
+# un_prelink.plug
