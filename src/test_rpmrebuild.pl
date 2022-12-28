@@ -171,18 +171,25 @@ like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc include' )
 if ( $out =~ m/result:(.*afick-doc.*rpm)/) {
 	my $res = $1;
 	$out = ` rpm -q -l -p --docfiles $res`;
-	unlike ( $out, qr/html/, 'check nodoc') or diag("out=$out\n");
+	unlike ( $out, qr/html/, 'check nodoc') or diag("rpm -q -l -p --docfiles $res : $out\n");
 }
 
 # file2pacDep
+$out = ` rpm -q -R afick-doc`;
+unlike ( $out, qr/bash/, 'before file2pacDep') or diag("out=$out\n");
 $out = `$cmd --include plugins/file2pacDep.plug afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*rpm/, 'plugin file2pacDep include' )
   or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/) {
+	my $res = $1;
+	$out = ` rpm -q -R -p $res`;
+	like ( $out, qr/bash/, 'check file2pacDep') or diag("rpm -q -R -p $res : $out\n");
+}
 
 # compat_digest.plug
 $out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
-like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
-  or diag("out=$out\n");
+#like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
+#  or diag("out=$out\n");
 
 # uniq.plug
 
