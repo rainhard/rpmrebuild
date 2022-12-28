@@ -202,5 +202,11 @@ like( $out, qr/result:.*afick-doc.*-3test.noarch.rpm/, 'plugin set_tag.sh' )
   or diag("out=$out\n");
 
 # unset_tag.plug
+$out = `TAG_ID=BuildArch $cmd --include plugins/unset_tag.plug afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*x86_64.rpm/, 'plugin unset_tag include' )
+  or diag("out=$out\n");
+$out = `$cmd --change-spec-preamble="plugins/unset_tag.sh -t BuildArch " afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*.x86_64.rpm/, 'plugin unset_tag.sh' )
+  or diag("out=$out\n");
 
 # un_prelink.plug
