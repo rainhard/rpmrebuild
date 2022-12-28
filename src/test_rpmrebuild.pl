@@ -161,29 +161,29 @@ ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
 
 # nodoc
 $out = ` rpm -q -l --docfiles afick-doc`;
-like ( $out, qr/html/, 'before nodoc') or diag("out=$out\n");
+like ( $out, qr/html/, 'plugin nodoc before') or diag("out=$out\n");
 $out = `$cmd --change-spec-files="nodoc.sh " afick-doc 2>&1 `;
-like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc' )
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc call change-spec-files' )
   or diag("out=$out\n");
 $out = `$cmd --include plugins/nodoc.plug afick-doc 2>&1 `;
-like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc include' )
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc call include' )
   or diag("out=$out\n");
 if ( $out =~ m/result:(.*afick-doc.*rpm)/) {
 	my $res = $1;
 	$out = ` rpm -q -l -p --docfiles $res`;
-	unlike ( $out, qr/html/, 'check nodoc') or diag("rpm -q -l -p --docfiles $res : $out\n");
+	unlike ( $out, qr/html/, 'plugin nodoc check') or diag("rpm -q -l -p --docfiles $res : $out\n");
 }
 
 # file2pacDep
 $out = ` rpm -q -R afick-doc`;
-unlike ( $out, qr/bash/, 'before file2pacDep') or diag("out=$out\n");
+unlike ( $out, qr/bash/, 'plugin file2pacDep before') or diag("out=$out\n");
 $out = `$cmd --include plugins/file2pacDep.plug afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*rpm/, 'plugin file2pacDep include' )
   or diag("out=$out\n");
 if ( $out =~ m/result:(.*afick-doc.*rpm)/) {
 	my $res = $1;
 	$out = ` rpm -q -R -p $res`;
-	like ( $out, qr/bash/, 'check file2pacDep') or diag("rpm -q -R -p $res : $out\n");
+	like ( $out, qr/bash/, 'plugin file2pacDep check') or diag("rpm -q -R -p $res : $out\n");
 }
 
 # compat_digest.plug
@@ -210,3 +210,15 @@ like( $out, qr/result:.*afick-doc.*.x86_64.rpm/, 'plugin unset_tag.sh' )
   or diag("out=$out\n");
 
 # un_prelink.plug
+
+# uniq.plug
+#$out = ` rpm -q -R afick-gui | grep 'bin/sh' | wc -l`;
+#ok( $out != 1, 'plugin uniq uniq') or diag("out=$out\n");
+#$out = `$cmd --include plugins/uniq.plug afick-gui 2>&1 `;
+#like( $out, qr/result:.*afick-gui.*rpm/, 'plugin uniq include' )
+#  or diag("out=$out\n");
+#if ( $out =~ m/result:(.*afick-gui.*rpm)/) {
+#	my $res = $1;
+#	$out = ` rpm -q -R -p $res | grep 'bin/sh' | wc -l`;
+#	ok ( $out == 1, 'plugin uniq check') or diag("rpm -q -R -p $res : $out\n");
+#}
