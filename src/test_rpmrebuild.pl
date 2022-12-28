@@ -160,12 +160,19 @@ ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
 #########
 
 # nodoc
+$out = ` rpm -q -l --docfiles afick-doc`;
+like ( $out, qr/html/, 'before nodoc') or diag("out=$out\n");
 $out = `$cmd --change-spec-files="nodoc.sh " afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc' )
   or diag("out=$out\n");
 $out = `$cmd --include plugins/nodoc.plug afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc include' )
   or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/) {
+	my $res = $1;
+	$out = ` rpm -q -l -p --docfiles $res`;
+	unlike ( $out, qr/html/, 'check nodoc') or diag("out=$out\n");
+}
 
 # file2pacDep
 $out = `$cmd --include plugins/file2pacDep.plug afick-doc 2>&1 `;
