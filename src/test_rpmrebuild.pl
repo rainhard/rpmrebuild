@@ -194,6 +194,12 @@ $out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
 # uniq.plug
 
 # set_tag.plug
+$out = `TAG_ID=Release TAG_VAL="2test" $cmd --include plugins/set_tag.plug afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*-2test.noarch.rpm/, 'plugin set_tag include' )
+  or diag("out=$out\n");
+$out = `$cmd --change-spec-preamble="plugins/set_tag.sh -t Release 3test" afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*-3test.noarch.rpm/, 'plugin set_tag.sh' )
+  or diag("out=$out\n");
 
 # unset_tag.plug
 
