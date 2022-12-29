@@ -9,6 +9,8 @@
 - change copyright year
 - fix warnings from shellcheck
 - add unitary tests
+- if batch mode, do not edit any spec part
+- spec_only : display spec name if successfull
 
 * Sun Jan 17 2021 <eric.gerbier@tutanota.com> 2.16-1
 - fix bug if more than 10 args (thanks Dmitry V. Levin)
