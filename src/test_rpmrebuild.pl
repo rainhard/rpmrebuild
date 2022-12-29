@@ -242,9 +242,15 @@ $out = ` cat $spec`;
 like($out, qr/change-spec-whole change-spec-preamble/, 'plugin demo modified spec') or diag("out=$out\n");
 
 # compat_digest.plug
-$out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
-#like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
-#  or diag("out=$out\n");
+unlink $spec if (-f $spec);
+$out = `$cmd --spec-only=$spec afick-doc 2>&1 `;
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+$out =`cat $spec`;
+unlike( $out, qr/binary_filedigest_algorithm/, 'plugin compat_digest.plug control without') or diag("out=$out\n");
+$out = `$cmd --spec-only=$spec --include plugins/compat_digest.plug afick-doc 2>&1`;
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+$out =`cat $spec`;
+like( $out, qr/binary_filedigest_algorithm/, 'plugin compat_digest.plug') or diag("out=$out\n");
 
 # un_prelink.plug
 $out = `type prelink 2>&1`;
