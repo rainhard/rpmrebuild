@@ -633,6 +633,7 @@ function Main
 		BUILDROOT="/"
 		SpecGeneration   || Error "SpecGeneration" || return
 		Processing       || Error "Processing" || return
+		echo "specfile: $specfile"
 	else
 		SpecGeneration   || Error "SpecGeneration" || return
 		CreateBuildRoot  || Error "CreateBuildRoot" || return

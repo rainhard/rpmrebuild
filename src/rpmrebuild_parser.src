@@ -1111,7 +1111,10 @@ function ProcessLongOptions
 			edit-triggers     | \
 			edit-verifyscript | \
 			edit-whole)
-				CreateProcessing "$LONG_OPTION" || return
+				if [ "$batch" != 'yes' ]
+				then
+					CreateProcessing "$LONG_OPTION" || return
+				fi
 			;;
 
 			help)

@@ -145,7 +145,8 @@ like( $out, qr/result:.*rpmrebuild.*rpm/, 'warning' ) or diag("out=$out\n");
 my $spec = '/tmp/rpmrebuild.spec';
 unlink $spec if ( -e $spec );
 $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
-ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
+like( $out, qr/specfile: $spec/, 'spec_only check output') or diag("out=$out\n");
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
 
 # capabilities
 # shadow-utils (mageia 8)
@@ -229,3 +230,12 @@ unlink $spec if (-f $spec);
 # demofiles.plug
 $out=` $cmd --include plugins/demofiles.plug rpmrebuild 2>&1 `;
 like( $out, qr/demofiles.plug.1rrp.xz/, 'plugin demofiles') or diag("out=$out\n");
+
+# demo.plug
+$spec = '/tmp/toto.spec';
+unlink $spec if (-f $spec);
+$out = ` $cmd --spec-only=$spec --include=plugins/demo.plug rpmrebuild 2>&1 `;
+like( $out, qr/specfile: $spec/, 'plugin demo check output') or diag("out=$out\n");
+ok( -e $spec, 'plugin demo check specfile' ) or diag("out=$out\n");
+$out = ` cat $spec`;
+like($out, qr/change-spec-whole change-spec-preamble/, 'plugin demo modified spec') or diag("out=$out\n");
