@@ -148,6 +148,14 @@ $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'spec_only check output') or diag("out=$out\n");
 ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
 
+# --md5-compat-digest
+$out =`cat $spec`;
+unlike( $out, qr/binary_filedigest_algorithm/, 'no md5-compat-digest') or diag("out=$out\n");
+$out = `$cmd --md5-compat-digest --spec-only=$spec rpmrebuild 2>&1`;
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+$out =`cat $spec`;
+like( $out, qr/binary_filedigest_algorithm/, 'md5-compat-digest') or diag("out=$out\n");
+
 # capabilities
 # shadow-utils (mageia 8)
 # /usr/bin/newgidmap cap_setgid=ep
