@@ -212,13 +212,18 @@ like( $out, qr/result:.*afick-doc.*.x86_64.rpm/, 'plugin unset_tag.sh' )
 # un_prelink.plug
 
 # uniq.plug
-#$out = ` rpm -q -R afick-gui | grep 'bin/sh' | wc -l`;
-#ok( $out != 1, 'plugin uniq uniq') or diag("out=$out\n");
-#$out = `$cmd --include plugins/uniq.plug afick-gui 2>&1 `;
-#like( $out, qr/result:.*afick-gui.*rpm/, 'plugin uniq include' )
-#  or diag("out=$out\n");
-#if ( $out =~ m/result:(.*afick-gui.*rpm)/) {
-#	my $res = $1;
-#	$out = ` rpm -q -R -p $res | grep 'bin/sh' | wc -l`;
-#	ok ( $out == 1, 'plugin uniq check') or diag("rpm -q -R -p $res : $out\n");
-#}
+# pb : rpm build seems to sort the list now
+# so work on builded spec file
+$spec = '/tmp/toto.spec';
+unlink $spec if (-f $spec);
+$out = ` $cmd --spec-only=/tmp/toto.spec -p ../build/old/rpmrebuild-1.4.6-1.noarch.rpm `;
+ok( -f $spec, 'plugin uniq build spec file normal') or diag("out=$out\n");
+my $count_requires_normal = ` grep '^Requires:' $spec | wc -l`;
+chomp $count_requires_normal;
+unlink $spec if (-f $spec);
+$out = ` $cmd --include plugins/uniq.plug --spec-only=/tmp/toto.spec -p ../build/old/rpmrebuild-1.4.6-1.noarch.rpm `;
+ok( -f $spec, 'plugin uniq build spec file with uniq') or diag("out=$out\n");
+my $count_requires_uniq = ` grep '^Requires:' $spec | wc -l`;
+chomp $count_requires_uniq;
+ok( $count_requires_normal != $count_requires_uniq, "plugin uniq requires before $count_requires_normal after $count_requires_uniq"); 
+unlink $spec if (-f $spec);
