@@ -191,8 +191,6 @@ $out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
 #like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
 #  or diag("out=$out\n");
 
-# uniq.plug
-
 # set_tag.plug
 $out = `TAG_ID=Release TAG_VAL="2test" $cmd --include plugins/set_tag.plug afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*-2test.noarch.rpm/, 'plugin set_tag include' )
@@ -227,3 +225,7 @@ my $count_requires_uniq = ` grep '^Requires:' $spec | wc -l`;
 chomp $count_requires_uniq;
 ok( $count_requires_normal != $count_requires_uniq, "plugin uniq requires before $count_requires_normal after $count_requires_uniq"); 
 unlink $spec if (-f $spec);
+
+# demofiles.plug
+$out=` $cmd --include plugins/demofiles.plug rpmrebuild 2>&1 `;
+like( $out, qr/demofiles.plug.1rrp.xz/, 'plugin demofiles') or diag("out=$out\n");
