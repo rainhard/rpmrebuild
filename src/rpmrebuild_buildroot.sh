@@ -74,7 +74,7 @@ while :; do
 			# result will be 4 permissions characters
 			file_perm="${file_perm#${not_perm}}"
 			Mkdir_p "$BuildRoot/$file" || Critical "$MY_BASENAME Mkdir_p $BuildRoot/$file"
-			chmod "$file_perm $BuildRoot/$file" || Critical "$MY_BASENAME chmod $file_perm $BuildRoot/$file"
+			chmod "$file_perm" "$BuildRoot/$file" || Critical "$MY_BASENAME chmod $file_perm $BuildRoot/$file"
 		;;
 
 		*)

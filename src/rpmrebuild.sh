@@ -76,14 +76,13 @@ function QuestionsToUser
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
 		export Aborted
-		return 0
+		return 1
 	}
 	local RELEASE_ORIG
 	RELEASE_ORIG="$(spec_query qf_spec_release )"
 	[ -z "$RELEASE_NEW" ] && \
 	AskYesNo "$WantChangeRelease" && {
-		echo -n "$EnterRelease $RELEASE_ORIG): "
-		read -r RELEASE_NEW
+		read -r -p "$EnterRelease $RELEASE_ORIG): " RELEASE_NEW
 	}
 	return 0
 }
@@ -382,8 +381,7 @@ function SendBugReport
 	local from
 	from="${USER}@${HOSTNAME}"
 	AskYesNo "$WantChangeEmail ($from)" && {
-		echo -n "$EnterEmail"
-		read -r from
+		read -r -p "$EnterEmail" from
 	}
 	GetInformations "$from" >> "$RPMREBUILD_BUGREPORT" 2>&1
 	AskYesNo "$WantEditReport" && {
@@ -633,6 +631,7 @@ function Main
 		BUILDROOT="/"
 		SpecGeneration   || Error "SpecGeneration" || return
 		Processing       || Error "Processing" || return
+		Echo "specfile: $specfile"
 	else
 		SpecGeneration   || Error "SpecGeneration" || return
 		CreateBuildRoot  || Error "CreateBuildRoot" || return
@@ -640,7 +639,7 @@ function Main
 		CheckArch	 || Error "CheckArch" || return
 		RpmBuild         || Error "RpmBuild" || return
 		RpmFileName      || Error "RpmFileName" || return
-		echo "result: ${RPMFILENAME}"
+		Echo "result: ${RPMFILENAME}"
 		if [ -z "$NOTESTINSTALL" ]; then
 			InstallationTest || Error "InstallationTest" || return
 		fi

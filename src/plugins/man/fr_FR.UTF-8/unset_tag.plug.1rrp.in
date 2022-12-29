@@ -44,7 +44,7 @@ TAG_ID : nom du tag à commenter dans le fichier spec
 .br 
 ou
 .br 
-TAG_ID=Release
+TAG_ID=BuildArch
 \fBrpmrebuild \-\-include unset_tag.plug apache\fP
 .br 
 pour commenter le tag BuildArch du package apache 

@@ -145,7 +145,19 @@ like( $out, qr/result:.*rpmrebuild.*rpm/, 'warning' ) or diag("out=$out\n");
 my $spec = '/tmp/rpmrebuild.spec';
 unlink $spec if ( -e $spec );
 $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
-ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
+like( $out, qr/specfile: $spec/, 'spec_only check output' )
+  or diag("out=$out\n");
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+
+# --md5-compat-digest
+$out = `cat $spec`;
+unlike( $out, qr/binary_filedigest_algorithm/, 'no md5-compat-digest' )
+  or diag("out=$out\n");
+$out = `$cmd --md5-compat-digest --spec-only=$spec rpmrebuild 2>&1`;
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+$out = `cat $spec`;
+like( $out, qr/binary_filedigest_algorithm/, 'md5-compat-digest' )
+  or diag("out=$out\n");
 
 # capabilities
 # shadow-utils (mageia 8)
@@ -160,27 +172,123 @@ ok( -e $spec, 'spec_only' ) or diag("out=$out\n");
 #########
 
 # nodoc
+$out = ` rpm -q -l --docfiles afick-doc`;
+like( $out, qr/html/, 'plugin nodoc before' ) or diag("out=$out\n");
 $out = `$cmd --change-spec-files="nodoc.sh " afick-doc 2>&1 `;
-like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc' )
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc call change-spec-files' )
   or diag("out=$out\n");
 $out = `$cmd --include plugins/nodoc.plug afick-doc 2>&1 `;
-like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc include' )
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin nodoc call include' )
   or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p --docfiles $res`;
+	unlike( $out, qr/html/, 'plugin nodoc check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}
 
 # file2pacDep
+$out = ` rpm -q -R afick-doc`;
+unlike( $out, qr/bash/, 'plugin file2pacDep before' ) or diag("out=$out\n");
 $out = `$cmd --include plugins/file2pacDep.plug afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*rpm/, 'plugin file2pacDep include' )
   or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -R -p $res`;
+	like( $out, qr/bash/, 'plugin file2pacDep check' )
+	  or diag("rpm -q -R -p $res : $out\n");
+}
 
-# compat_digest.plug
-$out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
-like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
+# set_tag.plug
+$out =
+`TAG_ID=Release TAG_VAL="2test" $cmd --include plugins/set_tag.plug afick-doc 2>&1 `;
+like(
+	$out,
+	qr/result:.*afick-doc.*-2test.noarch.rpm/,
+	'plugin set_tag include'
+) or diag("out=$out\n");
+$out =
+`$cmd --change-spec-preamble="plugins/set_tag.sh -t Release 3test" afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*-3test.noarch.rpm/, 'plugin set_tag.sh' )
+  or diag("out=$out\n");
+
+# unset_tag.plug
+$out = `TAG_ID=BuildArch $cmd --include plugins/unset_tag.plug afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*x86_64.rpm/, 'plugin unset_tag include' )
+  or diag("out=$out\n");
+$out =
+`$cmd --change-spec-preamble="plugins/unset_tag.sh -t BuildArch " afick-doc 2>&1 `;
+like( $out, qr/result:.*afick-doc.*.x86_64.rpm/, 'plugin unset_tag.sh' )
   or diag("out=$out\n");
 
 # uniq.plug
+# pb : rpm build seems to sort the list now
+# so work on builded spec file
+$spec = '/tmp/toto.spec';
+unlink $spec if ( -f $spec );
+$out =
+` $cmd --spec-only=/tmp/toto.spec -p ../build/old/rpmrebuild-1.4.6-1.noarch.rpm `;
+ok( -f $spec, 'plugin uniq build spec file normal' ) or diag("out=$out\n");
+my $count_requires_normal = ` grep '^Requires:' $spec | wc -l`;
+chomp $count_requires_normal;
+unlink $spec if ( -f $spec );
+$out =
+` $cmd --include plugins/uniq.plug --spec-only=/tmp/toto.spec -p ../build/old/rpmrebuild-1.4.6-1.noarch.rpm `;
+ok( -f $spec, 'plugin uniq build spec file with uniq' ) or diag("out=$out\n");
+my $count_requires_uniq = ` grep '^Requires:' $spec | wc -l`;
+chomp $count_requires_uniq;
+ok(
+	$count_requires_normal != $count_requires_uniq,
+"plugin uniq requires before $count_requires_normal after $count_requires_uniq"
+);
+unlink $spec if ( -f $spec );
 
-# set_tag.plug
+# demofiles.plug
+$out = ` $cmd --include plugins/demofiles.plug rpmrebuild 2>&1 `;
+like( $out, qr/demofiles.plug.1rrp.xz/, 'plugin demofiles' )
+  or diag("out=$out\n");
 
-# unset_tag.plug
+# demo.plug
+$spec = '/tmp/toto.spec';
+unlink $spec if ( -f $spec );
+$out = ` $cmd --spec-only=$spec --include=plugins/demo.plug rpmrebuild 2>&1 `;
+like( $out, qr/specfile: $spec/, 'plugin demo check output' )
+  or diag("out=$out\n");
+ok( -e $spec, 'plugin demo check specfile' ) or diag("out=$out\n");
+$out = ` cat $spec`;
+like(
+	$out,
+	qr/change-spec-whole change-spec-preamble/,
+	'plugin demo modified spec'
+) or diag("out=$out\n");
+
+# compat_digest.plug
+unlink $spec if ( -f $spec );
+$out = `$cmd --spec-only=$spec afick-doc 2>&1 `;
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+$out = `cat $spec`;
+unlike(
+	$out,
+	qr/binary_filedigest_algorithm/,
+	'plugin compat_digest.plug control without'
+) or diag("out=$out\n");
+$out =
+  `$cmd --spec-only=$spec --include plugins/compat_digest.plug afick-doc 2>&1`;
+ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+$out = `cat $spec`;
+like( $out, qr/binary_filedigest_algorithm/, 'plugin compat_digest.plug' )
+  or diag("out=$out\n");
 
 # un_prelink.plug
+$out = `type prelink 2>&1`;
+if ($out) {
+
+	# todo but prelink is not available on recent distributions
+	# fedora 37 mageia 8
+	$out = `$cmd --include plugins/un_prelink.plug bash 2>&1 `;
+}
+else {
+	diag('no prelink found : skip');
+}
+
