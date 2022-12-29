@@ -187,11 +187,6 @@ if ( $out =~ m/result:(.*afick-doc.*rpm)/) {
 	like ( $out, qr/bash/, 'plugin file2pacDep check') or diag("rpm -q -R -p $res : $out\n");
 }
 
-# compat_digest.plug
-$out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
-#like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
-#  or diag("out=$out\n");
-
 # set_tag.plug
 $out = `TAG_ID=Release TAG_VAL="2test" $cmd --include plugins/set_tag.plug afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*-2test.noarch.rpm/, 'plugin set_tag include' )
@@ -207,8 +202,6 @@ like( $out, qr/result:.*afick-doc.*x86_64.rpm/, 'plugin unset_tag include' )
 $out = `$cmd --change-spec-preamble="plugins/unset_tag.sh -t BuildArch " afick-doc 2>&1 `;
 like( $out, qr/result:.*afick-doc.*.x86_64.rpm/, 'plugin unset_tag.sh' )
   or diag("out=$out\n");
-
-# un_prelink.plug
 
 # uniq.plug
 # pb : rpm build seems to sort the list now
@@ -239,3 +232,19 @@ like( $out, qr/specfile: $spec/, 'plugin demo check output') or diag("out=$out\n
 ok( -e $spec, 'plugin demo check specfile' ) or diag("out=$out\n");
 $out = ` cat $spec`;
 like($out, qr/change-spec-whole change-spec-preamble/, 'plugin demo modified spec') or diag("out=$out\n");
+
+# compat_digest.plug
+$out = `$cmd --include plugins/compat_digest.plug afick-doc 2>&1 `;
+#like( $out, qr/result:.*afick-doc.*rpm/, 'plugin compat_digest.plug include' )
+#  or diag("out=$out\n");
+
+# un_prelink.plug
+$out = `type prelink 2>&1`;
+if ( $out ) {
+	# todo but prelink is not available on recent distributions
+	# fedora 37 mageia 8
+	$out = `$cmd --include plugins/un_prelink.plug bash 2>&1 `;
+} else {
+	diag('no prelink found : skip');
+}
+
