@@ -169,7 +169,10 @@ do
 		*)
 			# file name is the last elem of the line but may contains space
 			# quotes, maybe space : %dir %attr(0555, root, root) "/afs"
-			thefile=$( echo "$line" | awk -F '"' '{print $2}' )
+			# remove begin of line
+			line2=${line#*\"}
+			# remove end of line
+			thefile=${line2%\"}
 			filter_file "$thefile"
 			;;
 	esac
