@@ -61,7 +61,10 @@ function check_file () {
 		exit 1
 	else
 		# read file
-		EXCLUDE_LIST=$( cat "$f" )
+		EXCLUDE_LIST=$( < "$f" )
+		# change \n into space
+		# shellcheck disable=SC2086
+		# shellcheck disable=SC2116
 		EXCLUDE_LIST2=$( echo $EXCLUDE_LIST )
 		EXCLUDE_REGEX=${EXCLUDE_LIST2// /\|}
 		debug "EXCLUDE_REGEX=$EXCLUDE_REGEX"
@@ -72,7 +75,8 @@ function check_file () {
 function filter_file () {
 	local f=$1
 
-	local tst=$(echo $f | egrep -e "$EXCLUDE_REGEX" )
+	local tst
+	tst=$(echo "$f" | grep -E "$EXCLUDE_REGEX" )
 	if [ -n "$tst" ]
 	then
 		# found pattern : skip
@@ -87,7 +91,7 @@ function filter_file () {
 # test for arguments
 if [ $# -ne 0 ]
 then
-	while [[ $1 ]]
+	while [[ -n "$1" ]]
 	do
 		case $1 in
 			-d | --debug )
@@ -102,7 +106,7 @@ then
 				shift
 				EXCLUDE_FROM=$1
 				# check if file exists
-				check_file $EXCLUDE_FROM
+				check_file "$EXCLUDE_FROM"
 				shift
 				;;
 
@@ -110,7 +114,7 @@ then
 				shift
 				EXCLUDE_REGEX=$1
 				shift
-			;;
+				;;
 
 			-v | --version )
 				msg "$0 version $version";
@@ -126,7 +130,7 @@ then
 elif [ -n "$EXCLUDE_FROM" ]
 then
 	# we can also provide value by environment
-	check_file $EXCLUDE_FROM
+	check_file "$EXCLUDE_FROM"
 elif [ -n "$EXCLUDE_REGEX" ]
 then
 	# we can also provide value by environment
@@ -137,6 +141,7 @@ else
 fi
 
 # test the way to be called
+# shellcheck disable=SC2154
 if [ "$LONG_OPTION" != "change-spec-files" ]
 then
 	msg "error : $0 can not be called by $LONG_OPTION"
@@ -144,7 +149,7 @@ then
 	exit 1
 fi
 
-while read line
+while read -r line
 do
 	skip=''
 	# format
@@ -161,14 +166,14 @@ do
 			# no file name
 			skip=''
 			;;
-   		*)
+		*)
 			# file is the last elem of the line
-			thefile=$( echo $line | awk -F ' ' '{print $NF}' | sed 's/"//g' )
-			filter_file $thefile
+			thefile=$( echo "$line" | awk -F ' ' '{print $NF}' | sed 's/"//g' )
+			filter_file "$thefile"
 			;;
 	esac
 	if [ -z "$skip" ]
 	then
-		echo $line
+		echo "$line"
 	fi
 done
