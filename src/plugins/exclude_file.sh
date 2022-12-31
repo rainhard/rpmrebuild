@@ -22,10 +22,18 @@
 # code's file of exclude_file plugin for rpmrebuild
 
 version=1.0
+debug=''
 
 ###############################################################################
 function msg () {
-	echo >&2 $*
+	echo >&2 "$*"
+}
+###############################################################################
+function debug () {
+	if [ -n "$debug" ]
+	then
+		msg "debug $*"
+	fi
 }
 ###############################################################################
 function syntaxe () {
@@ -35,6 +43,7 @@ function syntaxe () {
 	msg "-r|--regex : use given regex"
 	msg "-h|--help : this help"
 	msg "-v|--version : print plugin version"
+	msg "-d|--debug : print debug messages"
 	msg "without option, do nothing"
 	exit 1
 
@@ -52,8 +61,10 @@ function check_file () {
 		exit 1
 	else
 		# read file
-		EXCLUDE_LIST=$( cat $f )
-		EXCLUDE_REGEX=$( echo $EXCLUDE_LIST | sed 's/ /\|/g' )
+		EXCLUDE_LIST=$( cat "$f" )
+		EXCLUDE_LIST2=$( echo $EXCLUDE_LIST )
+		EXCLUDE_REGEX=${EXCLUDE_LIST2// /\|}
+		debug "EXCLUDE_REGEX=$EXCLUDE_REGEX"
 	fi
 
 }
@@ -66,6 +77,7 @@ function filter_file () {
 	then
 		# found pattern : skip
 		skip=y
+		debug "(filter_file) $f skip=y"
 	else
 		skip=''
 	fi
@@ -78,6 +90,10 @@ then
 	while [[ $1 ]]
 	do
 		case $1 in
+			-d | --debug )
+				debug=y
+				shift
+				;;
 			-h | --help )
 				syntaxe
 				;;

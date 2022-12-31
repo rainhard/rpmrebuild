@@ -329,7 +329,6 @@ if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
 }
 # syntaxe 4
 my $filter='../test/exclude_from';
-system "echo changelog > $filter";
 $out = ` $cmd --change-spec-files='plugins/exclude_file.sh -f $filter ' afick-doc 2>&1`;
 like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file from call with option' )
   or diag("out=$out\n");
