@@ -152,10 +152,10 @@ fi
 while read -r line
 do
 	skip=''
-	# format
+	# format( see rpmrebuild_files.sh )
 	# %defattr(-,root,root)
-	# %dir /usr/lib/rpmrebuild
-	# /usr/lib/rpmrebuild/optional_tags.cfg
+	# %dir "/usr/lib/rpmrebuild"
+	# "/usr/lib/rpmrebuild/optional_tags.cfg"
 	# %dir %attr(0555, root, root) "/afs"
 	case "$line" in
 		'#'*)
@@ -167,8 +167,9 @@ do
 			skip=''
 			;;
 		*)
-			# file is the last elem of the line
-			thefile=$( echo "$line" | awk -F ' ' '{print $NF}' | sed 's/"//g' )
+			# file name is the last elem of the line but may contains space
+			# quotes, maybe space : %dir %attr(0555, root, root) "/afs"
+			thefile=$( echo "$line" | awk -F '"' '{print $2}' )
 			filter_file "$thefile"
 			;;
 	esac
