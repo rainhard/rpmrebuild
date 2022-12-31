@@ -246,7 +246,7 @@ unlink $spec if ( -f $spec );
 
 # demofiles.plug
 $out = ` $cmd --include plugins/demofiles.plug rpmrebuild 2>&1 `;
-like( $out, qr/demofiles.plug.1rrp.xz/, 'plugin demofiles' )
+like( $out, qr/demofiles.plug.1rrp/, 'plugin demofiles' )
   or diag("out=$out\n");
 
 # demo.plug
@@ -292,3 +292,70 @@ else {
 	diag('no prelink found : skip');
 }
 
+# exclude_file
+# control
+$out = ` rpm -q -l afick-doc`;
+like( $out, qr/changelog/, 'plugin exclude_file control' )
+	  or diag("rpm -q -l afick-doc : $out\n");
+# syntaxe 1
+$out = ` $cmd --change-spec-files='plugins/exclude_file.sh -r "change.og" ' afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file regex call with option' )
+  or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p $res`;
+	unlike( $out, qr/changelog/, 'plugin exclude_file check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}
+# syntaxe 2
+$out = `EXCLUDE_REGEX='.hangelog' $cmd --change-spec-files='plugins/exclude_file.sh ' afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file regex call with env' )
+  or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p $res`;
+	unlike( $out, qr/changelog/, 'plugin exclude_file check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}
+# syntaxe 3
+$out = `EXCLUDE_REGEX='c.angelog' $cmd --include plugins/exclude_file.plug afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file regex include' )
+  or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p $res`;
+	unlike( $out, qr/changelog/, 'plugin exclude_file check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}
+# syntaxe 4
+my $filter='../test/exclude_from';
+system "echo changelog > $filter";
+$out = ` $cmd --change-spec-files='plugins/exclude_file.sh -f $filter ' afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file from call with option' )
+  or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p $res`;
+	unlike( $out, qr/changelog/, 'plugin exclude_file check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}
+# syntaxe 5
+$out = `EXCLUDE_FROM=$filter $cmd --change-spec-files='plugins/exclude_file.sh ' afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file from call with env' )
+  or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p $res`;
+	unlike( $out, qr/changelog/, 'plugin exclude_file check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}
+# syntaxe 6
+$out = `EXCLUDE_FROM=$filter $cmd --include plugins/exclude_file.plug afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'plugin exclude_file from include' )
+  or diag("out=$out\n");
+if ( $out =~ m/result:(.*afick-doc.*rpm)/ ) {
+	my $res = $1;
+	$out = ` rpm -q -l -p $res`;
+	unlike( $out, qr/changelog/, 'plugin exclude_file check' )
+	  or diag("rpm -q -l -p --docfiles $res : $out\n");
+}

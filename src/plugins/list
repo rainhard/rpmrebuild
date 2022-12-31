@@ -4,6 +4,7 @@ plugin		: type of change
 compat_digest.plug : change-spec-preamble
 demofiles.plug	: change-files
 demo.plug	: change-spec-*
+exclude_file.plug : change-spec-files
 file2pacDep.plug : change-spec-requires
 nodoc.plug	: change-spec-files
 set_tag		: change-spec-preamble

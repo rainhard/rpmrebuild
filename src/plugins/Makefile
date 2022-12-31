@@ -6,6 +6,7 @@ PLUGINS :=          \
    compat_digest.plug \
    demo.plug        \
    demofiles.plug   \
+   exclude_file.plug \
    file2pacDep.plug \
    nodoc.plug       \
    set_tag.plug     \
@@ -18,6 +19,7 @@ SCRIPTS :=        \
    compat_digest.sh \
    demo.sh        \
    demofiles.sh   \
+   exclude_file.sh \
    file2pacDep.sh \
    nodoc.sh       \
    set_tag.sh     \
