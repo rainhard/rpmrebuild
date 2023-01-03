@@ -1,6 +1,7 @@
 .TH "demofiles.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 demofiles.plug \- a dummy plugin for rpmrebuild, to show how the plugin can work on files
+
 .SH "SYNOPSIS"
 rpmrebuild \-\-include demofiles.plug <\fIpackagename\fP>
 .br 
@@ -8,9 +9,8 @@ or
 .br 
 rpmrebuild  \-\-change\-files="demofiles.sh [\fIoption\fP]" <\fIpackagename\fP>
 .br 
-
-
 the second form allow to specify plugin's soptions
+
 .SH "DESCRIPTION"
 this plugin is to show how the plugin work on files
 .br 
@@ -35,6 +35,7 @@ contains the code for change\-files
 .TP 
 \fBdemofiles.plug.1\fP
 is this man page
+
 .SH "EXAMPLES"
 .LP 
 \fBrpmrebuild \-\-include demofiles.plug apache\fP
@@ -46,10 +47,12 @@ will apply plugin to files, then build the package
 Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
 .LP 
 .TP 
 this plugin is given as an example of what can be done
+
 .SH "COPYRIGHT"
 .LP 
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.

@@ -1,6 +1,7 @@
 .TH "file2pacDep" "1rrp" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 file2pacDep.plug \- a plugin for rpmrebuild, to change file dependencies into package dependencies
+
 .SH "SYNOPSIS"
 rpmrebuild \-\-include file2pacDep.plug <\fIpackagename\fP>
 .br 
@@ -16,6 +17,7 @@ the second allow to choose which part to change, and plugin options
 this plugin is to replace all package's files dependencies to package dependencies.
 .br 
 For example, a dependency to /bin/bash will be changed to a dependency to bash package, the same for libraries.
+
 .SH "OPTIONS"
 .TP 
 \fB\-f, \-\-file\fP
@@ -32,6 +34,7 @@ print plugin version and exit
 .TP 
 \fB\-V, \-\-forceversion\fP
 add a dependency to current version (>=)
+
 .SH "FILES"
 .TP 
 \fBfile2pacDep.plug\fP 
@@ -42,6 +45,7 @@ contains the code
 .TP 
 \fBfile2pacDep.plug.1\fP
 is this man page
+
 .SH "EXAMPLES"
 .LP 
 "normal" rpm dependencies are :
@@ -153,10 +157,12 @@ rpmlib(CompressedFileNames) <= 3.0.4\-1
 Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
 .LP 
 .TP 
 this plugin is given as an example of what can be done
+
 .SH "COPYRIGHT"
 .LP 
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.

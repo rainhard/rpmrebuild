@@ -1,6 +1,7 @@
 .TH "unset_tag.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 unset_tag.plug \- a plugin for rpmrebuild, to comment a tag key in spec file
+
 .SH "SYNOPSIS"
 .br 
 rpmrebuild  \-\-change\-spec\-preamble="unset_tag.sh \fI\-t tagkey " \fP<\fIpackagename\fP>
@@ -13,6 +14,7 @@ rpmrebuild  \-\-include unset_tag.plug <\fIpackagename\fP>
 
 .SH "DESCRIPTION"
 this plugin allow to comment a tag key in spec file
+
 .SH "OPTIONS"
 .TP 
 \fB\-h, \-\-help\fP
@@ -34,8 +36,10 @@ contains the code for change\-spec\-preamble
 .TP 
 \fBunset_tag.plug.1\fP
 is this man page
+
 .SH "ENVIRONMENT"
 TAG_ID : name of the spec tag to comment
+
 .SH "EXAMPLES"
 .LP 
 \fBrpmrebuild \-\-change\-spec\-preamble="unset_tag.sh \-t BuildArch" apache\fP
@@ -52,6 +56,7 @@ to comment the BuildArch tag for the package apache
 Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
 .LP 
 .TP 
