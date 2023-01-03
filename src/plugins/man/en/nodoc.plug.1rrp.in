@@ -1,6 +1,7 @@
 .TH "nodoc.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 nodoc.plug \- a plugin for rpmrebuild, to remove documentation
+
 .SH "SYNOPSIS"
 rpmrebuild \-\-include nodoc.plug <\fIpackagename\fP>
 .br 
@@ -27,6 +28,7 @@ remove only doc (/usr/share/doc) files
 .TP 
 \fB\-v, \-\-version\fP
 print plugin version and exit
+
 .SH "FILES"
 .TP 
 \fBnodoc.plug\fP
@@ -37,6 +39,7 @@ contains the code
 .TP 
 \fBnodoc.plug.1\fP
 is this man page
+
 .SH "EXAMPLES"
 .LP 
 \fBrpmrebuild \-\-include nodoc.plug rpm\fP
@@ -46,10 +49,12 @@ is this man page
 Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
 .LP 
 .TP 
 this plugin is given as an example of what can be done
+
 .SH "COPYRIGHT"
 .LP 
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.

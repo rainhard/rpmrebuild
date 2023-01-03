@@ -1,6 +1,7 @@
 .TH "uniq.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 uniq.plug \- a plugin for rpmrebuild, to remove duplicate spec lines
+
 .SH "SYNOPSIS"
 rpmrebuild \-\-include uniq.plug <\fIpackagename\fP>
 .br 
@@ -12,10 +13,12 @@ rpmrebuild  \-\-change\-spec\-requires|\-\-change\-spec\-provides|\-\-change\-sp
 the first form apply all changes
 .br 
 the second allow to choose which part to change, and plugin options
+
 .SH "DESCRIPTION"
 this plugin is to suppress duplicate lines in specfile.
 .br 
 For example, a package which contains several shell scripts will be added in rpm building several identical dependencies to the shell !
+
 .SH "OPTIONS"
 .TP 
 \fB\-h, \-\-help\fP
@@ -23,6 +26,7 @@ output help information plugins option and exit.
 .TP 
 \fB\-v, \-\-version\fP
 print plugin version and exit
+
 .SH "FILES"
 .TP 
 \fBuniq.plug\fP
@@ -33,6 +37,7 @@ contains the code
 .TP 
 \fBuniq.plug.1\fP
 is this man page
+
 .SH "EXAMPLES"
 .LP 
 \fBrpmrebuild \-\-include uniq.plug rpm\fP
@@ -42,10 +47,12 @@ is this man page
 Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
 .LP 
 .TP 
 this plugin is given as an example of what can be done
+
 .SH "COPYRIGHT"
 .LP 
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.

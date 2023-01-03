@@ -1,6 +1,7 @@
 .TH "compat_digest.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 compat_digest.plug \- a plugin for rpmrebuild, for digest compatibility with rpm 4.4x
+
 .SH "SYNOPSIS"
 .br 
 rpmrebuild  \-\-change\-spec\-preamble="compat_digest.sh <\fIpackagename\fP>
@@ -11,6 +12,7 @@ rpmrebuild  \-\-include compat_digest.plug <\fIpackagename\fP>
 
 .SH "DESCRIPTION"
 this plugin force the rpm internal digest to be compatible with rpm 4.4.x
+
 .SH "OPTIONS"
 .TP 
 \fB\-h, \-\-help\fP
@@ -18,6 +20,7 @@ output help information plugins option and exit.
 .TP 
 \fB\-v, \-\-version\fP
 print plugin version and exit
+
 .SH "FILES"
 .TP 
 \fBcompat_digest.sh\fP
@@ -28,8 +31,10 @@ contains the code for change\-spec\-preamble
 .TP 
 \fBcompat_digest.plug.1\fP
 is this man page
+
 .SH "ENVIRONMENT"
 .br 
+
 .SH "EXAMPLES"
 .LP 
 \fBrpmrebuild \-\-change\-spec\-preamble="compat_digest.sh apache\fP
@@ -44,6 +49,7 @@ rpmrebuild \-\-include compat_digest.plug apache
 Eric Gerbier <eric.gerbier@tutanota.com>
 .TP 
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
 .LP 
 .TP 
