@@ -4,74 +4,74 @@ demo.plug \- a dummy plugin for rpmrebuild, to show how the plugin work on spec 
 
 .SH "SYNOPSIS"
 rpmrebuild \-\-include demo.plug <\fIpackagename\fP>
-.br 
+.br
 or
-.br 
+.br
 rpmrebuild  \-\-change\-spec\-{type}="demo.sh [\fIoption\fP]" <\fIpackagename\fP>
-.br 
+.br
 
 the first form apply all changes
-.br 
+.br
 the second allow to choose which part to change, and plugin options
 
 .SH "DESCRIPTION"
 this plugin is to show how the plugin work
-.br 
+.br
 it will just add plugin type name begin of line in spec file.
 The spec file will not work any more but will show which parts can be modified
 
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 output help information plugins option and exit.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 print plugin version and exit
-.TP 
+.TP
 \fB\-n, \-\-null\fP
-do not add anything : just echo spec file 
+do not add anything : just echo spec file
 
 .SH "FILES"
-.TP 
+.TP
 \fBdemo.plug\fP
 is the 'include file' for a quicker use
-.TP 
+.TP
 \fBdemo.sh\fP
 contains the code for change\-spec*
-.TP 
+.TP
 \fBdemo.plug.1\fP
 is this man page
 
 .SH "EXAMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-include demo.plug rpm\fP
 
 will build, apply plugin to spec file, then edit it
 
 .SH "AUTHORS"
-.LP 
+.LP
 Eric Gerbier <eric.gerbier@tutanota.com>
-.TP 
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 this plugin is given as an example of what can be done
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.
-.br 
+.br
 this program is distributed under GNU General Public License
-.br 
+.br
 It is provided "as is", without any express or implied
 warranties.  See the file COPYING for details.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
 compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1) set_tag.plug(1) unset_tag.plug(1)
-.br 
+.br
 man \-k rrp for plugins specific manpages

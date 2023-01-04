@@ -3,7 +3,7 @@
 un_prelink.plug \- a plugin for rpmrebuild, to revert prelink
 
 .SH "SYNOPSIS"
-.br 
+.br
 rpmrebuild  \-\-include un_prelink.plug <\fIpackagename\fP>
 
 .SH "DESCRIPTION"
@@ -15,54 +15,54 @@ their relocation at startup significantly decreases  and  also  due  to
 fewer  relocations the run-time memory consumption decreases too.
 
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 output help information plugins option and exit.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 print plugin version and exit
- 
+
 .SH "FILES"
-.TP 
+.TP
 \fBun_prelink.sh\fP
 contains the code for change\-files
-.TP 
+.TP
 \fBun_prelink.plug\fP
-.TP 
+.TP
 \fBun_prelink.plug.1\fP
 is this man page
 
 .SH "ENVIRONMENT"
 
 .SH "EXAMPLES"
-.LP 
+.LP
 rpmrebuild \-\-include un_prelink.plug apache
-.br 
+.br
 to build apache package with not prelinked binaries
 
 .SH "AUTHORS"
-.LP 
+.LP
 Eric Gerbier <eric.gerbier@tutanota.com>, based on code from Han Holl
-.TP 
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2011 by Eric Gerbier.
-.br 
+.br
 this program is distributed under GNU General Public License
-.br 
+.br
 It is provided "as is", without any express or implied
 warranties.  See the file COPYING for details.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
-.br 
+.br
 compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1) set_tag.plug(1) un_prelink.plug(1)
-.br 
+.br
 man \-k rrp for plugins specific manpages

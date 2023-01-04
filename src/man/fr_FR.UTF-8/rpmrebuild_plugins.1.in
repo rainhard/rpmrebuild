@@ -5,169 +5,169 @@ rpmrebuild_plugins \- système de greffons (plugins) pour étendre les fonctions
 rpmrebuild [\fInon\-plugins\-option\fP] [\fIplugins\-option\fP] <\fIpackagename\fP>
 .SH "DESCRIPTION"
 \fBrpmrebuild\fP essaie de reconstruire le package rpm le plus proche de l'original possible.
-.LP 
+.LP
 dans certains cas, cela ne correspond pas au besoins de modification des rpm, il faut utiliser pour cela les plugins.
 .SH "RPMREBUILD SANS PLUGINS"
 Sans plugin, le processus de construction est le suivant :
-.TP 
+.TP
 \fBinterrogation\fP \-
 interrogation de la base rpm sur le package à reconstruire, découpée en plusieurs sections.
-.TP 
+.TP
 \fBconcaténation\fP \-
 création du fichier specfile à partir des sections recupérées.
-.TP 
+.TP
 \fBconstruction\fP \-
 fabrication du fichier rpm à partir du fichier specfile.
 .SH "RPMREBUILD AVEC PLUGINS"
 Quand on utilise des plugin, le processus devient :
-.TP 
+.TP
 \fBinterrogation\fP \-
 interrogation de la base rpm sur le package à reconstruire, découpée en plusieurs sections.
-.TP 
+.TP
 \fBmodification des sections\fP \-
 applique les filtres ou edite les sections spécifiées.
-.TP 
+.TP
 \fBconcaténation\fP \-
 création du fichier specfile à partir des sections récupérées.
-.TP 
+.TP
 \fBmodification globale\fP \-
 applique les filtre ou edite le fichier specfile.
-.TP 
+.TP
 \fBconstruction\fP \-
 fabrication du fichier rpm à partir du fichier specfile.
 .SH "SECTION DU SPECFILE"
 L'interrogation récupère les sections suivantes :
 .RS
-.br 
+.br
 preamble
-.br 
+.br
 conflicts
-.br 
+.br
 obsoletes
-.br 
+.br
 provides
-.br 
+.br
 requires
-.br 
+.br
 description
-.br 
+.br
 files
-.br 
+.br
 triggers
-.br 
+.br
 pre
-.br 
+.br
 post
-.br 
+.br
 preun
-.br 
+.br
 postun
-.br 
+.br
 verifyscript
-.br 
+.br
 changelog
 .RE
 .SH "CONCATENATION DU SPECFILE "
 crée le fichier specfile complet à partir des sections précédentes.
 Les étapes sont :
-.LP 
-ajouter les tags  AutoReq / AutoProv 
-.br 
+.LP
+ajouter les tags  AutoReq / AutoProv
+.br
 ajouter le tag  BuildRoot
-.br 
+.br
 ajouter quelques définitions pour ajuster le comportement de rpm
-.br 
+.br
 doubles les '%', afin d'eviter que rpm ne les interprète comme des macros.
-.br 
+.br
 ajouter '%description' avant la section description
-.br 
+.br
 ajouter '%files' avant la section des fichiers
-.br 
+.br
 ajouter '%changelog' avant la section des changements ( changelog )
 .SH "LES TYPES DE PLUGINS"
 la fabrication de package utilise deux entrées :
 un fichier specfile, et des fichiers dans l'arborescence buildroot.
 Il y a donc deux types de plugins :
-.TP 
+.TP
 \- ceux qui modifient le fichier specfile (example : demo.plug).
-.TP 
+.TP
 \- ceux qui modifient les fichiers (dans buildroot) (example : demofiles.plug).
 .SH "INTERFACE DES PLUGIN"
 Les plugin sont exécuté après les interrogations rpm et avant la fabrication
 du package, dans l'ordre spécifié dans la ligne de commande.
-.TP 
+.TP
 Code de sortie
 Les plugin doivent se terminer avec un code de sortie 0 en cas de succès, n'importe quelle
 autre valeur en cas d'echec.
-.TP 
+.TP
 Variables d'environment
 Les plugins utilisent les variables suivantes:
 .RS
-.TP 
+.TP
 RPMREBUILD_TMPDIR
 répertoire des fichiers temporaires. il sera supprimé par rpmrebuild en fin de travail.
-.TP 
+.TP
 RPMREBUILD_PLUGINS_DIR
 répertoire des plugins.
-.TP 
+.TP
 RPMREBUILD_COMMENT_MISSING
 Si positionné à 'yes' (oui), les fichier manquants sont commentés
 dans le fichier specfile.
-.TP 
+.TP
 RPMREBUILD_PUG_FROM_FS
 Si positionné à 'yes' (oui), les permissions, le proprietaire (uid), le groupe (gid)
-sont identiques à ceux des fichiers installés, sinon ils sont ceux enregistrés dans 
+sont identiques à ceux des fichiers installés, sinon ils sont ceux enregistrés dans
 la base rpm.
-.TP 
+.TP
 RPMREBUILD_WARNING
-Si positionné à 'yes' (oui), produit des avertissement si des fichiers contiennent 
+Si positionné à 'yes' (oui), produit des avertissement si des fichiers contiennent
 des caractères d'expension (* ? ).
-.TP 
+.TP
 PATH
 Il est positionné à $RPMREBUILD_PLUGINS_DIR:$PATH
-.TP 
+.TP
 LONG_OPTION
 contient le nom de l'option (sans \-\-) qui a déclenché le plugin.
-.TP 
+.TP
 RPM_BUILD_ROOT
 Pour les plugins qui modifient les fichiers, est positionné à buildroot.
 Pour les autres : vide.
 .RE
-.TP 
+.TP
 stdin and stdout
 les plugins qui modifient le fichier specfile (option \-\-spec\-\change\-*)
 lisent le specfile sur stdin et écrivent le résultat sur stdout.
 stdout.
 .SH "EXEMPLES DE PLUGINS"
 Plusieurs plugins sont fournis à titre d'exemples :
-.TP 
+.TP
 demofiles.plug (change\-files) : un plugin de "démo" pour montrer ce que l'on peut faire sur les fichiers
-.TP 
-demo.plug (change\-spec\-*) : un plugin de "démo", pour montrer ce que l'on peut faire sur le fichier spec 
-.TP 
+.TP
+demo.plug (change\-spec\-*) : un plugin de "démo", pour montrer ce que l'on peut faire sur le fichier spec
+.TP
 uniq.plug (change\-spec) :  un "vrai" plugin pour trier les lignes et éliminer les doublons sur certaines sections (require, provide ... )
-.TP 
+.TP
 file2pacDep.plug (change\-spec\-requires) : un "vrai" plugin pour convertir les dependances vers des fichiers en dependances vers des packages
-.TP 
+.TP
 nodoc.plug (change\-spec\-files) : un "vrai" plugin pour supprimer la documentation d'un package
-.TP 
+.TP
 set_tag.plug (change\-spec\-preamble) : un "vrai" plugin pour modifier la valeur d'un tag du fichier de spec
-.TP 
+.TP
 unset_tag.plug (change\-spec\-preamble) : un "vrai" plugin pour commnter un tag du fichier de spec
 .SH "CONVENTION DE NOMMAGE DES PAGES MAN de plugins"
 Si vous écrivez des plugin, vous êtes encouragés à suffixer les pages de
 manuel en \fB.1rrp\fP, afin que la commande \fB'man \-k rrp'\fP fournisse
-la liste des plugins pour rpmrebuild installés. Attention, la commande 
+la liste des plugins pour rpmrebuild installés. Attention, la commande
 \fBmakewhatis\fP doit être lancé pour que les nouvelles pages soient prises
 en compte.
 .SH "AUTHORS"
-.LP 
+.LP
 Eric Gerbier <eric.gerbier@tutanota.com>
-.br 
+.br
 Valery Reznic <valery_reznic@users.sourceforge.net>
-.TP 
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild(1), demofiles.plug(1), demo.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), set_tag.plug(1), unset_tag.plug(1),
  'man \-k rrp' pour la doc sur les plugins fournis.

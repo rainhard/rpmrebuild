@@ -3,37 +3,37 @@
 unset_tag.plug \- a plugin for rpmrebuild, to comment a tag key in spec file
 
 .SH "SYNOPSIS"
-.br 
+.br
 rpmrebuild  \-\-change\-spec\-preamble="unset_tag.sh \fI\-t tagkey " \fP<\fIpackagename\fP>
-.br 
+.br
 or
-.br 
+.br
 TAG_ID=tagkey
-.br 
+.br
 rpmrebuild  \-\-include unset_tag.plug <\fIpackagename\fP>
 
 .SH "DESCRIPTION"
 this plugin allow to comment a tag key in spec file
 
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 output help information plugins option and exit.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 print plugin version and exit
-.TP 
-\fB\-t, \-\-tag\fP tagkey 
+.TP
+\fB\-t, \-\-tag\fP tagkey
 comment the tagkey line
- 
+
 .SH "FILES"
-.TP 
+.TP
 \fBunset_tag.sh\fP
 contains the code for change\-spec\-preamble
-.TP 
+.TP
 \fBunset_tag.plug\fP
 
-.TP 
+.TP
 \fBunset_tag.plug.1\fP
 is this man page
 
@@ -41,40 +41,40 @@ is this man page
 TAG_ID : name of the spec tag to comment
 
 .SH "EXAMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-change\-spec\-preamble="unset_tag.sh \-t BuildArch" apache\fP
-.br 
-you can do the same with the following syntax 
-.br 
+.br
+you can do the same with the following syntax
+.br
 TAG_ID=BuildArch
 rpmrebuild \-\-include unset_tag.plug apache
-.br 
+.br
 to comment the BuildArch tag for the package apache
 
 .SH "AUTHORS"
-.LP 
+.LP
 Eric Gerbier <eric.gerbier@tutanota.com>
-.TP 
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 a very simple but real plugin
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2011 by Eric Gerbier.
-.br 
+.br
 this program is distributed under GNU General Public License
-.br 
+.br
 It is provided "as is", without any express or implied
 warranties.  See the file COPYING for details.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
 compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1) set_tag.plug(1) unset_tag.plug(1)
-.br 
+.br
 man \-k rrp for plugins specific manpages

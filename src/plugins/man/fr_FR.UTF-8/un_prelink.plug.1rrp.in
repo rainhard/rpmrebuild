@@ -3,7 +3,7 @@
 un_prelink.plug \- un plugin pour rpmrebuild, pour annuler le prelink sur les fichiers
 
 .SH "SYNOPSIS"
-.br 
+.br
 rpmrebuild  \-\-include un_prelink.plug <\fIpackagename\fP>
 
 .SH "DESCRIPTION"
@@ -13,55 +13,55 @@ prelink est un programme qui modifie les bibliothèques partagées et les binair
 quement liés, de sorte que le temps de demmarrage diminue.
 
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 affiche une aide, puis quitte.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 affiche la version du plugin puis quitte.
- 
+
 .SH "FILES"
-.TP 
+.TP
 \fBun_prelink.sh\fP
 le code du plugin
-.TP 
+.TP
 \fBun_prelink.plug\fP
-.TP 
+.TP
 \fBun_prelink.plug.1\fP
 la page de manuel
 
 .SH "ENVIRONMENT"
 
 .SH "EXAMPLES"
-.LP 
+.LP
 rpmrebuild \-\-include un_prelink.plug apache
-.br 
+.br
 reconstruit le package apache sans prelink
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <eric.gerbier@tutanota.com>, 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>,
 à partir de code fourni par Han Holl
-.TP 
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.
-.br 
+.br
 Ce programme est distribué sous la licence GNU General Public
-.br 
+.br
 Il est fourni en l'état, sans garanties.
 Consultez le fichier COPYING pour plus de détails.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
-.br 
+.br
 compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1) set_tag.plug(1) un_prelink.plug(1)
-.br 
+.br
 man \-k rrp for plugins specific manpages
