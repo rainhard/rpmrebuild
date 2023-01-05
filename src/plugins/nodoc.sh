@@ -112,7 +112,7 @@ do
 #	fi
 	# second code style (avoid call to external grep process)
 	case "$line" in
-   		%doc*)
+   		*%doc*)
 			#echo "%doc found"
       			case "$line" in
 				*/man*/man*/* | */man*/*/man*/*)

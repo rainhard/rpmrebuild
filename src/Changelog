@@ -8,11 +8,13 @@
 - change email to tutanota
 - change copyright year
 - fix warnings from shellcheck
-- add unitary tests
+- add unitary tests for plugins
 - if batch mode, do not edit any spec part
 - spec_only : display spec name if successfull
 - echo+read in one line with read -p
 - add new plugin exclude_file to exclude files from spec
+- split tests in t directory
+- bugfix in nodoc plugin
 
 * Sun Jan 17 2021 <eric.gerbier@tutanota.com> 2.16-1
 - fix bug if more than 10 args (thanks Dmitry V. Levin)
