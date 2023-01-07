@@ -34,48 +34,19 @@ my $dir_src  = $dir . '/../';                   # the src directory
 my $plug_dir = $dir_src . 'plugins';            # the plugin directory
 my $cmd      = $dir_src . 'rpmrebuild.sh -b';
 
-my $spec = "/tmp/toto_$PID.spec";
-
-# compat_digest.plug
-# add some directives in spec file
-# code of rpmrebuild_compat_digest.t plugin_compat_digest.t are very likely
-
-# 1-2 control without plugin
-unlink $spec if ( -f $spec );
-my $out = `$cmd --spec-only=$spec afick-doc 2>&1 `;
-my $tst = -f $spec;
-ok( $tst, 'plugin compat_digest.plug build spec without' )
+# 1-3 control
+my $out = `$cmd rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'debug control build' )
   or diag("out=$out\n");
-if ($tst) {
-	$out = `cat $spec`;
-	unlike(
-		$out,
-		qr/binary_filedigest_algorithm/,
-		'plugin compat_digest.plug control without'
-	) or diag("out=$out\n");
-}
-else {
-	fail('plugin compat_digest.plug control without');
-}
-
-# 3-4 with plugin
-unlink $spec if ( -f $spec );
-$out =
-`$cmd --spec-only=$spec --include $plug_dir/compat_digest.plug afick-doc 2>&1`;
-$tst = -f $spec;
-ok( $tst, 'plugin compat_digest.plug build spec with' )
+unlike( $out, qr/DEBUG/, 'debug control output' )
   or diag("out=$out\n");
-if ($tst) {
-	$out = `cat $spec`;
-	like(
-		$out,
-		qr/binary_filedigest_algorithm/,
-		'plugin compat_digest.plug check spec'
-	) or diag("out=$out\n");
-}
-else {
-	fail('plugin compat_digest.plug check spec');
-}
+unlike( $out, qr/RPMREBUILD_PUG_FROM_FS/, 'debug control env' )
+  or diag("out=$out\n");
 
-# cleaning
-unlink $spec if ( -f $spec );
+# --debug
+$out = `$cmd --debug rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*rpm/, 'debug build' ) or diag("out=$out\n");
+like( $out, qr/DEBUG/,                    'debug control output' )
+  or diag("out=$out\n");
+like( $out, qr/RPMREBUILD_PUG_FROM_FS/, 'debug control env' )
+  or diag("out=$out\n");

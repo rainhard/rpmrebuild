@@ -44,37 +44,36 @@ my $spec = "/tmp/toto_$PID.spec";
 unlink $spec if ( -f $spec );
 my $out = `$cmd --spec-only=$spec afick-doc 2>&1 `;
 my $tst = -f $spec;
-ok( $tst, 'plugin compat_digest.plug build spec without' )
+ok( $tst, 'md5-compat_digest build spec without' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 	unlike(
 		$out,
 		qr/binary_filedigest_algorithm/,
-		'plugin compat_digest.plug control without'
+		'md5-compat_digest control without'
 	) or diag("out=$out\n");
 }
 else {
-	fail('plugin compat_digest.plug control without');
+	fail('md5-compat_digest control without');
 }
 
 # 3-4 with plugin
 unlink $spec if ( -f $spec );
-$out =
-`$cmd --spec-only=$spec --include $plug_dir/compat_digest.plug afick-doc 2>&1`;
+$out = `$cmd --spec-only=$spec --md5-compat-digest afick-doc 2>&1`;
 $tst = -f $spec;
-ok( $tst, 'plugin compat_digest.plug build spec with' )
+ok( $tst, 'md5-compat_digest build spec with' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 	like(
 		$out,
 		qr/binary_filedigest_algorithm/,
-		'plugin compat_digest.plug check spec'
+		'md5-compat_digest check spec'
 	) or diag("out=$out\n");
 }
 else {
-	fail('plugin compat_digest.plug check spec');
+	fail('md5-compat_digest check spec');
 }
 
 # cleaning

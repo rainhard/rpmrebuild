@@ -53,11 +53,15 @@ like( $out, qr/options:/, 'help' ) or diag("out=$out\n");
 $out = `$cmd -h 2>&1`;
 like( $out, qr/options:/, 'help' ) or diag("out=$out\n");
 
-# 6 help-plugins
-$out = `$cmd --help 2>&1`;
-like( $out, qr/options:/, 'help' ) or diag("out=$out\n");
+# 6-8 help-plugins
+$out = `$cmd --help-plugins 2>&1`;
+like( $out, qr/options:/, 'help-plugins' ) or diag("out=$out\n");
+like( $out, qr/change-spec-whole/, 'help-plugins change-spec-whole' ) or diag("out=$out\n");
+like( $out, qr/edit-whole/, 'help-plugins edit-whole' ) or diag("out=$out\n");
 
-# 7 list-plugin
+# 9-10 list-plugin
 $out = `$cmd --list-plugin rpmrebuild 2>&1`;
+like( $out, qr/demo.plug/, 'list-plugin' ) or diag("out=$out\n");
+$out = `$cmd -l rpmrebuild 2>&1`;
 like( $out, qr/demo.plug/, 'list-plugin' ) or diag("out=$out\n");
 

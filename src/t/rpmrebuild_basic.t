@@ -34,48 +34,27 @@ my $dir_src  = $dir . '/../';                   # the src directory
 my $plug_dir = $dir_src . 'plugins';            # the plugin directory
 my $cmd      = $dir_src . 'rpmrebuild.sh -b';
 
-my $spec = "/tmp/toto_$PID.spec";
-
-# compat_digest.plug
-# add some directives in spec file
-# code of rpmrebuild_compat_digest.t plugin_compat_digest.t are very likely
-
-# 1-2 control without plugin
-unlink $spec if ( -f $spec );
-my $out = `$cmd --spec-only=$spec afick-doc 2>&1 `;
-my $tst = -f $spec;
-ok( $tst, 'plugin compat_digest.plug build spec without' )
+# 1 installed package
+my $out = `$cmd afick-doc 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm package (afick-doc)' )
   or diag("out=$out\n");
-if ($tst) {
-	$out = `cat $spec`;
-	unlike(
-		$out,
-		qr/binary_filedigest_algorithm/,
-		'plugin compat_digest.plug control without'
-	) or diag("out=$out\n");
-}
-else {
-	fail('plugin compat_digest.plug control without');
-}
 
-# 3-4 with plugin
-unlink $spec if ( -f $spec );
-$out =
-`$cmd --spec-only=$spec --include $plug_dir/compat_digest.plug afick-doc 2>&1`;
-$tst = -f $spec;
-ok( $tst, 'plugin compat_digest.plug build spec with' )
+# 2-3 rpm file
+$out = `$cmd -p $dir_src/../test/afick-doc-3.7.0-1.noarch.rpm 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm file short (afick-doc)' )
   or diag("out=$out\n");
-if ($tst) {
-	$out = `cat $spec`;
-	like(
-		$out,
-		qr/binary_filedigest_algorithm/,
-		'plugin compat_digest.plug check spec'
-	) or diag("out=$out\n");
-}
-else {
-	fail('plugin compat_digest.plug check spec');
-}
+$out = `$cmd --package $dir_src/../test/afick-doc-3.7.0-1.noarch.rpm 2>&1`;
+like( $out, qr/result:.*afick-doc.*rpm/, 'rpm file long (afick-doc)' )
+  or diag("out=$out\n");
 
-# cleaning
-unlink $spec if ( -f $spec );
+# 4 filesystem (user)
+$out = `$cmd filesystem 2>&1`;
+like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (user)' )
+  or diag("out=$out\n");
+
+# 5 filesystem (root)
+# works on mageia, not on fedora because filesystem contains /proc
+$out = `sudo $cmd filesystem 2>&1`;
+like( $out, qr/result:.*filesystem.*rpm/, 'filesystem (root)' )
+  or diag("out=$out\n");
+
