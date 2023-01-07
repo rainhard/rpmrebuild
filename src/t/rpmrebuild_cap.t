@@ -40,163 +40,111 @@ my $spec = "/tmp/toto_$PID.spec";
 
 # 1-5 control before changes
 my $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'pug control before build spec ok' )
+like( $out, qr/specfile: $spec/, 'cap control before build spec ok' )
   or diag("out=$out\n");
 unlike(
 	$out,
 	qr/WARNING: some files have been modified/,
-	'pug control before warning'
+	'cap control before warning'
 ) or diag("out=$out\n");
-unlike( $out, qr/.....UG..  d $pb/, 'pug control before changes' )
+unlike( $out, qr/........P  d $pb/, 'cap control before changes' )
   or diag("out=$out\n");
 my $tst = -f $spec;
-ok( $tst, 'pug control before spec exists' )
+ok( $tst, 'cap control before spec exists' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 	like(
 		$out,
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug control before spec files'
+		'cap control before spec files'
 	) or diag("out=$out\n");
 }
 else {
-	fail('pug control before spec');
+	fail('cap control before spec');
 }
 
 # modify rpmrebuild installed files
-system "sudo chown eric:eric $pb";
+system "sudo setcap cap_setgid=ep $pb";
 
 # 6-10 control after change
 $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'pug control after build spec ok' )
+like( $out, qr/specfile: $spec/, 'cap control after build spec ok' )
   or diag("out=$out\n");
 like(
 	$out,
 	qr/WARNING: some files have been modified/,
-	'pug control after warning'
+	'cap control after warning'
 ) or diag("out=$out\n");
-like( $out, qr/.....UG..  d $pb/, 'pug control after changes' )
+like( $out, qr/........P  d $pb/, 'cap control after changes' )
   or diag("out=$out\n");
 $tst = -f $spec;
-ok( $tst, 'pug control after spec exists' )
+ok( $tst, 'cap control after spec exists' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 	like(
 		$out,
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug control after spec files'
+		'cap control after spec files'
 	) or diag("out=$out\n");
 }
 else {
-	fail('pug control after spec');
+	fail('cap control after spec');
 }
 
-# 11-15 pug-from-db (default)
-$out = `$cmd --pug-from-db --spec-only=$spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'pug pug-from-db build spec ok' )
+# 11-15 --cap-from-db (default)
+$out = `$cmd --cap-from-db --spec-only=$spec rpmrebuild 2>&1`;
+like( $out, qr/specfile: $spec/, 'cap cap-from-db build spec ok' )
   or diag("out=$out\n");
 like(
 	$out,
 	qr/WARNING: some files have been modified/,
-	'pug pug-from-db warning'
+	'cap cap-from-db warning'
 ) or diag("out=$out\n");
-like( $out, qr/.....UG..  d $pb/, 'pug pug-from-db changes' )
+like( $out, qr/........P  d $pb/, 'cap cap-from-db changes' )
   or diag("out=$out\n");
 $tst = -f $spec;
-ok( $tst, 'pug pug-from-db spec exists' )
+ok( $tst, 'cap cap-from-db spec exists' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 	like(
 		$out,
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug pug-from-db spec files'
+		'cap cap-from-db spec files'
 	) or diag("out=$out\n");
 }
 else {
-	fail('pug pug-from-db spec');
+	fail('cap cap-from-db spec');
 }
 
-# 16-20 pug-from-fs
-$out = `$cmd --pug-from-fs --spec-only=$spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'pug pug-from-fs build spec ok' )
+# 16-20 --cap-from-fs
+$out = `$cmd --cap-from-fs --spec-only=$spec rpmrebuild 2>&1`;
+like( $out, qr/specfile: $spec/, 'cap cap-from-fs build spec ok' )
   or diag("out=$out\n");
 like(
 	$out,
 	qr/WARNING: some files have been modified/,
-	'pug pug-from-fs warning'
+	'cap cap-from-fs warning'
 ) or diag("out=$out\n");
-like( $out, qr/.....UG..  d $pb/, 'pug pug-from-fs changes' )
+like( $out, qr/........P  d $pb/, 'cap cap-from-fs changes' )
   or diag("out=$out\n");
 $tst = -f $spec;
-ok( $tst, 'pug pug-from-fs spec exists' )
+ok( $tst, 'cap cap-from-fs spec exists' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
-	unlike(
+	like(
 		$out,
-		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug pug-from-fs spec files'
+		qr/%doc %attr\(0644, root, root\) %caps\(cap_setgid=ep\) "$pb"/,
+		'cap cap-from-fs spec files'
 	) or diag("out=$out\n");
 }
 else {
-	fail('pug pug-from-fs spec');
-}
-
-# 21-25 keep-perm alias of pug-from-fs
-$out = `$cmd --keep-perm --spec-only=$spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'pug keep-perm build spec ok' )
-  or diag("out=$out\n");
-like(
-	$out,
-	qr/WARNING: some files have been modified/,
-	'pug keep-perm warning'
-) or diag("out=$out\n");
-like( $out, qr/.....UG..  d $pb/, 'pug keep-perm changes' )
-  or diag("out=$out\n");
-$tst = -f $spec;
-ok( $tst, 'pug keep-perm spec exists' )
-  or diag("out=$out\n");
-if ($tst) {
-	$out = `cat $spec`;
-	unlike(
-		$out,
-		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug keep-perm spec files'
-	) or diag("out=$out\n");
-}
-else {
-	fail('pug keep-perm spec');
-}
-
-# 26-30 -k of pug-from-fs
-$out = `$cmd -k --spec-only=$spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'pug short keep-perm build spec ok' )
-  or diag("out=$out\n");
-like(
-	$out,
-	qr/WARNING: some files have been modified/,
-	'pug short keep-perm warning'
-) or diag("out=$out\n");
-like( $out, qr/.....UG..  d $pb/, 'pug short keep-perm changes' )
-  or diag("out=$out\n");
-$tst = -f $spec;
-ok( $tst, 'pug short keep-perm spec exists' )
-  or diag("out=$out\n");
-if ($tst) {
-	$out = `cat $spec`;
-	unlike(
-		$out,
-		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug short keep-perm spec files'
-	) or diag("out=$out\n");
-}
-else {
-	fail('pug short keep-perm spec');
+	fail('cap cap-from-fs spec');
 }
 
 # restore
-system "sudo chown root:root $pb";
+system "sudo setcap -r $pb";
 unlink $spec if ( -f $spec );
