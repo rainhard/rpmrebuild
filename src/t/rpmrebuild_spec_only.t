@@ -46,12 +46,22 @@ unlike( $out, qr/specfile: $spec/, 'spec_only control specfile' )
 ok( !-e $spec, 'spec_only control specfile exists' ) or diag("out=$out\n");
 
 # --spec-only
+unlink $spec if ( -f $spec );
 $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
-unlike( $out, qr/result:.*rpmrebuild.*rpm/, 'spec-only result' )
+unlike( $out, qr/result:.*rpmrebuild.*rpm/, 'spec-only long result' )
   or diag("out=$out\n");
-like( $out, qr/specfile: $spec/, 'spec_only specfile' )
+like( $out, qr/specfile: $spec/, 'spec_only long specfile' )
   or diag("out=$out\n");
-ok( -e $spec, 'spec_only check file' ) or diag("out=$out\n");
+ok( -e $spec, 'spec_only long check file' ) or diag("out=$out\n");
+
+# spec-only short
+unlink $spec if ( -f $spec );
+$out = `$cmd -s $spec rpmrebuild 2>&1`;
+unlike( $out, qr/result:.*rpmrebuild.*rpm/, 'spec-only short result' )
+  or diag("out=$out\n");
+like( $out, qr/specfile: $spec/, 'spec_only short specfile' )
+  or diag("out=$out\n");
+ok( -e $spec, 'spec_only short check file' ) or diag("out=$out\n");
 
 # restore
 unlink $spec if ( -f $spec );

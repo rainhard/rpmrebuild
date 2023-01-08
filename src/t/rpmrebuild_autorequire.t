@@ -54,21 +54,40 @@ else {
 	fail('autorequire control spec');
 }
 
-# --autorequire
+# autorequire long
+unlink $spec if ( -f $spec );
 $out = `$cmd --autorequire --spec-only $spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'autorequire build spec ok' )
+like( $out, qr/specfile: $spec/, 'autorequire long build spec ok' )
   or diag("out=$out\n");
 $tst = -f $spec;
-ok( $tst, 'autorequire spec exists' )
+ok( $tst, 'autorequire long spec exists' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 
-	like( $out, qr/AutoReq: yes/, 'autorequire spec tag' )
+	like( $out, qr/AutoReq: yes/, 'autorequire long spec tag' )
 	  or diag("out=$out\n");
 }
 else {
-	fail('autorequire spec');
+	fail('autorequire long spec');
+}
+
+# autorequire short
+unlink $spec if ( -f $spec );
+$out = `$cmd -R --spec-only $spec rpmrebuild 2>&1`;
+like( $out, qr/specfile: $spec/, 'autorequire short build spec ok' )
+  or diag("out=$out\n");
+$tst = -f $spec;
+ok( $tst, 'autorequire short spec exists' )
+  or diag("out=$out\n");
+if ($tst) {
+	$out = `cat $spec`;
+
+	like( $out, qr/AutoReq: yes/, 'autorequire short spec tag' )
+	  or diag("out=$out\n");
+}
+else {
+	fail('autorequire short spec');
 }
 
 # restore

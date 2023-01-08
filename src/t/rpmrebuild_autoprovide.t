@@ -54,21 +54,40 @@ else {
 	fail('autoprovide control spec');
 }
 
-# --autoprovide
+# autoprovide long
+unlink $spec if ( -f $spec );
 $out = `$cmd --autoprovide --spec-only $spec rpmrebuild 2>&1`;
-like( $out, qr/specfile: $spec/, 'autoprovide build spec ok' )
+like( $out, qr/specfile: $spec/, 'autoprovide long build spec ok' )
   or diag("out=$out\n");
 $tst = -f $spec;
-ok( $tst, 'autoprovide spec exists' )
+ok( $tst, 'autoprovide long spec exists' )
   or diag("out=$out\n");
 if ($tst) {
 	$out = `cat $spec`;
 
-	like( $out, qr/AutoProv: yes/, 'autoprovide spec tag' )
+	like( $out, qr/AutoProv: yes/, 'autoprovide long spec tag' )
 	  or diag("out=$out\n");
 }
 else {
-	fail('autoprovide spec');
+	fail('autoprovide long spec');
+}
+
+# short autoprovide
+unlink $spec if ( -f $spec );
+$out = `$cmd -P --spec-only $spec rpmrebuild 2>&1`;
+like( $out, qr/specfile: $spec/, 'autoprovide short build spec ok' )
+  or diag("out=$out\n");
+$tst = -f $spec;
+ok( $tst, 'autoprovide short spec exists' )
+  or diag("out=$out\n");
+if ($tst) {
+	$out = `cat $spec`;
+
+	like( $out, qr/AutoProv: yes/, 'autoprovide short spec tag' )
+	  or diag("out=$out\n");
+}
+else {
+	fail('autoprovide short spec');
 }
 
 # restore

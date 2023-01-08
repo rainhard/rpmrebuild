@@ -41,5 +41,10 @@ like( $out, qr/result:.*rpmrebuild.*-1.noarch.rpm/, 'release control' )
 
 # --release
 $out = `$cmd --release=test rpmrebuild 2>&1`;
-like( $out, qr/result:.*rpmrebuild.*-test.noarch.rpm/, 'release change' )
+like( $out, qr/result:.*rpmrebuild.*-test.noarch.rpm/, 'release long change' )
+  or diag("out=$out\n");
+
+# short release
+$out = `$cmd -r test rpmrebuild 2>&1`;
+like( $out, qr/result:.*rpmrebuild.*-test.noarch.rpm/, 'release short change' )
   or diag("out=$out\n");
