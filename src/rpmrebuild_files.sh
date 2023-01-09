@@ -189,7 +189,7 @@ while :; do
 
 	# %caps handling
 	if [ "X$RPMREBUILD_CAP_FROM_FS" = "Xyes" ]; then
-		file_cap=$(  getcap "$file" | cut -f2 -d' ' )
+		file_cap=$(  getcap "$file" | rev | cut -f1 -d' ' | rev )
 	else
 		# get capability from rpm query
 		[ "X$file_cap" = "X(none)" ] && file_cap=""
