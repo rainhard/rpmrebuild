@@ -86,4 +86,4 @@ unlike(
 ) or diag("out=$out\n");
 
 # restore data
-system 'sudo rpmrestore.pl -batch rpmrebuild';
+system 'sudo rpmrestore.pl -batch -package=rpmrebuild';
