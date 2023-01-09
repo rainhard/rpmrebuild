@@ -609,7 +609,7 @@ function Main
 	if [ -z "$package_flag" ]; then
 		[ "$need_change_files" = "yes" ] || BUILDROOT="/"
    		IsPackageInstalled || return
-		if [ "$verify" = "yes" ]; then
+		if [ "$RPMREBUILD_verify" = "yes" ]; then
 			out=$(VerifyPackage) || return
 			if [ -n "$out" ]; then
 		 		Warning "$FilesModified\n$out"
