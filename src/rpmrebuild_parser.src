@@ -1186,7 +1186,7 @@ function ProcessLongOptions
 
 			spec-only)
 				RequeredArgument || return
-				spec_only="yes"
+				RPMREBUILD_spec_only="yes"
 				specfile="$OPTARG"
 			;;
 
@@ -1227,12 +1227,14 @@ function ProcessLongOptions
 function CommandLineParsing
 {
 	# Default flags' values. To be sure they don't came from environment
+	# export vars allow to see them in debug mode by the env command
+	# and to access in plugins
 	NEED_EXIT=""  # if not empty should be set to desired exit status
-	RPMREBUILD_additional=""
-	RPMREBUILD_autoprovide="no"
-	RPMREBUILD_autorequire="no"
-	RPMREBUILD_batch="no"
-	RPMREBUILD_debug=""
+	export RPMREBUILD_additional=""
+	export RPMREBUILD_autoprovide="no"
+	export RPMREBUILD_autorequire="no"
+	export RPMREBUILD_batch="no"
+	export RPMREBUILD_debug=""
 	md5_compat_digest="no"
 	need_change_files="no"
 	need_change_spec="no"
@@ -1240,9 +1242,9 @@ function CommandLineParsing
 	rpmdir=""
 	package_flag=""
 	package_install=""
-	spec_only="no"
+	export RPMREBUILD_spec_only="no"
 	specfile=""
-	RPMREBUILD_verify="yes"
+	export RPMREBUILD_verify="yes"
 	rpm_verbose="--quiet"
 
 	export RPMREBUILD_COMMENT_MISSING="no"
@@ -1320,7 +1322,7 @@ function CommandLineParsing
 	CheckOptions
 
 	CreateProcessing "fini" || return
-	if [ "$spec_only" = "yes" ] && [ "$need_change_files" = "yes" ]
+	if [ "$RPMREBUILD_spec_only" = "yes" ] && [ "$need_change_files" = "yes" ]
 	then
 		Echo "$NotCompatibleOption '--spec_only' , '--change-files'"
 		return 1

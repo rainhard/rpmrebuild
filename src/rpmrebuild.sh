@@ -71,7 +71,7 @@ function QuestionsToUser
 {
 	Debug '(QuestionsToUser)'
 	[ "$RPMREBUILD_batch"     = "yes" ] && return 0 ## batch mode, continue
-	[ "$spec_only" = "yes" ] && return 0 ## spec only mode, no questions
+	[ "$RPMREBUILD_spec_only" = "yes" ] && return 0 ## spec only mode, no questions
 
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
@@ -627,7 +627,7 @@ function Main
 		#RPMREBUILD_PUG_FROM_FS="no"  # Be sure use perm, owner, group from the pkg query.
 	fi
 
-	if [ "$spec_only" = "yes" ]; then
+	if [ "$RPMREBUILD_spec_only" = "yes" ]; then
 		BUILDROOT="/"
 		SpecGeneration   || Error "SpecGeneration" || return
 		Processing       || Error "Processing" || return
