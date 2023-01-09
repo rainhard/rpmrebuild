@@ -1187,7 +1187,7 @@ function ProcessLongOptions
 			spec-only)
 				RequeredArgument || return
 				RPMREBUILD_spec_only="yes"
-				specfile="$OPTARG"
+				RPMREBUILD_specfile="$OPTARG"
 			;;
 
 			verbose)
@@ -1243,7 +1243,7 @@ function CommandLineParsing
 	package_flag=""
 	package_install=""
 	export RPMREBUILD_spec_only="no"
-	specfile=""
+	export RPMREBUILD_specfile=""
 	export RPMREBUILD_verify="yes"
 	rpm_verbose="--quiet"
 

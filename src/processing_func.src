@@ -286,7 +286,7 @@ function processing_fini
 {
 	local cmd
 	if [ "$spec_concatenated" = "yes" ]; then
-		case "$specfile" in
+		case "$RPMREBUILD_specfile" in
 			'') # No spec-only flag
 				cmd="cp -f $FIC_SPEC.$spec_index $FIC_SPEC"
 			;;
@@ -296,11 +296,11 @@ function processing_fini
 			;;
 
 			*) # Spec-only flag, specfile not stdout
-				cmd="cp -f $FIC_SPEC.$spec_index $specfile"
+				cmd="cp -f $FIC_SPEC.$spec_index $RPMREBUILD_specfile"
 			;;
 			esac || return
 	else
-		case "$specfile" in
+		case "$RPMREBUILD_specfile" in
 			'') # No spec-only flag
 				cmd="spec_concatenate > $FIC_SPEC"
 			;;
@@ -310,7 +310,7 @@ function processing_fini
 			;;
 
 			*) # Spec-only flag, specfile not stdout
-				cmd="spec_concatenate > $specfile"
+				cmd="spec_concatenate > $RPMREBUILD_specfile"
 			;;
 		esac || return
 	fi
