@@ -70,7 +70,7 @@ function VerifyPackage
 function QuestionsToUser
 {
 	Debug '(QuestionsToUser)'
-	[ "$batch"     = "yes" ] && return 0 ## batch mode, continue
+	[ "$RPMREBUILD_batch"     = "yes" ] && return 0 ## batch mode, continue
 	[ "$spec_only" = "yes" ] && return 0 ## spec only mode, no questions
 
 	AskYesNo "$WantContinue" || {
@@ -372,7 +372,7 @@ function GetInformations
 function SendBugReport
 {
 	Debug '(SendBugReport)'
-	[ "$batch"     = "yes" ] && return 0 ## batch mode, skip report
+	[ "$RPMREBUILD_batch"     = "yes" ] && return 0 ## batch mode, skip report
 
 	[ -s "$RPMREBUILD_BUGREPORT" ] || return 0 ## empty report
 

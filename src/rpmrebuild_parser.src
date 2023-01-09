@@ -1017,7 +1017,7 @@ function ProcessLongOptions
 			;;
 
 			batch)
-				batch="yes"
+				RPMREBUILD_batch="yes"
 			;;
 
 			cap-from-db)
@@ -1111,7 +1111,8 @@ function ProcessLongOptions
 			edit-triggers     | \
 			edit-verifyscript | \
 			edit-whole)
-				if [ "$batch" != 'yes' ]
+				# no edit in batch mode
+				if [ "$RPMREBUILD_batch" != 'yes' ]
 				then
 					CreateProcessing "$LONG_OPTION" || return
 				fi
@@ -1230,7 +1231,7 @@ function CommandLineParsing
 	RPMREBUILD_additional=""
 	RPMREBUILD_autoprovide="no"
 	RPMREBUILD_autorequire="no"
-	batch="no"
+	RPMREBUILD_batch="no"
 	RPMREBUILD_debug=""
 	md5_compat_digest="no"
 	need_change_files="no"
