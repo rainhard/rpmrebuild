@@ -523,7 +523,7 @@ function check_i18ndomains
 # in debug mode , we do not clean temp files
 function clean_exit
 {
-	if [ -z "$debug" ]
+	if [ -z "$RPMREBUILD_debug" ]
 	then
 		RmDir "$RPMREBUILD_TMPDIR"
 	else

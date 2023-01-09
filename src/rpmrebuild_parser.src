@@ -1075,7 +1075,7 @@ function ProcessLongOptions
 			;;
 
 			debug)
-				debug="yes"
+				RPMREBUILD_debug="yes"
 				rpm_verbose="--verbose"
 			;;
 
@@ -1231,7 +1231,7 @@ function CommandLineParsing
 	RPMREBUILD_autoprovide="no"
 	RPMREBUILD_autorequire="no"
 	batch="no"
-	debug=""
+	RPMREBUILD_debug=""
 	md5_compat_digest="no"
 	need_change_files="no"
 	need_change_spec="no"
