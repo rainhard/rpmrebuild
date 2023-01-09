@@ -1005,7 +1005,7 @@ function ProcessLongOptions
 		case "$LONG_OPTION" in
 			additional)
 				RequeredArgument || return
-				additional="$additional $OPTARG"
+				RPMREBUILD_additional="$RPMREBUILD_additional $OPTARG"
 			;;
 
 			autoprovide)
@@ -1227,7 +1227,7 @@ function CommandLineParsing
 {
 	# Default flags' values. To be sure they don't came from environment
 	NEED_EXIT=""  # if not empty should be set to desired exit status
-	additional=""
+	RPMREBUILD_additional=""
 	autoprovide="no"
 	autorequire="no"
 	batch="no"
