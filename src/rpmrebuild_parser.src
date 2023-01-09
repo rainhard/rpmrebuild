@@ -1009,11 +1009,11 @@ function ProcessLongOptions
 			;;
 
 			autoprovide)
-				autoprovide="yes"
+				RPMREBUILD_autoprovide="yes"
 			;;
 
 			autorequire)
-				autorequire="yes"
+				RPMREBUILD_autorequire="yes"
 			;;
 
 			batch)
@@ -1228,8 +1228,8 @@ function CommandLineParsing
 	# Default flags' values. To be sure they don't came from environment
 	NEED_EXIT=""  # if not empty should be set to desired exit status
 	RPMREBUILD_additional=""
-	autoprovide="no"
-	autorequire="no"
+	RPMREBUILD_autoprovide="no"
+	RPMREBUILD_autorequire="no"
 	batch="no"
 	debug=""
 	md5_compat_digest="no"
