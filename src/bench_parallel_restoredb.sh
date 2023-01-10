@@ -6,6 +6,9 @@
 # $Id$
 # flock : https://linuxaria.com/howto/linux-shell-introduction-to-flock
 
+# shellcheck disable=SC2219
+# shellcheck disable=SC2181
+
 # number of procs for gnu parallel
 # 0 means as many as possible
 maxprocs=0
@@ -101,8 +104,8 @@ function bench {
 }
 
 function analyse {
-	pac=$( echo $1 | sed 's/\.output//')
-	output=$( cat $1 )
+	pac=${1%\.output}
+	output=$( < "$1" )
 
 	let seen=seen+1
 	echo -n "$seen/$max $pac "
