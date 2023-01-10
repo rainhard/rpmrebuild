@@ -15,7 +15,7 @@ function bench {
 	pac=$1
 
 	ladate=$( date +'%F-%H-%M-%S' )
-	echo -n "$ladate build $pac "
+	echo -n "$ladate $$ build $pac "
 	localoutput="${output_dir}/${pac}.output"
 
 	# wait for rpm
