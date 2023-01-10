@@ -226,7 +226,7 @@ function RpmBuild
 			return 1
 		}
 	fi
-	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$RPMREBUILD_rpm_defines" -bb "$rpm_verbose" "$RPMREBUILD_additional" "${FIC_SPEC}" || {
+	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$RPMREBUILD_rpm_defines" -bb "$RPMREBUILD_rpm_verbose" "$RPMREBUILD_additional" "${FIC_SPEC}" || {
 		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
 		return 1
 	}
