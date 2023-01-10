@@ -17,12 +17,16 @@ function bench {
 	pbarch=0
 	pbnotdir=0
 	pbchangelog=0
+	pbdb5=0
+	pbglob=0
 	list_bad=''
 	list_bad_dep=''
 	list_bad_magic=''
 	list_bad_arch=''
 	list_bad_dir=''
 	list_bad_changelog=''
+	list_bad_db5=''
+	list_bad_glob=''
 
 	for pac in $list
 	do
@@ -30,7 +34,7 @@ function bench {
 		echo -n "$seen/$max $pac "
 		localtmpdir=${tmpdir}/$$
 		mkdir $localtmpdir
-		output=$( nice ./rpmrebuild.sh -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
+		output=$( nice ./rpmrebuild.sh -b -k -w -y no -c yes -d $localtmpdir $pac  2>&1 )
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
@@ -48,6 +52,8 @@ function bench {
 			cpio=$( echo "$output" | grep "cpio: Bad magic" )
 			arch=$( echo "$output" | grep "Arch dependent binaries" )
 			notdir=$( echo "$output" | grep "Not a directory" )
+			db5=$( echo "$output" | grep "run database recovery" )
+			glob=$( echo "$output" | grep "contains globbing characters" )
 			if [ -n "$depend" ]
 			then
 				echo "NOTOK (Failed dependencies)"
@@ -78,6 +84,18 @@ function bench {
 				echo "  $output"
 				let pbnotdir="$pbnotdir + 1"
 				list_bad_dir="$list_bad_dir $pac"
+			elif [ -n "$db5" ]
+			then
+				echo "NOTOK (db5)"
+				echo "  $output"
+				let pbdb5="$pbdb5 + 1"
+				list_bad_db5="$list_bad_db5 $pac"
+			elif [ -n "$glob" ]
+			then
+				echo "NOTOK (glob)"
+				echo "  $output"
+				let pbglob="$pbglob + 1"
+				list_bad_glob="$list_bad_glob $pac"
 			else
 				echo "KO"
 				echo "  $output"
@@ -97,6 +115,8 @@ function bench {
 	echo "  pb arch : $pbarch ($list_bad_arch)"
 	echo "  pb dir  : $pbnotdir ($list_bad_dir)"
 	echo "  pb changelog  : $pbchangelog ($list_bad_changelog)"
+	echo "  pb db5  : $pbdb5 ($list_bad_db5)"
+	echo "  pb glob : $pbglob ($list_bad_glob)"
 	echo "  others  : $bad ($list_bad)"
 	echo "full log on $LOG"
 	echo "-------------------------------------------------------"
