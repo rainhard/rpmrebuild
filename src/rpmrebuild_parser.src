@@ -1254,7 +1254,7 @@ function CommandLineParsing
 	export RPMREBUILD_CAP_FROM_FS="no"
 	export RPMREBUILD_WARNING="no"
 
-	PAQUET=""
+	export RPMREBUILD_PAQUET=""
 	PAQUET_NAME=""
 
 	export LONG_OPTION
@@ -1339,27 +1339,27 @@ function CommandLineParsing
    		;;
 
    		1) # One argument, it's ok
-			PAQUET="$1"
+			RPMREBUILD_PAQUET="$1"
 			if [ -z "$RPMREBUILD_package_flag" ]; then
-				PAQUET_NAME=$( basename "$PAQUET" )
+				PAQUET_NAME=$( basename "$RPMREBUILD_PAQUET" )
 			else
 				# argument should be a file
-				if [ -f "$PAQUET" ]; then
-					PAQUET_NAME=$( basename "$PAQUET" )
+				if [ -f "$RPMREBUILD_PAQUET" ]; then
+					PAQUET_NAME=$( basename "$RPMREBUILD_PAQUET" )
 					# check if it is an rpm file
 					# rem : 'file' sometimes does not return 
 					# "RPM" because some other magic triggers
 					# before the RPM magic check runs
-					rpm -qp "$PAQUET" 2>/dev/null
+					rpm -qp "$RPMREBUILD_PAQUET" 2>/dev/null
 					# shellcheck disable=SC2181
 					if [ $? -eq 0 ]; then
 							: #ok
 					else
-						Error "(CommandLineParsing) $NotAnRpm '$PAQUET'"
+						Error "(CommandLineParsing) $NotAnRpm '$RPMREBUILD_PAQUET'"
 						return 1
 					fi
 				else
-					Error "(CommandLineParsing) $FileNotFound '$PAQUET'"
+					Error "(CommandLineParsing) $FileNotFound '$RPMREBUILD_PAQUET'"
 					return 1
 				fi
       			fi

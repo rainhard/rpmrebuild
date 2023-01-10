@@ -61,8 +61,8 @@ function SpecEdit
 # check for package change
 function VerifyPackage
 {
-	Debug "(VerifyPackage) ${PAQUET}"
-	rpm --verify --nodeps "$PAQUET" # Don't return here, st=1 - verify fail
+	Debug "(VerifyPackage) ${RPMREBUILD_PAQUET}"
+	rpm --verify --nodeps "$RPMREBUILD_PAQUET" # Don't return here, st=1 - verify fail
 	return 0
 }
 ###############################################################################
@@ -93,11 +93,11 @@ function IsPackageInstalled
 	Debug '(IsPackageInstalled)'
 	# test if package exists
 	local output
-	output=$( rpm --query "${PAQUET}" 2>&1 ) # Don't return here - use output
+	output=$( rpm --query "${RPMREBUILD_PAQUET}" 2>&1 ) # Don't return here - use output
 	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
-		Error "(IsPackageInstalled) ${PAQUET} $PackageNotInstalled"
+		Error "(IsPackageInstalled) ${RPMREBUILD_PAQUET} $PackageNotInstalled"
 		return 1
 	else
 		# find it : one or more ?
@@ -109,7 +109,7 @@ function IsPackageInstalled
 			;;
 
 			*)
-				Error "(IsPackageInstalled) $PackageTooMuch '${PAQUET}':\n$output"
+				Error "(IsPackageInstalled) $PackageTooMuch '${RPMREBUILD_PAQUET}':\n$output"
 			return 1
 			;;
 		esac 
@@ -129,7 +129,7 @@ function RpmUnpack
 	local CPIO_TEMP
 	CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
 	rm --force "$CPIO_TEMP"                               || return
-	rpm2cpio "${PAQUET}" > "$CPIO_TEMP"                     || Error "(RpmUnpack) rpm2cpio" || return
+	rpm2cpio "${RPMREBUILD_PAQUET}" > "$CPIO_TEMP"                     || Error "(RpmUnpack) rpm2cpio" || return
 	rm    --force --recursive "$BUILDROOT"                || return
 	Mkdir_p                   "$BUILDROOT"                || return
 	(cd "$BUILDROOT" && cpio --quiet -idmu --no-absolute-filenames ) < "$CPIO_TEMP" || Error "(RpmUnpack) cpio" || return
@@ -227,7 +227,7 @@ function RpmBuild
 		}
 	fi
 	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$RPMREBUILD_rpm_defines" -bb "$RPMREBUILD_rpm_verbose" "$RPMREBUILD_additional" "${FIC_SPEC}" || {
-		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
+		Error "(RpmBuild) package '${RPMREBUILD_PAQUET}' $BuildFailed"
 		return 1
 	}
 	
@@ -252,9 +252,9 @@ function RpmFileName
 		Debug '    workaround for rpm 3.x'
 		# get info from original paquet
 		# will work if no changes in spec (release ....)
-		#arch=$(eval $change_arch rpm $RPMREBUILD_rpm_defines --query $RPMREBUILD_package_flag --queryformat "%{ARCH}" ${PAQUET})
+		#arch=$(eval $change_arch rpm $RPMREBUILD_rpm_defines --query $RPMREBUILD_package_flag --queryformat "%{ARCH}" ${RPMREBUILD_PAQUET})
 		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
-		RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${PAQUET}") || return
+		RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${RPMREBUILD_PAQUET}") || return
 	fi
 
 	[ -n "$RPMFILENAME" ] || return
@@ -262,7 +262,7 @@ function RpmFileName
 	if [ ! -f "${RPMFILENAME}" ]
 	then
 		Error "(RpmFileName) $FileNotFound rpm $RPMFILENAME"
-		ls -ltr "${RPMREBUILD_rpmdir}/${pac_arch}/${PAQUET}*"
+		ls -ltr "${RPMREBUILD_rpmdir}/${pac_arch}/${RPMREBUILD_PAQUET}*"
 		return 1
 	fi
 	return 0
@@ -298,10 +298,10 @@ function InstallationTest
 	fi
 	# shellcheck disable=SC2086
 	rpm ${rpm_options} "${RPMFILENAME}" || {
-		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
+		Error "(InstallationTest) package '${RPMREBUILD_PAQUET}' $TestFailed"
 		return 1
 	}
-	Debug "(InstallationTest) test install ${PAQUET} ok"
+	Debug "(InstallationTest) test install ${RPMREBUILD_PAQUET} ok"
 	return 0
 }
 ###############################################################################
@@ -326,12 +326,12 @@ function Installation
 		fi
 		# shellcheck disable=SC2086
 		rpm ${rpm_options} "${RPMFILENAME}" || {
-			Error "(Installation) package '${PAQUET}' $InstallFailed"
+			Error "(Installation) package '${RPMREBUILD_PAQUET}' $InstallFailed"
 			return 1
 		}
 		return 0
 	else
-		Error "(Installation) package '${PAQUET}' $InstallCannot"
+		Error "(Installation) package '${RPMREBUILD_PAQUET}' $InstallCannot"
 		return 1
 	fi
 }
@@ -344,9 +344,9 @@ function Processing
 	source "$RPMREBUILD_PROCESSING" && return 0
 
 	if [ "$need_change_spec" = "yes" ] || [ "$need_change_files" = "yes" ]; then
-		[ "$Aborted" = "yes" ] || Error "(Processing) package '$PAQUET' $ModificationFailed."
+		[ "$Aborted" = "yes" ] || Error "(Processing) package '$RPMREBUILD_PAQUET' $ModificationFailed."
 	else
-		Error "(Processing) package '$PAQUET' $SpecFailed."
+		Error "(Processing) package '$RPMREBUILD_PAQUET' $SpecFailed."
 	fi
 	return 1
 }
