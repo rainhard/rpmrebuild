@@ -226,7 +226,7 @@ function RpmBuild
 			return 1
 		}
 	fi
-	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$rpm_defines" -bb "$rpm_verbose" "$RPMREBUILD_additional" "${FIC_SPEC}" || {
+	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$RPMREBUILD_rpm_defines" -bb "$rpm_verbose" "$RPMREBUILD_additional" "${FIC_SPEC}" || {
 		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
 		return 1
 	}
@@ -239,22 +239,22 @@ function RpmFileName
 {
 	Debug '(RpmFileName)'
 	local QF_RPMFILENAME
-	QF_RPMFILENAME=$(eval "$change_arch" rpm "$rpm_defines" --eval %_rpmfilename) || return
+	QF_RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --eval %_rpmfilename) || return
 	#Debug "    QF_RPMFILENAME=$QF_RPMFILENAME"
 	# from generated specfile
-	RPMFILENAME=$(eval "$change_arch" rpm "$rpm_defines" --specfile --query --queryformat "${QF_RPMFILENAME}" "${FIC_SPEC}") || return
+	RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --specfile --query --queryformat "${QF_RPMFILENAME}" "${FIC_SPEC}") || return
 
 	# workaround for redhat 6.x / rpm 3.x
 	local arch
-	arch=$(eval "$change_arch" rpm "$rpm_defines" --specfile --query --queryformat "%{ARCH}"  "${FIC_SPEC}")
+	arch=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --specfile --query --queryformat "%{ARCH}"  "${FIC_SPEC}")
 	if [ "$arch" = "(none)" ]
 	then
 		Debug '    workaround for rpm 3.x'
 		# get info from original paquet
 		# will work if no changes in spec (release ....)
-		#arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
+		#arch=$(eval $change_arch rpm $RPMREBUILD_rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
 		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
-		RPMFILENAME=$(eval "$change_arch" rpm "$rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${PAQUET}") || return
+		RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${PAQUET}") || return
 	fi
 
 	[ -n "$RPMFILENAME" ] || return

@@ -1081,13 +1081,13 @@ function ProcessLongOptions
 
 			define)
 				RequeredArgument || return
-				rpm_defines="$rpm_defines --define '$OPTARG'"
+				RPMREBUILD_rpm_defines="$RPMREBUILD_rpm_defines --define '$OPTARG'"
 			;;
 
 			directory)
 				RequeredArgument || return
 				rpmdir="$OPTARG"
-				rpm_defines="$rpm_defines --define '_rpmdir $rpmdir'" 
+				RPMREBUILD_rpm_defines="$RPMREBUILD_rpm_defines --define '_rpmdir $rpmdir'"
 			;;
 
 			edit-changelog    | \
@@ -1228,7 +1228,8 @@ function CommandLineParsing
 {
 	# Default flags' values. To be sure they don't came from environment
 	# export vars allow to see them in debug mode by the env command
-	# and to access in plugins
+	# another debug is possible with rpmrebuild --modify "env| grep RPMREBUILD" un_package
+	# and to access from plugins
 	NEED_EXIT=""  # if not empty should be set to desired exit status
 	export RPMREBUILD_additional=""
 	export RPMREBUILD_autoprovide="no"
@@ -1238,7 +1239,7 @@ function CommandLineParsing
 	md5_compat_digest="no"
 	need_change_files="no"
 	need_change_spec="no"
-	rpm_defines=""
+	export RPMREBUILD_rpm_defines=""
 	rpmdir=""
 	package_flag=""
 	package_install=""
@@ -1375,7 +1376,7 @@ function CommandLineParsing
 		# There is no rpmdir specified 
 		# Let us find native rpmdir value
 		# (with respect to defines)
-		rpmdir="$(eval rpm "$rpm_defines" --eval %_rpmdir)" || return
+		rpmdir="$(eval rpm "$RPMREBUILD_rpm_defines" --eval %_rpmdir)" || return
 	else
 		# There is rpmdir specified.
 		# Let us find it's absolute path.
