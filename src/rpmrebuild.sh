@@ -258,11 +258,11 @@ function RpmFileName
 	fi
 
 	[ -n "$RPMFILENAME" ] || return
-	RPMFILENAME="${rpmdir}/${RPMFILENAME}"
+	RPMFILENAME="${RPMREBUILD_rpmdir}/${RPMFILENAME}"
 	if [ ! -f "${RPMFILENAME}" ]
 	then
 		Error "(RpmFileName) $FileNotFound rpm $RPMFILENAME"
-		ls -ltr "${rpmdir}/${pac_arch}/${PAQUET}*"
+		ls -ltr "${RPMREBUILD_rpmdir}/${pac_arch}/${PAQUET}*"
 		return 1
 	fi
 	return 0

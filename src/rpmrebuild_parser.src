@@ -1086,8 +1086,8 @@ function ProcessLongOptions
 
 			directory)
 				RequeredArgument || return
-				rpmdir="$OPTARG"
-				RPMREBUILD_rpm_defines="$RPMREBUILD_rpm_defines --define '_rpmdir $rpmdir'"
+				RPMREBUILD_rpmdir="$OPTARG"
+				RPMREBUILD_rpm_defines="$RPMREBUILD_rpm_defines --define '_rpmdir $RPMREBUILD_rpmdir'"
 			;;
 
 			edit-changelog    | \
@@ -1240,7 +1240,7 @@ function CommandLineParsing
 	need_change_files="no"
 	need_change_spec="no"
 	export RPMREBUILD_rpm_defines=""
-	rpmdir=""
+	export RPMREBUILD_rpmdir=""
 	package_flag=""
 	package_install=""
 	export RPMREBUILD_spec_only="no"
@@ -1372,18 +1372,18 @@ function CommandLineParsing
 		;;
 	esac || return
 
-	if [ -z "$rpmdir" ]; then
+	if [ -z "$RPMREBUILD_rpmdir" ]; then
 		# There is no rpmdir specified 
 		# Let us find native rpmdir value
 		# (with respect to defines)
-		rpmdir="$(eval rpm "$RPMREBUILD_rpm_defines" --eval %_rpmdir)" || return
+		RPMREBUILD_rpmdir="$(eval rpm "$RPMREBUILD_rpm_defines" --eval %_rpmdir)" || return
 	else
 		# There is rpmdir specified.
 		# Let us find it's absolute path.
 		# Yeah, a bit ugly, but simple and seems to work...
-		Mkdir_p "$rpmdir" # Not check exit status here
-		rpmdir="$( cd "$rpmdir" && echo "$PWD" )" || {
-			Error "(CommandLineParsing) $CannotChdir '$rpmdir'"
+		Mkdir_p "$RPMREBUILD_rpmdir" # Not check exit status here
+		RPMREBUILD_rpmdir="$( cd "$RPMREBUILD_rpmdir" && echo "$PWD" )" || {
+			Error "(CommandLineParsing) $CannotChdir '$RPMREBUILD_rpmdir'"
 			return 1
 		}
 	fi
