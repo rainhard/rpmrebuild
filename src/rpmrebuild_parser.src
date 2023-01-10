@@ -1149,7 +1149,7 @@ function ProcessLongOptions
 			;;
 
 			install)
-                   		package_install="y"
+				RPMREBUILD_package_install="y"
 			;;
 
 			list-plugin)
@@ -1242,7 +1242,7 @@ function CommandLineParsing
 	export RPMREBUILD_rpm_defines=""
 	export RPMREBUILD_rpmdir=""
 	package_flag=""
-	package_install=""
+	export RPMREBUILD_package_install=""
 	export RPMREBUILD_spec_only="no"
 	export RPMREBUILD_specfile=""
 	export RPMREBUILD_verify="yes"
@@ -1392,7 +1392,7 @@ function CommandLineParsing
 ##############################################################################
 function CheckOptions
 {
-	if [ -n "$package_install" ]
+	if [ -n "$RPMREBUILD_package_install" ]
 	then
 		# force package test
 		RPMREBUILD_NOTESTINSTALL=""

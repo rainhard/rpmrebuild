@@ -643,7 +643,7 @@ function Main
 		if [ -z "$RPMREBUILD_NOTESTINSTALL" ]; then
 			InstallationTest || Error "InstallationTest" || return
 		fi
-		if [ -n "$package_install" ]; then
+		if [ -n "$RPMREBUILD_package_install" ]; then
 			Installation || Error "Installation" || return
 		fi
 	fi

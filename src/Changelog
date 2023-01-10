@@ -8,7 +8,7 @@
 - change email to tutanota
 - change copyright year
 - fix warnings from shellcheck
-- add unitary tests for plugins
+- add unitary tests for plugins and options
 - if batch mode, do not edit any spec part
 - spec_only : display spec name if successfull
 - echo+read in one line with read -p
