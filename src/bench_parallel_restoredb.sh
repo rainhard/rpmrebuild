@@ -250,12 +250,12 @@ echo "  other   : $bad ($list_bad)"
 echo "full log on $LOG"
 echo "-------------------------------------------------------"
 
-# clean temporary directories
-echo "clean temporary directories $tmpdir (o/n) ?"
-read rep
-if [ "$rep" == 'o' ]
+# temporary directories
+if [ -z "$1" ]
 then
+	# by default clean
+	echo "clean temporary directories :  $tmpdir"
 	rm -rf $tmpdir 2> /dev/null
 else
-	echo "temporary directories :  $tmpdir"
+	echo "keep temporary directories :  $tmpdir"
 fi

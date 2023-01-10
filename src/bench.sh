@@ -115,13 +115,13 @@ then
 fi
 
 LOG="$(pwd)/rpmrebuild_bench.log"
-if [ -f $LOG ]
+if [ -f "$LOG" ]
 then
-	mv $LOG $LOG.old
+	mv "$LOG" "${LOG}.old"
 fi
 
 export tmpdir=/tmp/rpmrebuild
-if [ -d $tmpdir ]
+if [ -d "$tmpdir" ]
 then
 	echo "find $tmpdir : check if another run"
 	exit 1
@@ -133,12 +133,12 @@ export LC_ALL=POSIX
 
 bench 2>&1 | tee $LOG
 
-# clean temporary directories
-echo "clean temporary directories $tmpdir (o/n) ?"
-read rep
-if [ "$rep" == 'o' ]
+# temporary directories
+if [ -z "$1" ]
 then
+	# by default clean
+	echo "clean temporary directories :  $tmpdir"
 	rm -rf $tmpdir 2> /dev/null
 else
-	echo "temporary directories :  $tmpdir"
+	echo "keep temporary directories :  $tmpdir"
 fi
