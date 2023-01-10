@@ -4,6 +4,9 @@
 # internal use for developpers
 # $Id$
 
+# shellcheck disable=SC2219
+# shellcheck disable=SC2181
+
 function bench {
 	# rpm -qa can return packages as gpg-pubkey-4ebfc273-48b5dbf3.src
 	list=$( rpm -qa | sed 's/\.src$//' | sort )
