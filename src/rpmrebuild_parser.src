@@ -1169,8 +1169,8 @@ function ProcessLongOptions
 			;;
 
 			package)
-                   		package_flag="-p"
-                	;;
+				RPMREBUILD_package_flag="-p"
+			;;
 
 			pug-from-db)
 				RPMREBUILD_PUG_FROM_FS="no"
@@ -1241,7 +1241,7 @@ function CommandLineParsing
 	need_change_spec="no"
 	export RPMREBUILD_rpm_defines=""
 	export RPMREBUILD_rpmdir=""
-	package_flag=""
+	export RPMREBUILD_package_flag=""
 	export RPMREBUILD_package_install=""
 	export RPMREBUILD_spec_only="no"
 	export RPMREBUILD_specfile=""
@@ -1339,10 +1339,10 @@ function CommandLineParsing
    		;;
 
    		1) # One argument, it's ok
-      			PAQUET="$1"
-      			if [ -z "$package_flag" ]; then
+			PAQUET="$1"
+			if [ -z "$RPMREBUILD_package_flag" ]; then
 				PAQUET_NAME=$( basename "$PAQUET" )
-      			else
+			else
 				# argument should be a file
 				if [ -f "$PAQUET" ]; then
 					PAQUET_NAME=$( basename "$PAQUET" )
@@ -1396,7 +1396,7 @@ function CheckOptions
 	then
 		# force package test
 		RPMREBUILD_NOTESTINSTALL=""
-	elif [ -n "$package_flag" ]
+	elif [ -n "$RPMREBUILD_package_flag" ]
 	then
 		# no test if work on files (not installed)
 		RPMREBUILD_NOTESTINSTALL="1"

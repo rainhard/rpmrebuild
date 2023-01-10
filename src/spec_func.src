@@ -54,7 +54,7 @@ function spec_query
 {
 	rpm_qf=$( $1 )
 	local RPM_QUERY
-	RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
+	RPM_QUERY="rpm --query $i18ndomains $RPMREBUILD_package_flag --queryformat "
 	$RPM_QUERY "$rpm_qf" "$PAQUET" || Error "(spec_query) $rpm_qf" || return
 	return 0
 }

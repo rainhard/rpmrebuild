@@ -143,7 +143,7 @@ function RpmUnpack
 function CreateBuildRoot
 {
 	Debug '(CreateBuildRoot)'
-        if [ -z "$package_flag" ]; then
+        if [ -z "$RPMREBUILD_package_flag" ]; then
 		# installed package
 		if [ "$need_change_files" = "yes" ]; then
 			/bin/bash "$MY_LIB_DIR"/rpmrebuild_buildroot.sh "$BUILDROOT" < "$FILES_IN" || Error "(CreateBuildRoot) rpmrebuild_buildroot.sh $BUILDROOT" || return
@@ -252,7 +252,7 @@ function RpmFileName
 		Debug '    workaround for rpm 3.x'
 		# get info from original paquet
 		# will work if no changes in spec (release ....)
-		#arch=$(eval $change_arch rpm $RPMREBUILD_rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
+		#arch=$(eval $change_arch rpm $RPMREBUILD_rpm_defines --query $RPMREBUILD_package_flag --queryformat "%{ARCH}" ${PAQUET})
 		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
 		RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${PAQUET}") || return
 	fi
@@ -606,7 +606,7 @@ function Main
 	# to solve problems of bad date
 	export LC_TIME=POSIX
 
-	if [ -z "$package_flag" ]; then
+	if [ -z "$RPMREBUILD_package_flag" ]; then
 		[ "$need_change_files" = "yes" ] || BUILDROOT="/"
    		IsPackageInstalled || return
 		if [ "$RPMREBUILD_verify" = "yes" ]; then
