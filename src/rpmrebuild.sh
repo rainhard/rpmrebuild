@@ -640,7 +640,7 @@ function Main
 		RpmBuild         || Error "RpmBuild" || return
 		RpmFileName      || Error "RpmFileName" || return
 		Echo "result: ${RPMFILENAME}"
-		if [ -z "$NOTESTINSTALL" ]; then
+		if [ -z "$RPMREBUILD_NOTESTINSTALL" ]; then
 			InstallationTest || Error "InstallationTest" || return
 		fi
 		if [ -n "$package_install" ]; then
