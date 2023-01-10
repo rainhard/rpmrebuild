@@ -18,7 +18,7 @@
 
 function spec_auto_req
 {
-	if [ "$autorequire" = "no" ]; then
+	if [ "$RPMREBUILD_autorequire" = "no" ]; then
 		echo 'AutoReq: no'
 		echo '%undefine __find_requires'
 	else
@@ -28,7 +28,7 @@ function spec_auto_req
 }
 function spec_auto_prov
 {
-	if [ "$autoprovide" = "no" ]; then
+	if [ "$RPMREBUILD_autoprovide" = "no" ]; then
 		echo 'AutoProv: no'
 		echo '%undefine __find_provides'
 	else
@@ -39,7 +39,7 @@ function spec_auto_prov
 
 function spec_md5_compat_digest
 {
-	if [ "$md5_compat_digest" = "no" ]; then
+	if [ "$RPMREBUILD_md5_compat_digest" = "no" ]; then
 		: # Do nothing
 	else
 		echo "%global _binary_filedigest_algorithm 1"
@@ -54,8 +54,8 @@ function spec_query
 {
 	rpm_qf=$( $1 )
 	local RPM_QUERY
-	RPM_QUERY="rpm --query $i18ndomains $package_flag --queryformat "
-	$RPM_QUERY "$rpm_qf" "$PAQUET" || Error "(spec_query) $rpm_qf" || return
+	RPM_QUERY="rpm --query $i18ndomains $RPMREBUILD_package_flag --queryformat "
+	$RPM_QUERY "$rpm_qf" "$RPMREBUILD_PAQUET" || Error "(spec_query) $rpm_qf" || return
 	return 0
 }
 
@@ -89,7 +89,7 @@ function spec_provides
 
 	# Comment out Provides with pgp()
 	local sed_provides='/Provides[[:space:]]*:[[:space:]]*gpg(.*)/s/^/#/'
-	[ "$autoprovide" = "yes" ] && sed_provides="$sed_provides$sed_comment"
+	[ "$RPMREBUILD_autoprovide" = "yes" ] && sed_provides="$sed_provides$sed_comment"
 	spec_query qf_spec_provides | sed -e "$sed_provides" || Error "(spec_provides) spec_query qf_spec_provides" || return
 	return 0
 }
@@ -101,7 +101,7 @@ function spec_requires
 
 	# Comment out Requires with rpmlib()
 	local sed_requires='/Requires[[:space:]]*:[[:space:]]*rpmlib(.*)/s/^/#/'
-	[ "$autorequire" = "yes" ] && sed_requires="$sed_requires$sed_comment"
+	[ "$RPMREBUILD_autorequire" = "yes" ] && sed_requires="$sed_requires$sed_comment"
 	TestAwk
 	# shellcheck disable=SC2181
 	if [ "$?" -eq 0 ]

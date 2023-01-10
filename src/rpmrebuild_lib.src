@@ -20,7 +20,7 @@
 
 function Debug
 {
-	if [ -n "$debug" ]
+	if [ -n "$RPMREBUILD_debug" ]
 	then
 		echo -e "DEBUG: $*" 1>&2
 	fi
