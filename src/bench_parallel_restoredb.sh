@@ -55,7 +55,7 @@ function bench {
 	else
 		localtmpdir=${tmpdir}/$$
 		mkdir $localtmpdir
-		nice ${mypath}/rpmrebuild.sh -b -k -y no -c yes -d $localtmpdir $pac >> ${localoutput} 2>&1
+		nice ${mypath}/rpmrebuild.sh -b -w -k -y no -c yes -d $localtmpdir $pac >> ${localoutput} 2>&1
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
@@ -68,6 +68,7 @@ function bench {
 			arch=$( grep "Arch dependent binaries"  $localoutput )
 			notdir=$( grep "Not a directory"  $localoutput )
 			db5=$( grep "run database recovery"  $localoutput )
+			glob=$( grep "contains globbing characters" $localoutput )
 			if [ -n "$depend" ]
 			then
 				res="$res (depend)"
@@ -86,6 +87,9 @@ function bench {
 			elif [ -n "$db5" ]
 			then
 				res="$res (db5)"
+			elif [ -n "$glob" ]
+			then
+				res="$res (glob)"
 			else
 				res="$res (other)"
 			fi
@@ -120,6 +124,7 @@ function analyse {
 		arch=$( echo "$output" | grep "Arch dependent binaries" )
 		notdir=$( echo "$output" | grep "Not a directory" )
 		db5=$( echo "$output" | grep "run database recovery" )
+		glob=$( echo "$output" | grep "contains globbing characters" )
 		if [ -n "$depend" ]
 		then
 			echo "NOTOK (Failed dependencies)"
@@ -156,6 +161,12 @@ function analyse {
 			echo "  $output"
 			let pbdb="$pbdb + 1"
 			list_bad_db="$list_bad_db $pac"
+		elif [ -n "$glob" ]
+		then
+			echo "NOTOK (glob error)"
+			echo "  $output"
+			let pbglob="$pbglob + 1"
+			list_bad_glob="$list_bad_glob $pac"
 		else
 			echo "KO"
 			echo "  $output"
@@ -225,6 +236,7 @@ pbarch=0
 pbnotdir=0
 pblog=0
 pbdb=0
+pbglob=0
 list_bad=''
 list_bad_cpio=''
 list_bad_dep=''
@@ -232,6 +244,7 @@ list_bad_arch=''
 list_bad_dir=''
 list_bad_log=''
 list_bad_db=''
+list_bad_glob=''
 
 for f in *.output
 do
@@ -246,6 +259,7 @@ echo "  pb arch : $pbarch ($list_bad_arch)"
 echo "  pb dir  : $pbnotdir ($list_bad_dir)"
 echo "  pb log  : $pblog ($list_bad_log)"
 echo "  pb db5  : $pbdb ($list_bad_db)"
+echo "  pb glob  : $pbglob ($list_bad_glob)"
 echo "  other   : $bad ($list_bad)"
 echo "full log on $LOG"
 echo "-------------------------------------------------------"
