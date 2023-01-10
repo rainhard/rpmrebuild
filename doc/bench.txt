@@ -1,0 +1,3 @@
+fedora 37 , 2154 packages, 4 proc
+mono-thread (bench.sh) : real	89m45,825s user	77m22,186s sys	15m0,111s
+multi-thread bench_parallel_restoredb.sh : real	36m51,539s user	116m45,306s sys	19m5,949s
