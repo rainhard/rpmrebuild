@@ -20,9 +20,9 @@ function bench {
 
 	# wait for rpm
 	# on mageia may have : db5 erreur(-30973) de dbenv->open: BDB0087 DB_RUNRECOVERY: Fatal error, run database recovery
-	max=2
-	i=0
-	ok=0
+	local max=2
+	local i=0
+	local ok=0
 	while [ $i -lt $max ]
 	do
 		rpm -q $pac > ${localoutput} 2>&1
@@ -196,13 +196,13 @@ fi
 export mypath
 
 LOG="$(pwd)/rpmrebuild_bench.log"
-if [ -f $LOG ]
+if [ -f "$LOG" ]
 then
-	mv $LOG $LOG.old
+	mv "$LOG" "${LOG}.old"
 fi
 
 export tmpdir=/tmp/rpmrebuild
-if [ -d $tmpdir ]
+if [ -d "$tmpdir" ]
 then
 	echo "find $tmpdir : check if another run"
 	exit 1
@@ -211,7 +211,7 @@ mkdir -p $tmpdir
 
 export output_dir="${tmpdir}/output"
 mkdir $output_dir
-cd $output_dir
+cd $output_dir || exit 1
 
 # to have standardize error messages
 export LC_ALL=POSIX
@@ -223,7 +223,7 @@ list=$( rpm -qa | sed 's/\.src$//' | sort )
 export max=$( echo "$list" | wc -l )
 
 echo "------- build -----------------"
-echo "$list" | sort | parallel bench | tee $LOG
+echo "$list" | sort | parallel --max-procs $maxprocs bench | tee $LOG
 
 echo "------- analysis --------------"
 # output analysis
