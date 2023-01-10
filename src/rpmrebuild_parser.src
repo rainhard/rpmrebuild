@@ -1159,7 +1159,7 @@ function ProcessLongOptions
 			;;
 
 			md5-compat-digest)
-				md5_compat_digest="yes"
+				RPMREBUILD_md5_compat_digest="yes"
 				# or by plugin :
 				#INCLUDE_FILE="$RPMREBUILD_PLUGINS_DIR/compat_digest.plug"
 				#Include || return
@@ -1236,7 +1236,7 @@ function CommandLineParsing
 	export RPMREBUILD_autorequire="no"
 	export RPMREBUILD_batch="no"
 	export RPMREBUILD_debug=""
-	md5_compat_digest="no"
+	export RPMREBUILD_md5_compat_digest="no"
 	need_change_files="no"
 	need_change_spec="no"
 	export RPMREBUILD_rpm_defines=""

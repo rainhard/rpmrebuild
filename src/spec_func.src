@@ -39,7 +39,7 @@ function spec_auto_prov
 
 function spec_md5_compat_digest
 {
-	if [ "$md5_compat_digest" = "no" ]; then
+	if [ "$RPMREBUILD_md5_compat_digest" = "no" ]; then
 		: # Do nothing
 	else
 		echo "%global _binary_filedigest_algorithm 1"
