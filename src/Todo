@@ -8,4 +8,16 @@ what now ?
 (detect passed signature with SIGGPG, ask for new one .)
 
 --------------------------------------------------------
-fix shell syntax with http://www.shellcheck.net/
+fix shell syntax with http://www.shellcheck.net/ on plugins
+
+plugin un_prelink : add test of prelink bin
+
+ref : https://tldp.org/LDP/abs/html/string-manipulation.html
+remove sed in plugins (set_tag unset_tag)
+
+remove sed in rpmrebuild code (use bash subsitution)
+
+clean man pages
+ sed -i -e 's/ $//'
+ blank ligne between section SH
+ same also

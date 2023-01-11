@@ -129,7 +129,7 @@ dist:	tar
 rpmbuild:	tar
 	$(MKDIR) $(RPM_BUILD_DIR)
 	$@ -ba $(RPM_DEFINES) rpmrebuild.spec
-	rpm --resign rpmrebuild*.rpm
+	rpmsign --resign rpmrebuild*.rpm
 
 clean: unexpand
 	$(RMDIR) $(ROOT) $(RPM_BUILD_DIR)
