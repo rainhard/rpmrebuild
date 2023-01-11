@@ -3,7 +3,7 @@
 ###############################################################################
 #
 #    Copyright (C) 2002 by Eric Gerbier
-#    Bug reports to: gerbier@users.sourceforge.net
+#    Bug reports to: eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -122,15 +122,18 @@ options:
 ###############################################################################
 function List_Plugins
 {
-	local plugindir=$( dirname "$0" )/plugins
+	local plugindir
+	plugindir=$( dirname "$0" )/plugins
 	for f in "$plugindir"/*.plug
 	do
-		local plug=$( basename "$f" )
+		local plug
+		plug=$( basename "$f" )
 		# use man to force localisation
 		# line number may vary
 		#text=$(man $plug | awk 'NR==7{print}' )
 		# filter by name of plugin
-		local text=$(man "$plug" | awk "/$plug +- /{print}" )
+		local text
+		text=$(man "$plug" | awk "/$plug +- /{print}" )
 		if [ -n "$text" ]
 		then
 			echo "$text"
@@ -161,10 +164,10 @@ function AmbiguousOption
 ###############################################################################
 function RequeredArgument
 {
-	[ "x$SHORT_OPTION" = "x-" ] || return 0  # we use short option,
+	[ "$SHORT_OPTION" = '-' ] || return 0  # we use short option,
                                                  	 # do nothing
-	if [ "$OPTARG_EXIST" ]; then
-		[ "$OPTIND_INCR" ] && OPTIND=$(( OPTIND + 1 ))
+	if [ -n "$OPTARG_EXIST" ]; then
+		[ -n "$OPTIND_INCR" ] && OPTIND=$(( OPTIND + 1 ))
 		return 0
 	fi
 
@@ -175,15 +178,16 @@ function RequeredArgument
 ###############################################################################
 function Include
 {
+	Debug "(Include) $INCLUDE_FILE"
 	while :; do 
-		read LONG_OPTION OPTARG || break
+		read -r LONG_OPTION OPTARG || break
 		OPTARG_EXIST="$OPTARG"
-		case "x$LONG_OPTION" in
-			x#*)
+		case "$LONG_OPTION" in
+			'#'*)
 				: # comment, do nothing 
 				;;
 
-			x)
+			'')
 				: # empty, do nothing
 				;;
 
@@ -1001,19 +1005,19 @@ function ProcessLongOptions
 		case "$LONG_OPTION" in
 			additional)
 				RequeredArgument || return
-				additional="$additional $OPTARG"
+				RPMREBUILD_additional="$RPMREBUILD_additional $OPTARG"
 			;;
 
 			autoprovide)
-				autoprovide="yes"
+				RPMREBUILD_autoprovide="yes"
 			;;
 
 			autorequire)
-				autorequire="yes"
+				RPMREBUILD_autorequire="yes"
 			;;
 
 			batch)
-				batch="yes"
+				RPMREBUILD_batch="yes"
 			;;
 
 			cap-from-db)
@@ -1056,9 +1060,12 @@ function ProcessLongOptions
 
 			comment-missing)
 				RequeredArgument || return
-				case "x$OPTARG" in
-			   		x[yY]*)
+				case "$OPTARG" in
+			   		[yY]*)
 						RPMREBUILD_COMMENT_MISSING="yes"
+					;;
+			   		[nN]*)
+						RPMREBUILD_COMMENT_MISSING="no"
 					;;
 
                            		*)
@@ -1068,19 +1075,19 @@ function ProcessLongOptions
 			;;
 
 			debug)
-				debug="yes"
-				rpm_verbose="--verbose"
+				RPMREBUILD_debug="yes"
+				RPMREBUILD_rpm_verbose="--verbose"
 			;;
 
 			define)
 				RequeredArgument || return
-				rpm_defines="$rpm_defines --define '$OPTARG'"
+				RPMREBUILD_rpm_defines="$RPMREBUILD_rpm_defines --define '$OPTARG'"
 			;;
 
 			directory)
 				RequeredArgument || return
-				rpmdir="$OPTARG"
-				rpm_defines="$rpm_defines --define '_rpmdir $rpmdir'" 
+				RPMREBUILD_rpmdir="$OPTARG"
+				RPMREBUILD_rpm_defines="$RPMREBUILD_rpm_defines --define '_rpmdir $RPMREBUILD_rpmdir'"
 			;;
 
 			edit-changelog    | \
@@ -1104,7 +1111,11 @@ function ProcessLongOptions
 			edit-triggers     | \
 			edit-verifyscript | \
 			edit-whole)
-				CreateProcessing "$LONG_OPTION" || return
+				# no edit in batch mode
+				if [ "$RPMREBUILD_batch" != 'yes' ]
+				then
+					CreateProcessing "$LONG_OPTION" || return
+				fi
 			;;
 
 			help)
@@ -1138,7 +1149,7 @@ function ProcessLongOptions
 			;;
 
 			install)
-                   		package_install="y"
+				RPMREBUILD_package_install="y"
 			;;
 
 			list-plugin)
@@ -1148,18 +1159,18 @@ function ProcessLongOptions
 			;;
 
 			md5-compat-digest)
-				md5_compat_digest="yes"
+				RPMREBUILD_md5_compat_digest="yes"
 				# or by plugin :
 				#INCLUDE_FILE="$RPMREBUILD_PLUGINS_DIR/compat_digest.plug"
 				#Include || return
 			;;	
 			notest-install)
-				NOTESTINSTALL=1
+				RPMREBUILD_NOTESTINSTALL=1
 			;;
 
 			package)
-                   		package_flag="-p"
-                	;;
+				RPMREBUILD_package_flag="-p"
+			;;
 
 			pug-from-db)
 				RPMREBUILD_PUG_FROM_FS="no"
@@ -1175,19 +1186,20 @@ function ProcessLongOptions
 
 			spec-only)
 				RequeredArgument || return
-				spec_only="yes"
-				specfile="$OPTARG"
+				RPMREBUILD_spec_only="yes"
+				RPMREBUILD_specfile="$OPTARG"
 			;;
 
 			verbose)
-				rpm_verbose="--verbose"
+				RPMREBUILD_rpm_verbose="--verbose"
 			;;
 
 			verify)
 				RequeredArgument || return
-				case "x$OPTARG" in
-			   		x[yY]*) verify="yes";;
-                           		*)      verify="no";;
+				case "$OPTARG" in
+					[yY]*) RPMREBUILD_verify="yes";;
+					[nN]*) RPMREBUILD_verify="no";;
+					*)      RPMREBUILD_verify="no";;
 				esac
 			;;
 
@@ -1215,30 +1227,34 @@ function ProcessLongOptions
 function CommandLineParsing
 {
 	# Default flags' values. To be sure they don't came from environment
+	# export vars allow to see them in debug mode by the env command
+	# another debug is possible with rpmrebuild --modify "env| grep RPMREBUILD" un_package
+	# and to access from plugins
 	NEED_EXIT=""  # if not empty should be set to desired exit status
-	additional=""
-	autoprovide="no"
-	autorequire="no"
-	batch="no"
-	debug=""
-	md5_compat_digest="no"
+	export RPMREBUILD_additional=""
+	export RPMREBUILD_autoprovide="no"
+	export RPMREBUILD_autorequire="no"
+	export RPMREBUILD_batch="no"
+	export RPMREBUILD_debug=""
+	export RPMREBUILD_md5_compat_digest="no"
 	need_change_files="no"
 	need_change_spec="no"
-	rpm_defines=""
-	rpmdir=""
-	package_flag=""
-	package_install=""
-	spec_only="no"
-	specfile=""
-	verify="yes"
-	rpm_verbose="--quiet"
+	export RPMREBUILD_rpm_defines=""
+	export RPMREBUILD_rpmdir=""
+	export RPMREBUILD_package_flag=""
+	export RPMREBUILD_package_install=""
+	export RPMREBUILD_spec_only="no"
+	export RPMREBUILD_specfile=""
+	export RPMREBUILD_verify="yes"
+	export RPMREBUILD_rpm_verbose="--quiet"
+	export RPMREBUILD_NOTESTINSTALL=''
 
 	export RPMREBUILD_COMMENT_MISSING="no"
 	export RPMREBUILD_PUG_FROM_FS="no"
 	export RPMREBUILD_CAP_FROM_FS="no"
 	export RPMREBUILD_WARNING="no"
 
-	PAQUET=""
+	export RPMREBUILD_PAQUET=""
 	PAQUET_NAME=""
 
 	export LONG_OPTION
@@ -1272,8 +1288,8 @@ function CommandLineParsing
 			y) LONG_OPTION="verify";;
 
                 	-)
-	        		case "x$OPTARG" in
-					x*=*)
+	        		case "$OPTARG" in
+					*=*)
 						LONG_OPTION=${OPTARG%%=*}
 						OPTARG=${OPTARG#*=}
 						OPTARG_EXIST=1
@@ -1301,14 +1317,14 @@ function CommandLineParsing
 
 		# Get "full" long option
 		ProcessLongOptions || return
-		[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
+		[ -z "$NEED_EXIT" ] || return "$NEED_EXIT"
 	done || return
 
 	# controls
 	CheckOptions
 
 	CreateProcessing "fini" || return
-	if [ "X$spec_only" = "Xyes" ] && [ "X$need_change_files" = "Xyes" ]
+	if [ "$RPMREBUILD_spec_only" = "yes" ] && [ "$need_change_files" = "yes" ]
 	then
 		Echo "$NotCompatibleOption '--spec_only' , '--change-files'"
 		return 1
@@ -1323,26 +1339,27 @@ function CommandLineParsing
    		;;
 
    		1) # One argument, it's ok
-      			PAQUET="$1"
-      			if [ "x$package_flag" = "x" ]; then
-				PAQUET_NAME=$( basename "$PAQUET" )
-      			else
+			RPMREBUILD_PAQUET="$1"
+			if [ -z "$RPMREBUILD_package_flag" ]; then
+				PAQUET_NAME=$( basename "$RPMREBUILD_PAQUET" )
+			else
 				# argument should be a file
-				if [ -f "$PAQUET" ]; then
-					PAQUET_NAME=$( basename "$PAQUET" )
+				if [ -f "$RPMREBUILD_PAQUET" ]; then
+					PAQUET_NAME=$( basename "$RPMREBUILD_PAQUET" )
 					# check if it is an rpm file
 					# rem : 'file' sometimes does not return 
 					# "RPM" because some other magic triggers
 					# before the RPM magic check runs
-					tst_rpm=$( rpm -qp "$PAQUET" 2>/dev/null )
+					rpm -qp "$RPMREBUILD_PAQUET" 2>/dev/null
+					# shellcheck disable=SC2181
 					if [ $? -eq 0 ]; then
 							: #ok
 					else
-						Error "(CommandLineParsing) $NotAnRpm '$PAQUET'"
+						Error "(CommandLineParsing) $NotAnRpm '$RPMREBUILD_PAQUET'"
 						return 1
 					fi
 				else
-					Error "(CommandLineParsing) $FileNotFound '$PAQUET'"
+					Error "(CommandLineParsing) $FileNotFound '$RPMREBUILD_PAQUET'"
 					return 1
 				fi
       			fi
@@ -1355,18 +1372,18 @@ function CommandLineParsing
 		;;
 	esac || return
 
-	if [ "x$rpmdir" = "x" ]; then
+	if [ -z "$RPMREBUILD_rpmdir" ]; then
 		# There is no rpmdir specified 
 		# Let us find native rpmdir value
 		# (with respect to defines)
-		rpmdir="$(eval rpm $rpm_defines --eval %_rpmdir)" || return
+		RPMREBUILD_rpmdir="$(eval rpm "$RPMREBUILD_rpm_defines" --eval %_rpmdir)" || return
 	else
 		# There is rpmdir specified.
 		# Let us find it's absolute path.
 		# Yeah, a bit ugly, but simple and seems to work...
-		Mkdir_p "$rpmdir" # Not check exit status here
-		rpmdir="$( cd "$rpmdir" && echo "$PWD" )" || {
-			Error "(CommandLineParsing) $CannotChdir '$rpmdir'"
+		Mkdir_p "$RPMREBUILD_rpmdir" # Not check exit status here
+		RPMREBUILD_rpmdir="$( cd "$RPMREBUILD_rpmdir" && echo "$PWD" )" || {
+			Error "(CommandLineParsing) $CannotChdir '$RPMREBUILD_rpmdir'"
 			return 1
 		}
 	fi
@@ -1375,14 +1392,14 @@ function CommandLineParsing
 ##############################################################################
 function CheckOptions
 {
-	if [ -n "$package_install" ]
+	if [ -n "$RPMREBUILD_package_install" ]
 	then
 		# force package test
-		NOTESTINSTALL=""
-	elif [ -n "$package_flag" ]
+		RPMREBUILD_NOTESTINSTALL=""
+	elif [ -n "$RPMREBUILD_package_flag" ]
 	then
 		# no test if work on files (not installed)
-		NOTESTINSTALL="1"
+		RPMREBUILD_NOTESTINSTALL="1"
 	fi
 	return 0
 }

@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.8.0" />
+  <title>Manpage of exclude_file.plug</title>
+  <style type="text/css">
+  /*<![CDATA[*/
+  dt.c1 {font-weight: bold}
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" type="text/css" href="project.css" />
+</head>
+<body>
+  <div>
+    <h1>exclude_file.plug</h1>Section: rpmrebuild plugin (1)<br />
+    Updated: 2.17<br />
+    <a href="#index">Index</a> <a name="lbAB" id="lbAB"></a>
+    <h2>NAME</h2>exclude_file.plug - a plugin for rpmrebuild, to remove files from spec file
+    <p><a name="lbAC" id="lbAC"></a></p>
+    <h2>SYNOPSIS</h2>rpmrebuild --change-spec-file="exclude_file.sh -f myfile" &lt;<i>packagename</i>&gt;<br />
+    or<br />
+    rpmrebuild --change-spec-file="exclude_file.sh -r myregex" &lt;<i>packagename</i>&gt;<br />
+    or<br />
+    EXCLUDE_FROM=myfile rpmrebuild --include exclude_file.plug &lt;<i>packagename</i>&gt;<br />
+    or<br />
+    EXCLUDE_REGEX=myregex rpmrebuild --include exclude_file.plug &lt;<i>packagename</i>&gt;
+    <p><a name="lbAD" id="lbAD"></a></p>
+    <h2>DESCRIPTION</h2>this plugin allow to remove files in spec file
+    <p><a name="lbAE" id="lbAE"></a></p>
+    <h2>OPTIONS</h2>
+    <dl>
+      <dt class="c1">-h, --help</dt>
+      <dd>output help information plugins option and exit.</dd>
+      <dt class="c1">-v, --version</dt>
+      <dd>print plugin version and exit</dd>
+      <dt class="c1">-d, --debug</dt>
+      <dd>print additional information to debug plugin.</dd>
+      <dt><b>-f, --from</b> my_exclude_file</dt>
+      <dd>read the exclusion list from my_exclude_file file (one file by line)</dd>
+      <dt><b>-r, --regex</b> my_regex</dt>
+      <dd>apply file name exclusion from my_regex regex string</dd>
+    </dl><a name="lbAF" id="lbAF"></a>
+    <h2>FILES</h2>
+    <dl>
+      <dt class="c1">exclude_file.sh</dt>
+      <dd>contains the shell code for change-spec-file</dd>
+      <dt class="c1">exclude_file.plug</dt>
+      <dd>is the 'include file' for a quicker use</dd>
+      <dt class="c1">exclude_file.plug.1</dt>
+      <dd>is this man page</dd>
+    </dl><a name="lbAG" id="lbAG"></a>
+    <h2>ENVIRONMENT</h2>EXCLUDE_FROM : file name which contains an exclusion list (one file by line)<br />
+    EXCLUDE_REGEX : string with a file exclusion regex
+    <p><a name="lbAH" id="lbAH"></a></p>
+    <h2>EXAMPLES</h2>
+    <p>remove all files which match fr.html using a regex in afick-doc package<br />
+    <b>rpmrebuild --change-spec-file="exclude_file.sh -r 'fr.html' " afick-doc</b><br />
+    or with a quick syntax and environment variables<br />
+    <b>EXCLUDE_REGEX=fr.html rpmrebuild --include exclude_file.plug afick-doc</b></p>
+    <p>remove all files which match fr.html with a file list<br />
+    <b>rpm -ql afick-doc | grep 'fr.html' &gt; /tmp/exclude_from<br />
+    rpmrebuild --change-spec-file="exclude_file.sh --from /tmp/exclude_from'" afick-doc</b><br />
+    or with a quick syntax and environment variables<br />
+    <b>EXCLUDE_FROM=/tmp/exclude_from rpmrebuild --include exclude_file.plug afick-doc</b></p>
+    <p><a name="lbAI" id="lbAI"></a></p>
+    <h2>AUTHORS</h2>
+    <p>Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt;</p>
+    <dl>
+      <dt>See &lt;URL:<a href="http://rpmrebuild.sourceforge.net/">http://rpmrebuild.sourceforge.net/</a>&gt;.</dt>
+      <dd></dd>
+    </dl><a name="lbAJ" id="lbAJ"></a>
+    <h2>NOTES</h2>
+    <dl>
+      <dt>a very simple but real plugin</dt>
+      <dd></dd>
+    </dl><a name="lbAK" id="lbAK"></a>
+    <h2>COPYRIGHT</h2>
+    <p>rpmrebuild is copyright (C) 2023 by Eric Gerbier.<br />
+    this program is distributed under GNU General Public License<br />
+    It is provided "as is", without any express or implied warranties. See the file COPYING for details.</p>
+    <p><a name="lbAL" id="lbAL"></a></p>
+    <h2>SEE ALSO</h2>
+    <p><a href="rpm.8.html">rpm</a>(8), <a href="rpmbuild.8.html">rpmbuild</a>(8), <a href="rpmrebuild_plugins.1.html">rpmrebuild_plugins</a>(1) ,<br />
+    <a href="compat_digest.plug.1.html">compat_digest.plug</a>(1), <a href="demo.plug.1.html">demo.plug</a>(1), <a href="demofiles.plug.1.html">demofiles.plug</a>(1), <a href="nodoc.plug.1.html">nodoc.plug</a>(1), <a href="uniq.plug.1.html">uniq.plug</a>(1), <a href="file2pacDep.plug.1.html">file2pacDep.plug</a>(1), <a href="exclude_file.plug.1.html">exclude_file.plug</a>(1), <a href="un_prelink.plug.1.html">un_prelink.plug</a>(1) , <a href="set_tag.plug.1.html">set_tag.plug</a>(1), <a href="unset_tag.plug.1.html">unset_tag.plug</a>(1) ,<br />
+    man -k rrp for plugins specific manpages</p>
+    <hr />
+    <a name="index" id="index"></a>
+    <h2>Index</h2>
+    <dl>
+      <dt><a href="#lbAB">NAME</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAC">SYNOPSIS</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAD">DESCRIPTION</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAE">OPTIONS</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAF">FILES</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAG">ENVIRONMENT</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAH">EXAMPLES</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAI">AUTHORS</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAJ">NOTES</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAK">COPYRIGHT</a></dt>
+      <dd></dd>
+      <dt><a href="#lbAL">SEE ALSO</a></dt>
+      <dd></dd>
+    </dl>
+    <hr />
+    This document was created by <a href="/man/man2html">man2html</a>, using the manual pages.<br />
+    Time: 10:31:45 GMT, January 11, 2023
+  </div>
+</body>
+</html>

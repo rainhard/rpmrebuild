@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.7.28" />
+  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.8.0" />
   <title>rpmrebuild changelog</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="Author" content="Gerbier" />
@@ -15,6 +14,7 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.17">2.17</a></li>
       <li><a href="#v2.16-1">2.16-1</a></li>
       <li><a href="#v2.15-1">2.15-1</a></li>
       <li><a href="#v2.14-1">2.14-1</a></li>
@@ -72,7 +72,29 @@
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
     <hr />
-    Sun Jan 17 2021 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.16-1" id="v2.16-1">2.16-1</a>
+    Tue Jan 10 2023 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.17" id="v2.17">2.17</a>
+    <ul>
+      <li>fix -r does not work (xujing)</li>
+      <li>fix spelling errors that could mislead users (xujing)</li>
+      <li>fix --comment-missing=n does not work (xujing)</li>
+      <li>fix --cap-from-fs does not work (xujing)</li>
+      <li>all shell are bash</li>
+      <li>clean test x$var, use -z</li>
+      <li>change email to tutanota</li>
+      <li>change copyright year</li>
+      <li>change gpg key</li>
+      <li>fix warnings from shellcheck</li>
+      <li>add unitary tests for plugins and options</li>
+      <li>if batch mode, do not edit any spec part</li>
+      <li>spec_only : display spec name if successfull</li>
+      <li>echo+read in one line with read -p</li>
+      <li>add new plugin exclude_file to exclude files from spec</li>
+      <li>split tests in t directory</li>
+      <li>bugfix in nodoc plugin</li>
+      <li>rename internal variable with RPMREBUILD_ prefix</li>
+    </ul>
+    <hr />
+    Sun Jan 17 2021 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.16-1" id="v2.16-1">2.16-1</a>
     <ul>
       <li>fix bug if more than 10 args (thanks Dmitry V. Levin)</li>
       <li>add signal trapping to clean directory</li>
@@ -81,7 +103,7 @@
       <li>fix installation test for kernel and multi-arch packages</li>
     </ul>
     <hr />
-    Fri Feb 21 2020 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.15-1" id="v2.15-1">2.15-1</a>
+    Fri Feb 21 2020 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.15-1" id="v2.15-1">2.15-1</a>
     <ul>
       <li>fix error on rpmrebuild_files.sh line 204 (verify tag)</li>
       <li>use env in shebang to avoid path problemes (/bin versus /usr/bin)</li>
@@ -93,7 +115,7 @@
       <li>fix bug on conditional requires (with space)</li>
     </ul>
     <hr />
-    Fri Oct 19 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.14-1" id="v2.14-1">2.14-1</a>
+    Fri Oct 19 2018 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.14-1" id="v2.14-1">2.14-1</a>
     <ul>
       <li>add list of optional tags, to allow rpmrebuild work with old rpm versions</li>
       <li>add dependency on setarch</li>
@@ -106,34 +128,34 @@
       <li>workaround for redhat 6.x / rpm 3.x, merci Francesco</li>
     </ul>
     <hr />
-    Wed Sep 12 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.13-1" id="v2.13-1">2.13-1</a>
+    Wed Sep 12 2018 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.13-1" id="v2.13-1">2.13-1</a>
     <ul>
       <li>can handle recommends / supplements rpm tags</li>
     </ul>
     <hr />
-    Fri Jul 20 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.12-1" id="v2.12-1">2.12-1</a>
+    Fri Jul 20 2018 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.12-1" id="v2.12-1">2.12-1</a>
     <ul>
       <li>apply patch on requires from Bruce Jerrick : Handle Requires(pre,post,preun,postun)</li>
       <li>add new requires syntax with if ( redhat-rpm-config )</li>
     </ul>
     <hr />
-    Sun Jun 10 2018 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.11-3" id="v2.11-3">2.11-3</a>
+    Sun Jun 10 2018 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.11-3" id="v2.11-3">2.11-3</a>
     <ul>
       <li>Made minor grammatical fixes to English language translations (patch from beroset)</li>
     </ul>
     <hr />
-    Sun Sep 10 2017 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.11-2" id="v2.11-2">2.11-2</a>
+    Sun Sep 10 2017 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.11-2" id="v2.11-2">2.11-2</a>
     <ul>
       <li>fix bad day of week in changelog (rpmbuild warning)</li>
       <li>add dependency to rpm-build package instead rpmbuild binary</li>
     </ul>
     <hr />
-    Wed Nov 22 2013 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.11" id="v2.11">2.11</a>
+    Wed Nov 22 2013 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.11" id="v2.11">2.11</a>
     <ul>
       <li>add install option</li>
     </ul>
     <hr />
-    Sun Aug 11 2013 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.10-2" id="v2.10-2">2.10-2</a>
+    Sun Aug 11 2013 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.10-2" id="v2.10-2">2.10-2</a>
     <ul>
       <li>bugfix from 2.10: the test install was inverted (applied on rpm files instead installed rpm)</li>
     </ul>
@@ -150,14 +172,14 @@
       <li>fix to work with rpm 4.10 (Fedora 18) - error: incorrect format: invalid field width</li>
     </ul>
     <hr />
-    Thu Jul 11 2012 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.8" id="v2.8">2.8</a>
+    Thu Jul 11 2012 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.8" id="v2.8">2.8</a>
     <ul>
       <li>can handle SUGGESTS/ENHANCES rpm tag</li>
       <li>add --cap-from-fs/cap-from-db options</li>
       <li>change tar.gz to allow build rpm package with rpmbuild -tb</li>
     </ul>
     <hr />
-    Thu June 06 2012 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.7" id="v2.7">2.7</a>
+    Thu June 06 2012 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.7" id="v2.7">2.7</a>
     <ul>
       <li>patch from Andreas Kainz for package file checking</li>
       <li>add new unset_tag plugin</li>
@@ -170,12 +192,12 @@
       <li>fix bad arch on gpg-pubkey packages</li>
     </ul>
     <hr />
-    Tue Jul 12 2011 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.6" id="v2.6">2.6</a>
+    Tue Jul 12 2011 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.6" id="v2.6">2.6</a>
     <ul>
       <li>fix bug when working on source packages, ghost files</li>
     </ul>
     <hr />
-    Tue Apr 19 2011 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.5" id="v2.5">2.5</a>
+    Tue Apr 19 2011 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.5" id="v2.5">2.5</a>
     <ul>
       <li>add -5/-l options in man pages</li>
       <li>Added support for obsolete version and flags (bugfix by Valery Reznic)</li>
@@ -185,7 +207,7 @@
       <li>specfile will allow build package for rpm version 4 or 3</li>
     </ul>
     <hr />
-    Fri Dec 11 2009 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.4" id="v2.4">2.4</a>
+    Fri Dec 11 2009 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.4" id="v2.4">2.4</a>
     <ul>
       <li>add -l / --list-plugin option</li>
     </ul>Tue Nov 12 2009 Valery Reznic &lt;<a href="mailto:valery_reznic@users.sourceforge.net">valery_reznic@users.sourceforge.net</a>&gt;
@@ -193,7 +215,7 @@
       <li>add -5 / --md5-compat-digest option</li>
     </ul>
     <hr />
-    Wed Jan 09 2009 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.3" id="v2.3">2.3</a>
+    Wed Jan 09 2009 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.3" id="v2.3">2.3</a>
     <ul>
       <li>release version 2.3</li>
     </ul>Tue Dec 16 2008 Valery Reznic &lt;<a href="mailto:valery_reznic@users.sourceforge.net">valery_reznic@users.sourceforge.net</a>&gt;
@@ -202,22 +224,22 @@
     </ul>Tue Dec 16 2008 Valery Reznic &lt;<a href="mailto:valery_reznic@users.sourceforge.net">valery_reznic@users.sourceforge.net</a>&gt;
     <ul>
       <li>fix for rpm 4.6 (fedora 10), that ignore BuildRoot in the spec file flag</li>
-    </ul>Wed Dec 05 2008 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt;
+    </ul>Wed Dec 05 2008 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt;
     <ul>
       <li>do not use popt any more</li>
     </ul>
     <hr />
-    Wed Aug 06 2008 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.2.3-1" id="v2.2.3-1">2.2.3-1</a>
+    Wed Aug 06 2008 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.2.3-1" id="v2.2.3-1">2.2.3-1</a>
     <ul>
       <li>fix a problem with new rpm security on mandriva (defaultbuildroot)</li>
     </ul>
     <hr />
-    Mon Apr 28 2008 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.2.2-1" id="v2.2.2-1">2.2.2-1</a>
+    Mon Apr 28 2008 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.2.2-1" id="v2.2.2-1">2.2.2-1</a>
     <ul>
       <li>fix a bug when working on package file with path</li>
     </ul>
     <hr />
-    Wed Apr 2 2008 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.2.1-1" id="v2.2.1-1">2.2.1-1</a>
+    Wed Apr 2 2008 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.2.1-1" id="v2.2.1-1">2.2.1-1</a>
     <ul>
       <li>fix bug on uid/gid with --pug-from-fs option</li>
       <li>demo plugin : better error message</li>
@@ -227,7 +249,7 @@
       <li>add utf-8 for french localisation</li>
     </ul>
     <hr />
-    Mon Oct 22 2007 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.2.0-1" id="v2.2.0-1">2.2.0-1</a>
+    Mon Oct 22 2007 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.2.0-1" id="v2.2.0-1">2.2.0-1</a>
     <ul>
       <li>add translation system (english and french) with new locale and man directory</li>
       <li>fix a bug with rpm localisation in PackageInstalled function ( rpm message are localized, so the grep filter does not work everywhere )</li>
@@ -236,7 +258,7 @@
       <li>add tests for --package option (if file exists, if it is an rpm)</li>
     </ul>
     <hr />
-    Mon Jun 18 2007 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.1.1-1" id="v2.1.1-1">2.1.1-1</a>
+    Mon Jun 18 2007 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.1.1-1" id="v2.1.1-1">2.1.1-1</a>
     <ul>
       <li>remove commented tags (PAYLOAD*, INSTALLTID, OPTFLAGS, PLATFORM, SIGSIZE) to solve bug for rpm 3.x</li>
       <li>add more info to bugreport (issues, warnings)</li>
@@ -244,7 +266,7 @@
       <li>send bug report to new rpmrebuild-bugreport list</li>
     </ul>
     <hr />
-    Tue May 15 2007 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.1.0-1" id="v2.1.0-1">2.1.0-1</a>
+    Tue May 15 2007 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.1.0-1" id="v2.1.0-1">2.1.0-1</a>
     <ul>
       <li>remove old deprecated tags ICON and SERIAL</li>
       <li>comment missing localisation file (lang)</li>
@@ -255,7 +277,7 @@
       <li>add code to send bug report by mail (SendBugReport)</li>
     </ul>
     <hr />
-    Tue May 31 2005 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.0.4-1" id="v2.0.4-1">2.0.4-1</a>
+    Tue May 31 2005 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.0.4-1" id="v2.0.4-1">2.0.4-1</a>
     <ul>
       <li>force tmpdir to be empty (Christopher Faylor)</li>
       <li>fix bug with testinstall return</li>
@@ -263,14 +285,14 @@
       <li>improved nodoc plugin</li>
     </ul>
     <hr />
-    Fri May 20 2005 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.0.3-1" id="v2.0.3-1">2.0.3-1</a>
+    Fri May 20 2005 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.0.3-1" id="v2.0.3-1">2.0.3-1</a>
     <ul>
       <li>add --notest-install option (Christopher Faylor)</li>
       <li>add --release option (Christopher Faylor)</li>
       <li>add nodoc plugin</li>
     </ul>
     <hr />
-    Wed Mar 2 2005 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v2.0.2-1" id="v2.0.2-1">2.0.2-1</a>
+    Wed Mar 2 2005 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.0.2-1" id="v2.0.2-1">2.0.2-1</a>
     <ul>
       <li>fix bug with BuildArch tag (rpmrebuild_popt) (gerbier)</li>
       <li>Change script from /usr/local/bin to /usr/bin (reznic)</li>
@@ -298,7 +320,7 @@
       <li>CommandLineParsing functionality moved to the new file rpmrebuild_parser.src</li>
     </ul>
     <hr />
-    <p>Mon Aug 16 2004 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.4.7-3" id="v1.4.7-3">1.4.7-3</a></p>
+    <p>Mon Aug 16 2004 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.4.7-3" id="v1.4.7-3">1.4.7-3</a></p>
     <ul>
       <li>change dependency from rpm-build package to rpmbuild file for suses distrib</li>
       <li>some fixes from rmlint</li>
@@ -331,18 +353,18 @@
       <li>add all remaining dependencies (bash, sed, grep ...) to package</li>
     </ul>
     <hr />
-    <p>Thu May 6 2004 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.4.6-2" id="v1.4.6-2">1.4.6-2</a></p>
+    <p>Thu May 6 2004 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.4.6-2" id="v1.4.6-2">1.4.6-2</a></p>
     <ul>
       <li>split in 2 packages for rpm &lt; 4 and rpm &gt; 4 (add rpm-build dependency)</li>
     </ul>
     <hr />
-    <p>2004-01-01 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.4.6-1" id="v1.4.6-1">1.4.6-1</a></p>
+    <p>2004-01-01 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.4.6-1" id="v1.4.6-1">1.4.6-1</a></p>
     <ul>
       <li>added -P/--autoprovide flag</li>
       <li>added -R/--autorequire flag</li>
     </ul>
     <hr />
-    <p>2003-11-14 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.4.5-2" id="v1.4.5-2">1.4.5-2</a></p>
+    <p>2003-11-14 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.4.5-2" id="v1.4.5-2">1.4.5-2</a></p>
     <ul>
       <li>change filter behavior to be more robust</li>
       <li>read -r on /etc/popt to keep backslash</li>
@@ -380,12 +402,12 @@
       <li>fixed problem with specspo (now query package and not specspo information)</li>
     </ul>
     <hr />
-    <p>2003-02-04 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.4.1-1" id="v1.4.1-1">1.4.1-1</a></p>
+    <p>2003-02-04 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.4.1-1" id="v1.4.1-1">1.4.1-1</a></p>
     <ul>
       <li>add warning flag (-w/--warning)</li>
     </ul>
     <hr />
-    <p>2003-01-17 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.4.0-1" id="v1.4.0-1">1.4.0-1</a></p>
+    <p>2003-01-17 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.4.0-1" id="v1.4.0-1">1.4.0-1</a></p>
     <ul>
       <li>added long options (Reznic)</li>
       <li>added support for %%lang (Reznic)</li>
@@ -407,12 +429,12 @@
       <li>rewrite the filter to remove empty answer (none) from rpm queries in a more general way</li>
     </ul>
     <hr />
-    <p>2002-11-23 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.1-0" id="v1.1-0">1.1-0</a></p>
+    <p>2002-11-23 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.1-0" id="v1.1-0">1.1-0</a></p>
     <ul>
       <li>add a filter to remove empty answer (none) from rpm queries</li>
     </ul>
     <hr />
-    <p>2002-10-23 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v1.0-0" id="v1.0-0">1.0-0</a></p>
+    <p>2002-10-23 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v1.0-0" id="v1.0-0">1.0-0</a></p>
     <ul>
       <li>replace vi specfile by a %define to change release</li>
       <li>add command lines options (-h : help, -v : verbose, -V: version)</li>
@@ -444,25 +466,25 @@
       <li>recode the %file section with all new tags (missingok, noreplace ...)</li>
     </ul>
     <hr />
-    <p>2002-09-27 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.7.0" id="v0.7.0">0.7.0</a></p>
+    <p>2002-09-27 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.7.0" id="v0.7.0">0.7.0</a></p>
     <ul>
       <li>to have better portability, work now only on local directory (thanks to <a href="mailto:valery_reznic@users.sourceforge.net">Valery Reznic</a>)</li>
       <li>a complete rewrite for performances</li>
     </ul>
     <hr />
-    <p>2002-09-23 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.6.0" id="v0.6.0">0.6.0</a></p>
+    <p>2002-09-23 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.6.0" id="v0.6.0">0.6.0</a></p>
     <ul>
       <li>add triggers (thanks to Han Holl)</li>
       <li>add many other spec tags (icon, exclude*, serial, provides, conflicts ...)</li>
     </ul>
     <hr />
-    <p>2002-09-20 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.5.0" id="v0.5.0">0.5.0</a></p>
+    <p>2002-09-20 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.5.0" id="v0.5.0">0.5.0</a></p>
     <ul>
       <li>try to have it work on any distribution (not only Redhat)</li>
       <li>the rpm package is now signed with my gpg key</li>
     </ul>
     <hr />
-    <p>2002-09-18 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.4.2" id="v0.4.2">0.4.2</a></p>
+    <p>2002-09-18 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.4.2" id="v0.4.2">0.4.2</a></p>
     <ul>
       <li>add architecture (thanks to Han Holl &lt;HAN.HOLL@PRISMANT.NL&gt;)</li>
       <li>add require, obsolete</li>
@@ -471,13 +493,13 @@
       <li>try to have full English messages</li>
     </ul>
     <hr />
-    <p>2002-09-18 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.4.1" id="v0.4.1">0.4.1</a></p>
+    <p>2002-09-18 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.4.1" id="v0.4.1">0.4.1</a></p>
     <ul>
       <li>suppress a useless exit</li>
       <li>shell cosmetic changes</li>
     </ul>
     <hr />
-    <p>2002-07-18 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.4" id="v0.4">0.4</a></p>
+    <p>2002-07-18 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.4" id="v0.4">0.4</a></p>
     <ul>
       <li>first rpm package</li>
       <li>check changes (rpm -V)</li>
@@ -486,19 +508,19 @@
       <li>add type doc and config files</li>
     </ul>
     <hr />
-    <p>2002-07-12 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.3" id="v0.3">0.3</a></p>
+    <p>2002-07-12 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.3" id="v0.3">0.3</a></p>
     <ul>
       <li>fix bug on Redhat 6.x with pre /post install script</li>
       <li>first public release, as a single shell</li>
     </ul>
     <hr />
-    <p>2000-02-01 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.2" id="v0.2">0.2</a></p>
+    <p>2000-02-01 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.2" id="v0.2">0.2</a></p>
     <ul>
       <li>add changelog</li>
       <li>add pre post install scripts</li>
     </ul>
     <hr />
-    <p>2000-01-01 Eric Gerbier &lt;<a href="mailto:gerbier@users.sourceforge.net">gerbier@users.sourceforge.net</a>&gt; <a name="v0.1" id="v0.1">0.1</a></p>
+    <p>2000-01-01 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v0.1" id="v0.1">0.1</a></p>
     <ul>
       <li>initial and minimal version</li>
     </ul>

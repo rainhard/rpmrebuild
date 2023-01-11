@@ -129,7 +129,7 @@ dist:	tar
 rpmbuild:	tar
 	$(MKDIR) $(RPM_BUILD_DIR)
 	$@ -ba $(RPM_DEFINES) rpmrebuild.spec
-	rpm --resign rpmrebuild*.rpm
+	rpmsign --resign rpmrebuild*.rpm
 
 clean: unexpand
 	$(RMDIR) $(ROOT) $(RPM_BUILD_DIR)
@@ -146,6 +146,9 @@ $(HTML_PAGES) : $(MANPAGES_DEF)
 html: man $(HTML_PAGES)
 	cp $(HTML_PAGES) ../web
 	$(MAKE) -C plugins $@
+
+check: $(LIB_SCRIPTS) $(INCLUDE_SCRIPTS)
+	./shellcheck.sh
 
 # build all packages
 alldist: rpmbuild dist html

@@ -3,7 +3,7 @@
 #   rpmrebuild.sh 
 #
 #    Copyright (C) 2002 by Eric Gerbier
-#    Bug reports to: gerbier@users.sourceforge.net
+#    Bug reports to: eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
 #    GNU General Public License for more details.
 #
 ###############################################################################
+# shellcheck disable=SC2181
+#  Check exit code directly with e.g. if mycmd;, not indirectly with $?
+# shellcheck disable=SC1090
+#  ShellCheck can't follow non-constant source
 
 # debug 
 #set -x 
@@ -36,13 +40,14 @@ function GetVersion
 function SpecEdit
 {
 	Debug '(SpecEdit)'
-	if [ $# -ne 1 ] || [  "x$1" = "x" ]
+	if [ $# -ne 1 ] || [ -z "$1" ]
 	then
 		Error "(SpecEdit) Usage: $0 SpecEdit <file>"
 		return 1
 	fi
 	# -e option : edit the spec file
-	local File=$1
+	local File
+	File=$1
 	${VISUAL:-${EDITOR:-vi}} "$File"
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
@@ -56,8 +61,8 @@ function SpecEdit
 # check for package change
 function VerifyPackage
 {
-	Debug "(VerifyPackage) ${PAQUET}"
-	rpm --verify --nodeps "$PAQUET" # Don't return here, st=1 - verify fail
+	Debug "(VerifyPackage) ${RPMREBUILD_PAQUET}"
+	rpm --verify --nodeps "$RPMREBUILD_PAQUET" # Don't return here, st=1 - verify fail
 	return 0
 }
 ###############################################################################
@@ -65,19 +70,19 @@ function VerifyPackage
 function QuestionsToUser
 {
 	Debug '(QuestionsToUser)'
-	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, continue
-	[ "X$spec_only" = "Xyes" ] && return 0 ## spec only mode, no questions
+	[ "$RPMREBUILD_batch"     = "yes" ] && return 0 ## batch mode, continue
+	[ "$RPMREBUILD_spec_only" = "yes" ] && return 0 ## spec only mode, no questions
 
 	AskYesNo "$WantContinue" || {
 		Aborted="yes"
 		export Aborted
-		return 0
+		return 1
 	}
-	local RELEASE_ORIG="$(spec_query qf_spec_release )"
+	local RELEASE_ORIG
+	RELEASE_ORIG="$(spec_query qf_spec_release )"
 	[ -z "$RELEASE_NEW" ] && \
 	AskYesNo "$WantChangeRelease" && {
-		echo -n "$EnterRelease $RELEASE_ORIG): "
-		read RELEASE_NEW
+		read -r -p "$EnterRelease $RELEASE_ORIG): " RELEASE_NEW
 	}
 	return 0
 }
@@ -87,14 +92,16 @@ function IsPackageInstalled
 {
 	Debug '(IsPackageInstalled)'
 	# test if package exists
-	local output=$( rpm --query "${PAQUET}" 2>&1 ) # Don't return here - use output
+	local output
+	output=$( rpm --query "${RPMREBUILD_PAQUET}" 2>&1 ) # Don't return here - use output
 	if [ "$?" -eq 1 ]
 	then
 		# no such package in rpm database
-		Error "(IsPackageInstalled) ${PAQUET} $PackageNotInstalled"
+		Error "(IsPackageInstalled) ${RPMREBUILD_PAQUET} $PackageNotInstalled"
 		return 1
 	else
 		# find it : one or more ?
+		# shellcheck disable=SC2086
 		set -- $output
 		case $# in
 			1)
@@ -102,7 +109,7 @@ function IsPackageInstalled
 			;;
 
 			*)
-				Error "(IsPackageInstalled) $PackageTooMuch '${PAQUET}':\n$output"
+				Error "(IsPackageInstalled) $PackageTooMuch '${RPMREBUILD_PAQUET}':\n$output"
 			return 1
 			;;
 		esac 
@@ -115,13 +122,14 @@ function RpmUnpack
 {
 	Debug '(RpmUnpack)'
 	# do not install files on /
-	[ "x$BUILDROOT" = "x/" ] && {
+	[ "$BUILDROOT" = "/" ] && {
 		Error "(RpmUnpack) $BuildRootError"
         	return 1
 	}
-	local CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
+	local CPIO_TEMP
+	CPIO_TEMP=$TMPDIR_WORK/${PAQUET_NAME}.cpio
 	rm --force "$CPIO_TEMP"                               || return
-	rpm2cpio "${PAQUET}" > "$CPIO_TEMP"                     || Error "(RpmUnpack) rpm2cpio" || return
+	rpm2cpio "${RPMREBUILD_PAQUET}" > "$CPIO_TEMP"                     || Error "(RpmUnpack) rpm2cpio" || return
 	rm    --force --recursive "$BUILDROOT"                || return
 	Mkdir_p                   "$BUILDROOT"                || return
 	(cd "$BUILDROOT" && cpio --quiet -idmu --no-absolute-filenames ) < "$CPIO_TEMP" || Error "(RpmUnpack) cpio" || return
@@ -135,9 +143,9 @@ function RpmUnpack
 function CreateBuildRoot
 {
 	Debug '(CreateBuildRoot)'
-        if [ "x$package_flag" = "x" ]; then
+        if [ -z "$RPMREBUILD_package_flag" ]; then
 		# installed package
-		if [ "X$need_change_files" = "Xyes" ]; then
+		if [ "$need_change_files" = "yes" ]; then
 			/bin/bash "$MY_LIB_DIR"/rpmrebuild_buildroot.sh "$BUILDROOT" < "$FILES_IN" || Error "(CreateBuildRoot) rpmrebuild_buildroot.sh $BUILDROOT" || return
 		else
 			: # Do nothing (avoid a copy)
@@ -163,7 +171,8 @@ function CheckArch
 {
 	Debug '(CheckArch)'
 	# current architecture
-	local cur_arch=$( uname -m)
+	local cur_arch
+	cur_arch=$( uname -m)
 
 	# pac_arch is got from RpmArch
 	RpmArch
@@ -189,12 +198,13 @@ function RpmBuild
 	# rpmrebuild package dependency
 	# for rpm 3.x : use rpm
 	# for rpm 4.x : use rpmbuild
+	local BUILDCMD
 	if [ -x /usr/bin/rpmbuild ]
 	then
-		local BUILDCMD=/usr/bin/rpmbuild
+		BUILDCMD=/usr/bin/rpmbuild
 	else
 
-		local BUILDCMD=rpm
+		BUILDCMD=rpm
 	fi
 
 	# rpm 4.6 ignore BuildRoot in the spec file, 
@@ -206,7 +216,7 @@ function RpmBuild
 	# another may be with : mount --bind -o ro / $BUILDROOT
 	# but if does not work if not superuser
 	# and need also to mount all other filesystems (/usr /var ...)
-	if [ "x$BUILDROOT" = "x/" ]; then
+	if [ "$BUILDROOT" = "/" ]; then
 		BUILDROOT="${RPMREBUILD_TMPDIR}/my_root"
 		# Just in case previous link is here
 		rm -f "$BUILDROOT" || return
@@ -216,8 +226,8 @@ function RpmBuild
 			return 1
 		}
 	fi
-	eval $change_arch $BUILDCMD --define "'buildroot $BUILDROOT'" $rpm_defines -bb $rpm_verbose $additional ${FIC_SPEC} || {
-		Error "(RpmBuild) package '${PAQUET}' $BuildFailed"
+	eval "$change_arch" $BUILDCMD --define "'buildroot $BUILDROOT'" "$RPMREBUILD_rpm_defines" -bb "$RPMREBUILD_rpm_verbose" "$RPMREBUILD_additional" "${FIC_SPEC}" || {
+		Error "(RpmBuild) package '${RPMREBUILD_PAQUET}' $BuildFailed"
 		return 1
 	}
 	
@@ -228,29 +238,31 @@ function RpmBuild
 function RpmFileName
 {
 	Debug '(RpmFileName)'
-	local QF_RPMFILENAME=$(eval $change_arch rpm $rpm_defines --eval %_rpmfilename) || return
+	local QF_RPMFILENAME
+	QF_RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --eval %_rpmfilename) || return
 	#Debug "    QF_RPMFILENAME=$QF_RPMFILENAME"
 	# from generated specfile
-	RPMFILENAME=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "${QF_RPMFILENAME}" ${FIC_SPEC}) || return
+	RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --specfile --query --queryformat "${QF_RPMFILENAME}" "${FIC_SPEC}") || return
 
 	# workaround for redhat 6.x / rpm 3.x
-	local arch=$(eval $change_arch rpm $rpm_defines --specfile --query --queryformat "%{ARCH}"  ${FIC_SPEC})
+	local arch
+	arch=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --specfile --query --queryformat "%{ARCH}"  "${FIC_SPEC}")
 	if [ "$arch" = "(none)" ]
 	then
 		Debug '    workaround for rpm 3.x'
 		# get info from original paquet
 		# will work if no changes in spec (release ....)
-		#arch=$(eval $change_arch rpm $rpm_defines --query $package_flag --queryformat "%{ARCH}" ${PAQUET})
+		#arch=$(eval $change_arch rpm $RPMREBUILD_rpm_defines --query $RPMREBUILD_package_flag --queryformat "%{ARCH}" ${RPMREBUILD_PAQUET})
 		#RPMFILENAME=$(echo $RPMFILENAME | sed "s/(none)/$arch/g")
-		RPMFILENAME=$(eval $change_arch rpm $rpm_defines --query --queryformat "${QF_RPMFILENAME}" ${PAQUET}) || return
+		RPMFILENAME=$(eval "$change_arch" rpm "$RPMREBUILD_rpm_defines" --query --queryformat "${QF_RPMFILENAME}" "${RPMREBUILD_PAQUET}") || return
 	fi
 
 	[ -n "$RPMFILENAME" ] || return
-	RPMFILENAME="${rpmdir}/${RPMFILENAME}"
+	RPMFILENAME="${RPMREBUILD_rpmdir}/${RPMFILENAME}"
 	if [ ! -f "${RPMFILENAME}" ]
 	then
 		Error "(RpmFileName) $FileNotFound rpm $RPMFILENAME"
-		ls -ltr "${rpmdir}/${pac_arch}/${PAQUET}*"
+		ls -ltr "${RPMREBUILD_rpmdir}/${pac_arch}/${RPMREBUILD_PAQUET}*"
 		return 1
 	fi
 	return 0
@@ -261,9 +273,10 @@ function RpmFileName
 function IsMultiInstall
 {
 	# get package name
-	local package_name=$( rpm -qp --queryformat '%{NAME}' ${RPMFILENAME} )
+	local package_name
+	package_name=$( rpm -qp --queryformat '%{NAME}' "${RPMFILENAME}" )
 	# count installs
-	rpm -q ${package_name} 2> /dev/null | wc -l
+	rpm -q "${package_name}" 2> /dev/null | wc -l
 }
 ###############################################################################
 # test if build package can be installed
@@ -272,8 +285,10 @@ function InstallationTest
 	Debug '(InstallationTest)'
 	# installation test
 	# force is necessary to avoid the message : already installed
-	local rpm_options='--test --force'
-	local nb=$( IsMultiInstall )
+	local rpm_options
+	rpm_options='--test --force'
+	local nb
+	nb=$( IsMultiInstall )
 	if [ "$nb" -le 1 ]
 	then
 		rpm_options="$rpm_options -U"
@@ -281,11 +296,12 @@ function InstallationTest
 		Debug "multi-installed package"
 		rpm_options="$rpm_options -i"
 	fi
+	# shellcheck disable=SC2086
 	rpm ${rpm_options} "${RPMFILENAME}" || {
-		Error "(InstallationTest) package '${PAQUET}' $TestFailed"
+		Error "(InstallationTest) package '${RPMREBUILD_PAQUET}' $TestFailed"
 		return 1
 	}
-	Debug "(InstallationTest) test install ${PAQUET} ok"
+	Debug "(InstallationTest) test install ${RPMREBUILD_PAQUET} ok"
 	return 0
 }
 ###############################################################################
@@ -294,24 +310,28 @@ function Installation
 {
 	Debug '(Installation)'
 	# chek if root
-	local ID=$( id -u )
+	local ID
+	ID=$( id -u )
 	if [ "$ID" -eq 0 ]
 	then
-		local rpm_options='-v -h --force'
-		local nb=$( IsMultiInstall )
+		local rpm_options
+		rpm_options='-v -h --force'
+		local nb
+		nb=$( IsMultiInstall )
 		if [ "$nb" -le 1 ]
 		then
 			rpm_options="$rpm_options -U"
 		else
 			rpm_options="$rpm_options -i"
 		fi
+		# shellcheck disable=SC2086
 		rpm ${rpm_options} "${RPMFILENAME}" || {
-			Error "(Installation) package '${PAQUET}' $InstallFailed"
+			Error "(Installation) package '${RPMREBUILD_PAQUET}' $InstallFailed"
 			return 1
 		}
 		return 0
 	else
-		Error "(Installation) package '${PAQUET}' $InstallCannot"
+		Error "(Installation) package '${RPMREBUILD_PAQUET}' $InstallCannot"
 		return 1
 	fi
 }
@@ -320,15 +340,13 @@ function Installation
 function Processing
 {
 	Debug '(Processing)'
-	#local Aborted="no"
-	local MsgFail
 
 	source "$RPMREBUILD_PROCESSING" && return 0
 
-	if [ "X$need_change_spec" = "Xyes" ] || [ "X$need_change_files" = "Xyes" ]; then
-		[ "X$Aborted" = "Xyes" ] || Error "(Processing) package '$PAQUET' $ModificationFailed."
+	if [ "$need_change_spec" = "yes" ] || [ "$need_change_files" = "yes" ]; then
+		[ "$Aborted" = "yes" ] || Error "(Processing) package '$RPMREBUILD_PAQUET' $ModificationFailed."
 	else
-		Error "(Processing) package '$PAQUET' $SpecFailed."
+		Error "(Processing) package '$RPMREBUILD_PAQUET' $SpecFailed."
 	fi
 	return 1
 }
@@ -354,16 +372,16 @@ function GetInformations
 function SendBugReport
 {
 	Debug '(SendBugReport)'
-	[ "X$batch"     = "Xyes" ] && return 0 ## batch mode, skip report
+	[ "$RPMREBUILD_batch"     = "yes" ] && return 0 ## batch mode, skip report
 
 	[ -s "$RPMREBUILD_BUGREPORT" ] || return 0 ## empty report
 
 	AskYesNo "$WantSendBugReport" || return
 	# build default mail address 
-	local from="${USER}@${HOSTNAME}"
+	local from
+	from="${USER}@${HOSTNAME}"
 	AskYesNo "$WantChangeEmail ($from)" && {
-		echo -n "$EnterEmail"
-		read from
+		read -r -p "$EnterEmail" from
 	}
 	GetInformations "$from" >> "$RPMREBUILD_BUGREPORT" 2>&1
 	AskYesNo "$WantEditReport" && {
@@ -378,7 +396,8 @@ function SendBugReport
 # search if the given tag exists in current rpm release
 function SearchTag
 {
-	local tag=$1
+	local tag
+	tag=$1
 	for rpm_tag in $RPM_TAGS
 	do
 		if [ "$tag" = "$rpm_tag" ]
@@ -395,10 +414,13 @@ function SearchTag
 function ChangeRpmQf
 {
 	Debug "(ChangeRpmQf) $1"
-	local SED_PAR=$1
-	local input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	local SED_PAR
+	SED_PAR=$1
+	local input_rpmqf
+	input_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	si_rpmqf=$(( si_rpmqf + 1 ))
-	local output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
+	local output_rpmqf
+	output_rpmqf=$TMPDIR_WORK/rpmrebuild_rpmqf.src.$si_rpmqf
 	sed -e "$SED_PAR" < "$input_rpmqf" > "$output_rpmqf"
 
 	return 0
@@ -416,13 +438,15 @@ function GenRpmQf
 	# base code
 	cp "${MY_LIB_DIR}"/rpmrebuild_rpmqf.src "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf
 
-	local optional_file=$MY_LIB_DIR/optional_tags.cfg
+	local optional_file
+	optional_file=$MY_LIB_DIR/optional_tags.cfg
 	if [ -f "$optional_file" ]
 	then
 		local tag1 type tag2
-		while read tag1 type tag2
+		while read -r tag1 type tag2
 		do
-			local tst_comment=$( echo "$tag1" | grep '#' )
+			local tst_comment
+			tst_comment=$( echo "$tag1" | grep '#' )
 			if [ -z "$tst_comment" ]
 			then
 			SearchTag "$tag1" || {
@@ -462,10 +486,12 @@ function CheckTags
 	Debug '(CheckTags)'
 	# list of used tags
 	#Echo "(CheckTags) search tags in rpmrebuild_rpmqf.src.$si_rpmqf"
-	local rpmrebuild_tags=$( "${MY_LIB_DIR}"/rpmrebuild_extract_tags.sh "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf )
+	local rpmrebuild_tags
+	rpmrebuild_tags=$( "${MY_LIB_DIR}"/rpmrebuild_extract_tags.sh "${TMPDIR_WORK}"/rpmrebuild_rpmqf.src.$si_rpmqf )
 
 	# check for all rpmrebuild tags
-	local errors=0
+	local errors
+	errors=0
 	for tag in $rpmrebuild_tags
 	do
 		SearchTag "$tag" || {
@@ -497,7 +523,7 @@ function check_i18ndomains
 # in debug mode , we do not clean temp files
 function clean_exit
 {
-	if [ -z "$debug" ]
+	if [ -z "$RPMREBUILD_debug" ]
 	then
 		RmDir "$RPMREBUILD_TMPDIR"
 	else
@@ -527,7 +553,6 @@ function Main
 	TMPDIR_WORK=${RPMREBUILD_TMPDIR}/work
 
 	MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR rpmrebuild.sh dirname $0"; exit 1)
-	MY_BASENAME=$( basename "$0" )
 	source "${MY_LIB_DIR}/rpmrebuild_lib.src"    || ( echo "ERROR rpmrebuild.sh source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
 	# create tempory directories before any work/test
@@ -555,14 +580,17 @@ function Main
 		*)  real_lang=en;;
 	esac
 	# load translation file
+	# shellcheck source=locale/en/rpmrebuild.lang
 	source "$MY_LIB_DIR/locale/$real_lang/rpmrebuild.lang"
 	
 	RPMREBUILD_PROCESSING=$TMPDIR_WORK/PROCESSING
 	processing_init || return
 	CommandLineParsing "$@" || return
-	[ "x$NEED_EXIT" = "x" ] || return $NEED_EXIT
+	[ -z "$NEED_EXIT" ] || return "$NEED_EXIT"
 
-	Debug "rpmrebuild version $VERSION : $@"
+	Debug "rpmrebuild version $VERSION : $*"
+	environment=$( env | sort )
+	Debug "environment : $environment"
 
 	check_i18ndomains
 
@@ -578,18 +606,18 @@ function Main
 	# to solve problems of bad date
 	export LC_TIME=POSIX
 
-	if [ "x$package_flag" = "x" ]; then
-   		[ "X$need_change_files" = "Xyes" ] || BUILDROOT="/"
+	if [ -z "$RPMREBUILD_package_flag" ]; then
+		[ "$need_change_files" = "yes" ] || BUILDROOT="/"
    		IsPackageInstalled || return
-   		if [ "X$verify" = "Xyes" ]; then
-      			out=$(VerifyPackage) || return
-      			if [ -n "$out" ]; then
+		if [ "$RPMREBUILD_verify" = "yes" ]; then
+			out=$(VerifyPackage) || return
+			if [ -n "$out" ]; then
 		 		Warning "$FilesModified\n$out"
 		 		QuestionsToUser || return
-      			fi
-   		else # NoVerify
+			fi
+		else # NoVerify
 			:
-   		fi
+		fi
 	else
 		:
 		# When rebuilding package from .rpm file it's just native
@@ -599,10 +627,11 @@ function Main
 		#RPMREBUILD_PUG_FROM_FS="no"  # Be sure use perm, owner, group from the pkg query.
 	fi
 
-	if [ "X$spec_only" = "Xyes" ]; then
+	if [ "$RPMREBUILD_spec_only" = "yes" ]; then
 		BUILDROOT="/"
 		SpecGeneration   || Error "SpecGeneration" || return
 		Processing       || Error "Processing" || return
+		Echo "specfile: $RPMREBUILD_specfile"
 	else
 		SpecGeneration   || Error "SpecGeneration" || return
 		CreateBuildRoot  || Error "CreateBuildRoot" || return
@@ -610,11 +639,11 @@ function Main
 		CheckArch	 || Error "CheckArch" || return
 		RpmBuild         || Error "RpmBuild" || return
 		RpmFileName      || Error "RpmFileName" || return
-		echo "result: ${RPMFILENAME}"
-		if [ -z "$NOTESTINSTALL" ]; then
+		Echo "result: ${RPMFILENAME}"
+		if [ -z "$RPMREBUILD_NOTESTINSTALL" ]; then
 			InstallationTest || Error "InstallationTest" || return
 		fi
-		if [ -n "$package_install" ]; then
+		if [ -n "$RPMREBUILD_package_install" ]; then
 			Installation || Error "Installation" || return
 		fi
 	fi
@@ -628,7 +657,7 @@ Main "$@"
 st=$?	# save status
 
 # bug report ?
-if [ "X$Aborted" = "Xno" ]
+if [ "$Aborted" = "no" ]
 then
 	SendBugReport
 fi

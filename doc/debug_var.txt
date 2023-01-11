@@ -1,0 +1,7 @@
+it is possible to check shell variables with
+1) the debug option
+rpmrebuild --debug my_pac
+2) the modify option
+rpmrebuild --modify 'env|grep RPMREBUILD|sort' my_pac
+
+all rpmrebuild options use RPMREBUILD prefix, and are exported

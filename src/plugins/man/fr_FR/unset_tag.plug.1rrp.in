@@ -2,75 +2,76 @@
 .SH "NAME"
 unset_tag.plug \- un plugin pour rpmrebuild, qui permet de commenter un tag dans le fichier spec
 .SH "SYNOPSIS"
-.br 
+.br
 rpmrebuild  \-\-change\-spec\-preamble="unset_tag.sh \fI\-t tag \fP" <\fInom_de_package\fP>
-.br 
+.br
 ou
-.br 
+.br
 TAG_ID=tag
-.br 
+.br
 rpmrebuild  \-\-include unset_tag.plug \fInom_de_package\fP
 
 .SH "DESCRIPTION"
 Ce plugin permet de commenter un tag dans le fichier spec
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 affiche de l'aide sur le plugin puis finit.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 affiche la version du plugin version puis finit.
-.TP 
-\fB\-t, \-\-tag\fP votre_tag 
-commente le tag votre_tag 
- 
+.TP
+\fB\-t, \-\-tag\fP votre_tag
+commente le tag votre_tag
+
 .SH "FILES"
-.TP 
+.TP
 \fBunset_tag.sh\fP
 contient le code du plugin pour change\-spec\-preamble
-.TP 
+.TP
 \fBunset_tag.plug\fP
 
-.TP 
+.TP
 \fBunset_tag.plug.1\fP
 la page de manuel
 .SH "ENVIRONMENT"
 TAG_ID : nom du tag à commenter dans le fichier spec
 .SH "EXAMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-change\-spec\-preamble="unset_tag.sh \-t BuildArch" apache\fP
-.br 
+.br
 ou
-.br 
-TAG_ID=Release
+.br
+TAG_ID=BuildArch
 \fBrpmrebuild \-\-include unset_tag.plug apache\fP
-.br 
-pour commenter le tag BuildArch du package apache 
+.br
+pour commenter le tag BuildArch du package apache
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
-.TP 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 un plugin simple mais utile
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2011 by Eric Gerbier.
-.br 
+.br
 Ce programme est distribué sous la licence GNU General Public.
-.br 
+.br
 Il est fourni en l'état, sans garanties.
 Consultez le fichier COPYING pour plus de détails.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
-compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  file2pacDep.plug(1), nodoc.plug(1), uniq.plug(1), set_tag.plug(1), unset_tag.plug(1)
-.br 
+compat_digest.plug(1), demo.plug(1), demofiles.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), exclude_file.plug(1), un_prelink.plug(1)
+set_tag.plug(1), unset_tag.plug(1)
+.br
 man \-k rrp for plugins specific manpages

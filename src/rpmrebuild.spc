@@ -17,7 +17,7 @@ BuildRoot: %{_topdir}/installroots/%{name}-%{version}-%{release}
 Source: rpmrebuild-%{version}.tar.gz
 # Following are optional fields
 Url: http://rpmrebuild.sourceforge.net
-Packager: Eric Gerbier <gerbier@users.sourceforge.net>
+Packager: Eric Gerbier <eric.gerbier@tutanota.com>
 #Distribution: 
 BuildArchitectures: noarch
 Requires: bash

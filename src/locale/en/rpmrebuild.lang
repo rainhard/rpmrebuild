@@ -71,7 +71,7 @@ UsageWarning='print warning if detect filenames with globbing characters (defaul
 UsageVerify='verify package (rpm -V) before processing (default : yes).'
 UsageHelp='print this help'
 UsageHelpPlugins='print help about plugins options'
-UsageCopyright='Copyright (C) 2002-2007 by Eric Gerbier (<gerbier@users.sourceforge.net>)'
+UsageCopyright='Copyright (C) 2002-2023 by Eric Gerbier (<eric.gerbier@tutanota.com>)'
 UsageLicense='this program is distributed under GNU General Public License'
 
 UsagePluginChangeFiles="command to modify package's files"

@@ -1,0 +1,25 @@
+###############################################################################
+#    exclude_file.plug
+#      it's a part of the rpmrebuild project
+#
+#    Copyright (C) 2023 by Eric Gerbier
+#    Bug reports to: eric.gerbier@tutanota.com
+#      or	   : valery_reznic@users.sourceforge.net
+#    $Id$
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+###############################################################################
+# include file for exclude_file plugin
+# allow a quicker use with : rpmrebuild --include exclude_file.plug
+# if you use the EXCLUDE_FROM or EXCLUDE_REGEX environment variables
+
+change-spec-files exclude_file.sh

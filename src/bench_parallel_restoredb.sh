@@ -1,10 +1,13 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # this script test rpmrebuild on all installed packages
 # it must be started as root
 # internal use for developpers
 # use gnu parallel to speed up
 # $Id$
 # flock : https://linuxaria.com/howto/linux-shell-introduction-to-flock
+
+# shellcheck disable=SC2219
+# shellcheck disable=SC2181
 
 # number of procs for gnu parallel
 # 0 means as many as possible
@@ -15,14 +18,14 @@ function bench {
 	pac=$1
 
 	ladate=$( date +'%F-%H-%M-%S' )
-	echo -n "$ladate build $pac "
+	echo -n "$ladate $$ build $pac "
 	localoutput="${output_dir}/${pac}.output"
 
 	# wait for rpm
 	# on mageia may have : db5 erreur(-30973) de dbenv->open: BDB0087 DB_RUNRECOVERY: Fatal error, run database recovery
-	max=2
-	i=0
-	ok=0
+	local max=2
+	local i=0
+	local ok=0
 	while [ $i -lt $max ]
 	do
 		rpm -q $pac > ${localoutput} 2>&1
@@ -55,7 +58,7 @@ function bench {
 	else
 		localtmpdir=${tmpdir}/$$
 		mkdir $localtmpdir
-		nice ./rpmrebuild -b -k -y no -c yes -d $localtmpdir $pac >> ${localoutput} 2>&1 
+		nice ${mypath}/rpmrebuild.sh -b -w -k -y no -c yes -d $localtmpdir $pac >> ${localoutput} 2>&1
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
@@ -68,6 +71,7 @@ function bench {
 			arch=$( grep "Arch dependent binaries"  $localoutput )
 			notdir=$( grep "Not a directory"  $localoutput )
 			db5=$( grep "run database recovery"  $localoutput )
+			glob=$( grep "contains globbing characters" $localoutput )
 			if [ -n "$depend" ]
 			then
 				res="$res (depend)"
@@ -86,6 +90,9 @@ function bench {
 			elif [ -n "$db5" ]
 			then
 				res="$res (db5)"
+			elif [ -n "$glob" ]
+			then
+				res="$res (glob)"
 			else
 				res="$res (other)"
 			fi
@@ -97,8 +104,8 @@ function bench {
 }
 
 function analyse {
-	pac=$( echo $1 | sed 's/\.output//')
-	output=$( cat $1 )
+	pac=${1%\.output}
+	output=$( < "$1" )
 
 	let seen=seen+1
 	echo -n "$seen/$max $pac "
@@ -120,6 +127,7 @@ function analyse {
 		arch=$( echo "$output" | grep "Arch dependent binaries" )
 		notdir=$( echo "$output" | grep "Not a directory" )
 		db5=$( echo "$output" | grep "run database recovery" )
+		glob=$( echo "$output" | grep "contains globbing characters" )
 		if [ -n "$depend" ]
 		then
 			echo "NOTOK (Failed dependencies)"
@@ -156,6 +164,12 @@ function analyse {
 			echo "  $output"
 			let pbdb="$pbdb + 1"
 			list_bad_db="$list_bad_db $pac"
+		elif [ -n "$glob" ]
+		then
+			echo "NOTOK (glob error)"
+			echo "  $output"
+			let pbglob="$pbglob + 1"
+			list_bad_glob="$list_bad_glob $pac"
 		else
 			echo "KO"
 			echo "  $output"
@@ -177,14 +191,21 @@ then
 	exit 1
 fi
 
-LOG="$(pwd)/rpmrebuild_bench.log"
-if [ -f $LOG ]
+mypath=$( dirname $0)
+if [ "$mypath" == '.' ]
 then
-	mv $LOG $LOG.old
+	mypath=$( pwd )
+fi
+export mypath
+
+LOG="$(pwd)/rpmrebuild_bench.log"
+if [ -f "$LOG" ]
+then
+	mv "$LOG" "${LOG}.old"
 fi
 
 export tmpdir=/tmp/rpmrebuild
-if [ -d $tmpdir ]
+if [ -d "$tmpdir" ]
 then
 	echo "find $tmpdir : check if another run"
 	exit 1
@@ -193,7 +214,7 @@ mkdir -p $tmpdir
 
 export output_dir="${tmpdir}/output"
 mkdir $output_dir
-cd $output_dir
+cd $output_dir || exit 1
 
 # to have standardize error messages
 export LC_ALL=POSIX
@@ -205,7 +226,7 @@ list=$( rpm -qa | sed 's/\.src$//' | sort )
 export max=$( echo "$list" | wc -l )
 
 echo "------- build -----------------"
-echo "$list" | sort | parallel bench | tee $LOG
+echo "$list" | sort | parallel --max-procs $maxprocs bench | tee $LOG
 
 echo "------- analysis --------------"
 # output analysis
@@ -218,6 +239,7 @@ pbarch=0
 pbnotdir=0
 pblog=0
 pbdb=0
+pbglob=0
 list_bad=''
 list_bad_cpio=''
 list_bad_dep=''
@@ -225,6 +247,7 @@ list_bad_arch=''
 list_bad_dir=''
 list_bad_log=''
 list_bad_db=''
+list_bad_glob=''
 
 for f in *.output
 do
@@ -239,16 +262,17 @@ echo "  pb arch : $pbarch ($list_bad_arch)"
 echo "  pb dir  : $pbnotdir ($list_bad_dir)"
 echo "  pb log  : $pblog ($list_bad_log)"
 echo "  pb db5  : $pbdb ($list_bad_db)"
+echo "  pb glob  : $pbglob ($list_bad_glob)"
 echo "  other   : $bad ($list_bad)"
 echo "full log on $LOG"
 echo "-------------------------------------------------------"
 
-# clean temporary directories
-echo "clean temporary directories (o/n) ?"
-read rep
-if [ "$rep" == 'o' ]
+# temporary directories
+if [ -z "$1" ]
 then
+	# by default clean
+	echo "clean temporary directories :  $tmpdir"
 	rm -rf $tmpdir 2> /dev/null
 else
-	echo "temporary directories :  $tmpdir"
+	echo "keep temporary directories :  $tmpdir"
 fi

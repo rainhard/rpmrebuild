@@ -5,7 +5,7 @@
 #
 #    Copyright (C) 2002, 2003, 2013 by Valery Reznic
 #    Bug reports to: valery_reznic@users.sourceforge.net
-#      or          : gerbier@users.sourceforge.net
+#      or          : eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 ###############################################################################
 
 ################################################################
-# This script get from stanard input data in the following format:
+# This script get from standard input data in the following format:
 # <file_type>   - type of the file (as first field from 'ls -l' output)
 # <file_flags>  - rpm file's flag (as %{FILEFLAGS:fflag}) - may be empty string
 # <file_perm>   - file's permission (as %{FILEMODES:octal})
@@ -40,7 +40,7 @@ MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR $0 dirname $0"; exit 1)
 MY_BASENAME=$( basename "$0" )
 source "$MY_LIB_DIR/rpmrebuild_lib.src"    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
-if [ $# -ne 1 ] || [ "x$1" = "x" ]
+if [ $# -ne 1 ] || [ -z "$1" ]
 then
 	Critical "Usage: $0 <buildroot>"
 fi
@@ -49,7 +49,7 @@ BuildRoot="$1"
 
 while :; do
 	read file_type
-	[ "x$file_type" = "x" ] && break
+	[ -z "$file_type" ] && break
 	read file_flags
 	read file_perm
 	read file_user
@@ -61,8 +61,8 @@ while :; do
 
 	[ -e "$file" ] || continue # File/directory not exist, do nothing
 
-	case "X$file_type" in
-		Xd*)
+	case "$file_type" in
+		d*)
 			# Directory
 			# I don't use --mode for Mkdir, because it doesn't work
 			# when directory already exist.
@@ -74,7 +74,7 @@ while :; do
 			# result will be 4 permissions characters
 			file_perm="${file_perm#${not_perm}}"
 			Mkdir_p "$BuildRoot/$file" || Critical "$MY_BASENAME Mkdir_p $BuildRoot/$file"
-			chmod "$file_perm $BuildRoot/$file" || Critical "$MY_BASENAME chmod $file_perm $BuildRoot/$file"
+			chmod "$file_perm" "$BuildRoot/$file" || Critical "$MY_BASENAME chmod $file_perm $BuildRoot/$file"
 		;;
 
 		*)

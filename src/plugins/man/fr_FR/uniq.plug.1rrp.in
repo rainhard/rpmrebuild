@@ -3,64 +3,65 @@
 uniq.plug \- un plugin pour rpmrebuild, qui supprimes les doublons dans le fichier specfile.
 .SH "SYNOPSIS"
 rpmrebuild \-\-include uniq.plug <\fIpackagename\fP>
-.br 
+.br
 ou
-.br 
+.br
 rpmrebuild  \-\-change\-spec\-requires|\-\-change\-spec\-provides|\-\-change\-spec\-conflicts|\-\-change\-spec\-obsoletes="uniq.sh [\fIoption\fP]" <\fIpackagename\fP>
-.br 
+.br
 
 la première forme s'applique à toutes les sections concernées.
-.br 
+.br
 la deuxième forme permet de choisir la section, et de passer des options au plugin.
 .SH "DESCRIPTION"
 Ce plugin permet de supprimer les doublons dans le fichier specfile
-.br 
+.br
 Par exemple, un package qui contient plusieurs scripts shell contient par défaut (AutoRequire) plusieurs dependances identiques à ce shell !
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 affiche une aide, puis quitte.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 affiche la version du plugin, puis quitte.
 .SH "FILES"
-.TP 
+.TP
 \fBuniq.plug\fP
 le fichier à inclure, pour une utilisation rapide.
-.TP 
+.TP
 \fBuniq.sh\fP
 le code proprement dit.
-.TP 
+.TP
 \fBuniq.plug.1\fP
 les pages de manuel.
 .SH "EXEMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-include uniq.plug rpm\fP
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
-.TP 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 Ce plugin est donné à titre d'exemple.
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.
-.br 
+.br
 Ce programme est distribué sous la licence GNU General Public.
-.br 
+.br
 Il est fourni en l'état, sans garanties.
 Consultez le fichier COPYING pour plus de détails.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
-compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  file2pacDep.plug(1), nodoc.plug(1), uniq.plug(1), set_tag.plug(1), unset_tag.plug(1)
-.br 
+compat_digest.plug(1), demo.plug(1), demofiles.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), exclude_file.plug(1), un_prelink.plug(1)
+set_tag.plug(1), unset_tag.plug(1)
+.br
 man \-k rrp for plugins specific manpages

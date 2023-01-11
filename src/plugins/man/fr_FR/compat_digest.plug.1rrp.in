@@ -2,67 +2,68 @@
 .SH "NAME"
 compat_digest.plug \- un plugin de rpmrebuild, pour une compatibilité des hashages md5 avec rpm version 4.4x
 .SH "SYNOPSIS"
-.br 
+.br
 rpmrebuild  \-\-change\-spec\-preamble="compat_digest.sh <\fIpackagename\fP>
-.br 
+.br
 ou
-.br 
+.br
 rpmrebuild  \-\-include compat_digest.plug <\fIpackagename\fP>
 
 .SH "DESCRIPTION"
 ce plugin force les checksum internes de rpm à être compatible avec rpm 4.4.x
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 affiche de l'aide sur le plugin puis sort
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 affiche la version du plugin version puis sort.
 .SH "FILES"
-.TP 
+.TP
 \fBcompat_digest.sh\fP
 contient le code pour change\-spec\-preamble
-.TP 
+.TP
 \fBcompat_digest.plug\fP
 le fichier d'inclusion
-.TP 
+.TP
 \fBcompat_digest.plug.1\fP
 cette documentation
 .SH "ENVIRONMENT"
-.br 
+.br
 .SH "EXAMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-change\-spec\-preamble="compat_digest.sh apache\fP
 
-ou 
+ou
 
-.br 
+.br
 rpmrebuild \-\-include compat_digest.plug apache
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
-.TP 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 cette fonction est également disponible avec les options \-5 / \-\-md5\-compat\-digest
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2008 by Eric Gerbier.
-.br 
+.br
 Ce programme est distribué sous la licence GNU General Public.
-.br 
+.br
 Il est fourni en l'état, sans garanties.  Consultez le fichier COPYING
 pour plus de détails.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
-compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  file2pacDep.plug(1), nodoc.plug(1), uniq.plug(1), set_tag.plug(1), unset_tag.plug(1)
-.br 
+compat_digest.plug(1), demo.plug(1), demofiles.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), exclude_file.plug(1), un_prelink.plug(1)
+set_tag.plug(1), unset_tag.plug(1)
+.br
 man \-k rrp for plugins specific manpages

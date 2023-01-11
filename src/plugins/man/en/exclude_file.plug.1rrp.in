@@ -1,0 +1,106 @@
+.TH "exclude_file.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
+.SH "NAME"
+exclude_file.plug \- a plugin for rpmrebuild, to remove files from spec file
+
+.SH "SYNOPSIS"
+rpmrebuild \-\-change\-spec\-file="exclude_file.sh -f myfile" <\fIpackagename\fP>
+.br
+or
+.br
+rpmrebuild \-\-change\-spec\-file="exclude_file.sh -r myregex" <\fIpackagename\fP>
+.br
+or
+.br
+EXCLUDE_FROM=myfile
+rpmrebuild \-\-include exclude_file.plug <\fIpackagename\fP>
+.br
+or
+.br
+EXCLUDE_REGEX=myregex
+rpmrebuild \-\-include exclude_file.plug <\fIpackagename\fP>
+
+.SH "DESCRIPTION"
+this plugin allow to remove files in spec file
+
+.SH "OPTIONS"
+.TP
+\fB\-h, \-\-help\fP
+output help information plugins option and exit.
+.TP
+\fB\-v, \-\-version\fP
+print plugin version and exit
+.TP
+\fB\-d, \-\-debug\fP
+print additional information to debug plugin.
+.TP
+\fB\-f, \-\-from\fP my_exclude_file
+read the exclusion list from my_exclude_file file (one file by line)
+.TP
+\fB\-r, \-\-regex\fP my_regex
+apply file name exclusion from my_regex regex string
+
+.SH "FILES"
+.TP
+\fBexclude_file.sh\fP
+contains the shell code for change\-spec\-file
+.TP
+\fBexclude_file.plug\fP
+is the 'include file' for a quicker use
+.TP
+\fBexclude_file.plug.1\fP
+is this man page
+
+.SH "ENVIRONMENT"
+EXCLUDE_FROM : file name which contains an exclusion list (one file by line)
+.br
+EXCLUDE_REGEX : string with a file exclusion regex
+
+.SH "EXAMPLES"
+.LP
+remove all files which match fr.html using a regex in afick-doc package
+.br
+\fBrpmrebuild \-\-change\-spec\-file="exclude_file.sh \-r 'fr\.html' " afick-doc\fP
+.br
+or with a quick syntax and environment variables
+.br
+\fBEXCLUDE_REGEX=fr\.html rpmrebuild \-\-include exclude_file.plug afick-doc\fP
+
+.LP
+remove all files which match fr.html with a file list
+.br
+\fBrpm -ql afick-doc | grep 'fr\.html' > /tmp/exclude_from
+.br
+rpmrebuild \-\-change\-spec\-file="exclude_file.sh \-\-from /tmp/exclude_from'" afick-doc\fP
+.br
+or with a quick syntax and environment variables
+.br
+\fBEXCLUDE_FROM=/tmp/exclude_from rpmrebuild \-\-include exclude_file.plug afick-doc\fP
+
+.SH "AUTHORS"
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.TP
+See <URL:http://rpmrebuild.sourceforge.net/>.
+
+.SH "NOTES"
+.LP
+.TP
+a very simple but real plugin
+
+.SH "COPYRIGHT"
+.LP
+rpmrebuild is copyright (C) 2023 by Eric Gerbier.
+.br
+this program is distributed under GNU General Public License
+.br
+It is provided "as is", without any express or implied
+warranties.  See the file COPYING for details.
+
+.SH "SEE ALSO"
+.LP
+rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
+.br
+compat_digest.plug(1), demo.plug(1), demofiles.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), exclude_file.plug(1), un_prelink.plug(1)
+set_tag.plug(1), unset_tag.plug(1)
+.br
+man \-k rrp for plugins specific manpages

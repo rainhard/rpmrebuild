@@ -1,17 +1,31 @@
-* Tue Dec 20 2022 <gerbier@users.sourceforge.net> 2.17
+* Tue Jan 10 2023 <eric.gerbier@tutanota.com> 2.17
 - fix -r does not work (xujing)
 - fix spelling errors that could mislead users (xujing)
 - fix --comment-missing=n does not work (xujing)
 - fix --cap-from-fs does not work (xujing)
+- all shell are bash
+- clean test x$var, use -z
+- change email to tutanota
+- change copyright year
+- change gpg key
+- fix warnings from shellcheck
+- add unitary tests for plugins and options
+- if batch mode, do not edit any spec part
+- spec_only : display spec name if successfull
+- echo+read in one line with read -p
+- add new plugin exclude_file to exclude files from spec
+- split tests in t directory
+- bugfix in nodoc plugin
+- rename internal variable with RPMREBUILD_ prefix
 
-* Sun Jan 17 2021 <gerbier@users.sourceforge.net> 2.16-1
+* Sun Jan 17 2021 <eric.gerbier@tutanota.com> 2.16-1
 - fix bug if more than 10 args (thanks Dmitry V. Levin)
 - add signal trapping to clean directory
 - fix warnings from shellcheck
 - fix problem when rebuild filesystem package (builroot not a directory)
 - fix installation test for kernel and multi-arch packages
 
-* Fri Feb 21 2020 <gerbier@users.sourceforge.net> 2.15-1
+* Fri Feb 21 2020 <eric.gerbier@tutanota.com> 2.15-1
 - fix error on rpmrebuild_files.sh line 204 (verify tag)
 - use env in shebang to avoid path problemes (/bin versus /usr/bin)
 - updated htmc doc (features, usage)
@@ -21,7 +35,7 @@
 - better diagnostic on internal error
 - fix bug on conditional requires (with space)
 
-* Fri Oct 19 2018 <gerbier@users.sourceforge.net> 2.14-1
+* Fri Oct 19 2018 <eric.gerbier@tutanota.com> 2.14-1
 - add list of optional tags, to allow rpmrebuild work with old rpm versions
 - add dependency on setarch
 - add debug code (calls on functions)
@@ -32,24 +46,24 @@
 - test if awk support non-posix lshift (qf_spec_requires_raw)
 - workaround for redhat 6.x / rpm 3.x, thanks Francesco
 
-* Wed Sep 12 2018 <gerbier@users.sourceforge.net> 2.13-1
+* Wed Sep 12 2018 <eric.gerbier@tutanota.com> 2.13-1
 - can handle recommends / supplements rpm tags
 
-* Fri Jul 20 2018 <gerbier@users.sourceforge.net> 2.12-1
+* Fri Jul 20 2018 <eric.gerbier@tutanota.com> 2.12-1
 - apply patch from Bruce Jerrick : Handle Requires(pre,post,preun,postun)
 - add new requires syntax with if ( redhat-rpm-config )
 
-* Sun Jun 10 2018 <gerbier@users.sourceforge.net> 2.11-3
+* Sun Jun 10 2018 <eric.gerbier@tutanota.com> 2.11-3
 - Made minor grammatical fixes to English language translations (patch from beroset)
 
-* Sun Sep 10 2017 <gerbier@users.sourceforge.net> 2.11-2
+* Sun Sep 10 2017 <eric.gerbier@tutanota.com> 2.11-2
 - fix bad day of week in changelog (rpmbuild warning)
 - add dependency to rpm-build package instead rpmbuild binary
 
-* Fri Nov 22 2013 <gerbier@users.sourceforge.net> 2.11
+* Fri Nov 22 2013 <eric.gerbier@tutanota.com> 2.11
 - add install option
 
-* Sun Aug 11 2013 <gerbier@users.sourceforge.net> 2.10-2
+* Sun Aug 11 2013 <eric.gerbier@tutanota.com> 2.10-2
 - bugfix from 2.10 on test install : test was inverted (applied on rpm files instead installed rpm)
 
 * Thu Aug 01 2013 <valery_reznic@users.sourceforge.net> 2.10
@@ -60,12 +74,12 @@
 * Sun Jan 13 2013 <valery_reznic@users.sourceforge.net> 2.9
 - fix to work with rpm 4.10 (Fedora 18) - error: incorrect format: invalid field width
 
-* Wed Jul 11 2012 <gerbier@users.sourceforge.net> 2.8
+* Wed Jul 11 2012 <eric.gerbier@tutanota.com> 2.8
 - can handle SUGGESTS/ENHANCES rpm tag
 - add --cap-from-fs/cap-from-db options
 - build rpmrebuild-version.tar.gz to allow rpmbuild -tb work
 
-* Wed Jun 06 2012 <gerbier@users.sourceforge.net> 2.7
+* Wed Jun 06 2012 <eric.gerbier@tutanota.com> 2.7
 - patch from Andreas Kainz for package file checking
 - add new unset_tag plugin
 - add support for rpm version 5 (mandriva)
@@ -76,10 +90,10 @@
 - fix problem with different architecture (build 32bit on 64bits)
 - fix bad arch on gpg-pubkey packages
 
-* Tue Jul 12 2011 <gerbier@users.sourceforge.net> 2.6
+* Tue Jul 12 2011 <eric.gerbier@tutanota.com> 2.6
 - fix bug when working on source packages, ghost files
 
-* Fri Apr 15 2011 <gerbier@users.sourceforge.net> 2.5
+* Fri Apr 15 2011 <eric.gerbier@tutanota.com> 2.5
 - add -5/-l options in man pages
 - Added support for obsolete version and flags (bugfix by Valery Reznic)
 - shell compatibility (mkdir) for AIX : use -p option instead --parents
@@ -87,13 +101,13 @@
 - apply patch from ndyankov : support for broken symlinks
 - specfile will allow build package for rpm version 4 or 3
 
-* Fri Dec 11 2009 <gerbier@users.sourceforge.net> 2.4
+* Fri Dec 11 2009 <eric.gerbier@tutanota.com> 2.4
 - add -l / --list-plugin option
 
 * Thu Nov 12 2009 <valery_reznic@users.sourceforge.net>
 - add -5 / --md5-compat-digest option
 
-* Fri Jan 09 2009 <gerbier@users.sourceforge.net> 2.3
+* Fri Jan 09 2009 <eric.gerbier@tutanota.com> 2.3
 - release version 2.3
 
 * Tue Dec 16 2008 <valery_reznic@users.sourceforge.net>
@@ -102,16 +116,16 @@
 * Tue Dec 16 2008 <valery_reznic@users.sourceforge.net>
 - fix for rpm 4.6 (fedora 10), that ignore BuildRoot in the spec file flag
 
-* Fri Dec 05 2008 <gerbier@users.sourceforge.net>
+* Fri Dec 05 2008 <eric.gerbier@tutanota.com>
 - do not use popt any more
 
-* Wed Aug 06 2008 <gerbier@users.sourceforge.net> 2.2.3-1
+* Wed Aug 06 2008 <eric.gerbier@tutanota.com> 2.2.3-1
 - fix a problem with new rpm security on mandriva (defaultbuildroot)
 
-* Mon Apr 28 2008 <gerbier@users.sourceforge.net> 2.2.2-1
+* Mon Apr 28 2008 <eric.gerbier@tutanota.com> 2.2.2-1
 - fix a bug when working on package file with path
 
-* Wed Apr 2 2008 <gerbier@users.sourceforge.net> 2.2.1-1
+* Wed Apr 2 2008 <eric.gerbier@tutanota.com> 2.2.1-1
 - fix bug on uid/gid with --pug-from-fs option
 - demo plugin : better error message
 - do not remove /etc/popt : it does not belong our package
@@ -119,7 +133,7 @@
 - new demofiles plugin
 - add utf-8 for french localisation
 
-* Mon Oct 22 2007 <gerbier@users.sourceforge.net> 2.2.0-1
+* Mon Oct 22 2007 <eric.gerbier@tutanota.com> 2.2.0-1
 - add translation system (english and french) with new locale and man directory
 - fix a bug with rpm localisation in PackageInstalled function ( rpm message are localized, so the grep filter does not work everywhere )
 - fix bug : include file are also search in plugin directory
@@ -130,13 +144,13 @@
 - replace code in remove_from_popt.make.include by sed call (cf fedora specfile)
 - update specfile description tag
 
-* Mon Jun 18 2007 <gerbier@users.sourceforge.net> 2.1.1-1
+* Mon Jun 18 2007 <eric.gerbier@tutanota.com> 2.1.1-1
 - remove commented tags (PAYLOAD*, INSTALLTID, OPTFLAGS, PLATFORM, SIGSIZE) to solve bug for rpm 3.x
 - add more info to bugreport (issues, warnings)
 - add choice of email addresse for bug report
 - send bug report to new rpmrebuild-bugreport list
 
-* Tue May 15 2007 <gerbier@users.sourceforge.net> 2.1.0-1
+* Tue May 15 2007 <eric.gerbier@tutanota.com> 2.1.0-1
 - remove old deprecated tags ICON and SERIAL
 - comment missing localisation file (lang)
 - remove commnented tag XPM and GIF
@@ -145,18 +159,18 @@
 - check if rpm tags exists (CheckTags)
 - add code to send bug report by mail (SendBugReport)
 
-* Tue May 31 2005 <gerbier@users.sourceforge.net> 2.0.4-1
+* Tue May 31 2005 <eric.gerbier@tutanota.com> 2.0.4-1
 - force tmpdir to be empty (Christopher Faylor)
 - fix bug with testinstall return
 - fix bug with short options -r -n
 - improved nodoc plugin
 
-* Fri May 20 2005 <gerbier@users.sourceforge.net> 2.0.3-1
+* Fri May 20 2005 <eric.gerbier@tutanota.com> 2.0.3-1
 - add --notest-install option (Christopher Faylor)
 - add --release option (Christopher Faylor)
 - add nodoc plugin
 
-* Wed Mar  2 2005 <gerbier@users.sourceforge.net> 2.0.2-1
+* Wed Mar  2 2005 <eric.gerbier@tutanota.com> 2.0.2-1
 - fix bug with BuildArch tag (rpmrebuild_popt)
 
 * Tue Mar  1 2005 <valery_reznic@users.sourceforge.net> 2.0.2-1
@@ -167,7 +181,7 @@
 * Tue Feb 22 2005 <valery_reznic@users.sourceforge.net> 2.0.1-1
 - fix for rpm-4.3.[12]
 
-* Wed Dec 29 2004 <gerbier@users.sourceforge.net> 2.0.0-1
+* Wed Dec 29 2004 <eric.gerbier@tutanota.com> 2.0.0-1
 - add demo, uniq, file2pacDep plugins (exemples)
 - add commented tags (PAYLOAD*, PATCH, SIZE, INSTALLTID, OPTFLAGS, PLATFORM, ARCHIVESIZE,SIGSIZE, SERIAL)
 
@@ -191,7 +205,7 @@
 * Sun Sep 19 2004 <valery_reznic@users.sourceforge.net> 2.0.0-1
 - CommandLineParsing functionality moved to the new file rpmrebuild_parser.src
 
-* Mon Aug 16 2004 <gerbier@users.sourceforge.net> 1.4.7-3
+* Mon Aug 16 2004 <eric.gerbier@tutanota.com> 1.4.7-3
 - change dependency from rpm-build package to rpmbuild file for suses distrib
 - some fixes from rmlint
 
@@ -211,7 +225,7 @@
 - change SpecFile to generate rpm according autorequire/autoprovide (avoid post sed)
 - add rpmrebuild file (avoid symbolic link)
 
-* Mon May 24 2004 <gerbier@users.sourceforge.net> 1.4.6-4
+* Mon May 24 2004 <eric.gerbier@tutanota.com> 1.4.6-4
 - fix a bug on --autoprovide/--autorequire
 
 * Mon May 24 2004 <valery_reznic@users.sourceforge.net> 1.4.6-4
@@ -227,14 +241,14 @@
 - dir option changed to directory
 - add all remaining dependencies (bash, sed, grep ...) to package
 
-* Thu May 6 2004 <gerbier@users.sourceforge.net> 1.4.6-2
+* Thu May 6 2004 <eric.gerbier@tutanota.com> 1.4.6-2
 - split in 2 packages for rpm <4 and rpm >4 (add rpm-build dependency) 
 
-* Mon Nov 24 2003 <gerbier@users.sourceforge.net> 1.4.6-1
+* Mon Nov 24 2003 <eric.gerbier@tutanota.com> 1.4.6-1
 - added -P/--autoprovide flag
 - added -R/--autorequire flag
 
-* Wed Nov 19 2003 <gerbier@users.sourceforge.net> 1.4.5-2
+* Wed Nov 19 2003 <eric.gerbier@tutanota.com> 1.4.5-2
 - change filter behavior to be more robust
 - read -r on /etc/popt to keep backslash
 - fix comment-missing option
@@ -262,10 +276,10 @@
 * Mon Jun 02 2003 <valery_reznic@users.sourceforge.net> 1.4.2-1
 - fixed problem with specspo (now I query package and not specspo information)
 
-* Mon Feb 03 2003 <gerbier@users.sourceforge.net> 1.4.1-1
+* Mon Feb 03 2003 <eric.gerbier@tutanota.com> 1.4.1-1
 - add warning flag (-w/--warning) 
 
-* Fri Jan 17 2003 <gerbier@users.sourceforge.net> 1.4.0-1
+* Fri Jan 17 2003 <eric.gerbier@tutanota.com> 1.4.0-1
 - public release of 1.3 dev branch
 
 * Sun Dec 29 2002 <valery_reznic@users.sourceforge.net> 1.3-1
@@ -274,7 +288,7 @@
 * Wed Dec 18 2002 <valery_reznic@users.sourceforge.net> 1.3-1
 - more simple and robust filter
 
-* Thu Dec 12 2002 <gerbier@users.sourceforge.net> 1.3.1
+* Thu Dec 12 2002 <eric.gerbier@tutanota.com> 1.3.1
 - add filter option for "pluggins"
 - rewrite --resolv-dep as pluggin
 
@@ -282,7 +296,7 @@
 - change long options name to be more consistant
 - added support for %%lang
 
-* Tue Dec 10 2002 <gerbier@users.sourceforge.net> 1.3.0
+* Tue Dec 10 2002 <eric.gerbier@tutanota.com> 1.3.0
 - add man page
 - fix bug with % in changelog
 - add -r|--resolv-dep option
@@ -297,10 +311,10 @@
 * Sun Nov 24 2002 <valery_reznic@users.sourceforge.net> 1.1-1
 - filter "(none)" answer from rpm the scripts queries
 
-* Sat Nov 23 2002 <gerbier@users.sourceforge.net> 1.1-0
+* Sat Nov 23 2002 <eric.gerbier@tutanota.com> 1.1-0
 - filter "(none)" answer from rpm queries
 
-* Tue Oct 22 2002 <gerbier@users.sourceforge.net> 1.0-0
+* Tue Oct 22 2002 <eric.gerbier@tutanota.com> 1.0-0
 - replace vi by %%define
 - add command lines options (-h : help, -v : verbose, -V: version)
 - add lsm description
@@ -328,29 +342,29 @@
 - recode %file with all new tags (missingok, noreplace...)
 - Valery Reznic join the project
 
-* Mon Sep 30 2002  <gerbier@users.sourceforge.net> 0.7.0
+* Mon Sep 30 2002  <eric.gerbier@tutanota.com> 0.7.0
 - work on local dir (thanks Valery Reznic <valery_reznic@users.sourceforge.net>)
 
-* Mon Sep 23 2002  <gerbier@users.sourceforge.net> 0.6.0
+* Mon Sep 23 2002  <eric.gerbier@tutanota.com> 0.6.0
 - add triggers (thanks to Han Holl <han.holl@prismant.nl>
 - add many other spec tags (icon, exlude*, serial, provides, conflicts ...)
 
-* Fri Sep 20 2002  <gerbier@users.sourceforge.net> 0.5.0
+* Fri Sep 20 2002  <eric.gerbier@tutanota.com> 0.5.0
 - try to have it work on any distribution
 - the rpm package is now signed with my gpg key
 
-* Tue Sep 17 2002  <gerbier@users.sourceforge.net> 0.4.2
+* Tue Sep 17 2002  <eric.gerbier@tutanota.com> 0.4.2
 - add architecture support (thanks to Han Holl <han.holl@prismant.nl>)
 - add add require, obsolete tags
 - force time format with LC_TIME to POSIX
 - change shell name to match project name
 - full english messages
 
-* Tue Sep 17 2002  <gerbier@users.sourceforge.net> 0.4.1
+* Tue Sep 17 2002  <eric.gerbier@tutanota.com> 0.4.1
 - suppress useless exit
 - shell cosmetic changes
 
-* Sun Jul 14 2002  <gerbier@users.sourceforge.net>
+* Sun Jul 14 2002  <eric.gerbier@tutanota.com>
 - Initial spec file created by autospec ver. 0.6 with rpm 2.5 compatibility
 - check changes (rpm -V)
 - check for multiples rpm

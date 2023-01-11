@@ -10,149 +10,149 @@ rpmrebuild est un outil pour construire facilement un package rpm.
 Il peut être utilisé pour fabriquer un fichier rpm à partir d'un package installé ou pour modifier un package : modifiez les fichiers installés et lancez rpmrebuild.
 
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-5  \-\-md5\-compat\-digest\fP
 passe en mode compatible avec les checksum de rpm 4.4 (md5)
-.TP 
+.TP
 \fB\-a, \-\-additional\fP=<\fIflags\fP>
 passe des options (flags) spécifiques pour \fBrpmbuild\fP
-.TP 
+.TP
 \fB\-b, \-\-batch\fP
 mode batch (ne pose pas de questions)
-.TP 
+.TP
 \fB\-\-cap\-from\-db (default)\fP
 utiliser les capacités posix définis dans la base rpm
-.TP 
+.TP
 \fB\-\-cap\-from\-fs\fP
 utiliser les capacités posix des fichiers installés
 (qui peuvent être différents de ceux enregistrés dans la base rpm à l'installation)
-.TP 
+.TP
 \fB\-c, \-\-comment\-missing\fP=<\fIyes\fP|\fIno\fP>
 commente les fichiers manquants dans le fichier specfile. Defaut: \fBno\fP (non).
-.TP 
+.TP
 \fB\-D, \-\-define\fP=<\fIdefines\fP>
 définition(s) à passer au programme \fBrpmbuild\fP.
-.TP 
+.TP
 \fB\-d, \-\-directory\fP=<\fIdirectory\fP>
 répertoire du package rpm package résultat.
-.TP 
+.TP
 \fB\-e, \-\-edit\-spec\fP
 alias de l'options \-\-edit\-whole.
-.TP 
+.TP
 \fB\-f, \-\-filter\fP=<\fIcommand\fP>
 alias de l'option \fB\-\-change\-spec\-whole\fP
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 affiche une aide sur le programme (sauf les plugins), puis sort.
-.TP 
+.TP
 \fB\-\-help\-plugins\fP
 affiche une aide sur les plugins, puis sort.
-.TP 
+.TP
 \fB\-i, \-\-include\fP=<\fIfile\fP>
 lit les options dans le fichier 'file' indiqué.
-.TP 
+.TP
 \fB\-I, \-\-install\fP
 installe le package crée
-.TP 
+.TP
 \fB\-k, \-\-keep\-perm\fP
 alias de l'option \fB\-\-pug\-from\-fs\fP
-.TP 
+.TP
 \fB\-l, \-\-list\-plugin\fP
 liste les plugins installés
-.TP 
+.TP
 \fB\-m, \-\-modify\fP=<\fIcommand\fP>
 alias de l'option \fB\-\-change\-files
-.TP 
+.TP
 \fB\-n, \-\-notest\-install \fP
 ne pas tester l'installation à la fin de la construction du package.
-.TP 
+.TP
 \fB\-p, \-\-package\fP
 travailler sur un fichier rpm, au lieu d'un package installé (comme l'option \-p de la commande rpm)
-.TP 
+.TP
 \fB\-\-pug\-from\-db (default)\fP
 donner aux fichier les droits, uid, gid identiqued à ceux enregistrés dans la base rpm
-.TP 
+.TP
 \fB\-\-pug\-from\-fs\fP
 conserver les droits, uid, gid des fichiers installés
 (qui peuvent être différents de ceux enregistrés dans la base rpm à l'installation)
-.TP 
+.TP
 \fB\-P, \-\-autoprovide\fP
 demande à rpm de calculer automatiquement les capacités (ce que fournit le package)
-.TP 
+.TP
 \fB\-R, \-\-autorequire\fP
 demande à rpm de calculer automatiquement les dépendances
-.TP 
+.TP
 \fB\-r, \-\-release\fP=<\fIversion\fP>\fP
 specifie le nouveau numéro de release du package à fabriquer
-.TP 
+.TP
 \fB\-s, \-\-spec\-only\fP=<\fIspecfile\fP>
 ne fabriquer que le fichier specfile (ne pas contruire le package)
 Ne peut être utilisé avec l'option \fB\-\-change\-files\fP.
-.TP 
+.TP
 \fB\-v, \-\-verbose\fP
 mode verbeux
-.TP 
+.TP
 \fB\-\-debug\fP
 pour le debuggage : ne supprime pas les fichiers temporaires en fin de travail.
 force le mode "verbose"
-.TP 
+.TP
 \fB\-V, \-\-version\fP
 affiche la version du programme et se termine.
-.TP 
+.TP
 \fB\-w, \-\-warning\fP
 affiche des avertissements si il détecte des problèmes potentiels
 (par exemple, des noms de fichiers contenant des caractères * ? )
-.TP 
+.TP
 \fB\-y, \-\-verify\fP=<\fIyes\fP|\fIno\fP>
-affiche (oui/non) les modifications du package avant le travail proprement dit. 
+affiche (oui/non) les modifications du package avant le travail proprement dit.
 Defaut: \fByes\fP (oui). Le mettre à non permet de gagner en performance.
-.LP 
+.LP
 PLUGINS OPTION
-.LP 
+.LP
 les fonctionnalités de rpmrebuild peuvent être étendues avec des plugins (greffons).
 Ces plugins sont cherchés dans \fB/usr/lib/rpmrebuild/plugins\fP , puis dans le $PATH
-.TP 
+.TP
 \fB\-\-change\-files\fP=<\fIcommand\fP>
-Appelle le plugin indiqué pour modifier les fichiers du package. 
+Appelle le plugin indiqué pour modifier les fichiers du package.
 Note : les fichiers sont copiés dans un répertoire temporaire, les fichiers d'origine (installés) ne sont donc pas modifiés)
-.br 
+.br
 Ne peut être utilisé avec l'option \fB\-\-spec\-only\fP
-.LP 
+.LP
 \fB\-\-change\-spec\-whole\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-whole
 .RS
 Appelle le plugin (respectivement l'éditeur) pour modifier l'ensemble du fichier specfile.
 .RE
-.LP 
+.LP
 \fB\-\-change\-spec\-preamble\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-preamble
-.LP 
+.LP
 \fB\-\-change\-spec\-conflicts\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-conflicts
-.LP 
+.LP
 \fB\-\-change\-spec\-obsoletes\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-obsoletes
-.LP 
+.LP
 \fB\-\-change\-spec\-provides\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-provides
-.LP 
+.LP
 \fB\-\-change\-spec\-requires\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-requires
-.LP 
+.LP
 \fB\-\-change\-spec\-suggests\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-suggests
-.LP 
+.LP
 \fB\-\-change\-spec\-enhances\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-enhances
-.LP 
+.LP
 \fB\-\-change\-spec\-recommends\fP=<\fIcommand\fP>
 .br
 \fB\-\-edit\-recommends
@@ -162,132 +162,132 @@ Appelle le plugin (respectivement l'éditeur) pour modifier l'ensemble du fichier
 \fB\-\-edit\-supplements
 .LP
 \fB\-\-change\-spec\-description\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-description
-.LP 
+.LP
 \fB\-\-change\-spec\-files\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-files
-.LP 
+.LP
 \fB\-\-change\-spec\-triggers\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-triggers
-.LP 
+.LP
 \fB\-\-change\-spec\-pre\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-pre
-.LP 
+.LP
 \fB\-\-change\-spec\-post\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-post
-.LP 
+.LP
 \fB\-\-change\-spec\-preun\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-preun
-.LP 
+.LP
 \fB\-\-change\-spec\-postun\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-postun
-.LP 
+.LP
 \fB\-\-change\-spec\-pretrans\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-pretrans
-.LP 
+.LP
 \fB\-\-change\-spec\-postrans\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-postrans
-.LP 
+.LP
 \fB\-\-change\-spec\-verifyscript\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-verifyscript
-.LP 
+.LP
 \fB\-\-change\-spec\-changelog\fP=<\fIcommand\fP>
-.br 
+.br
 \fB\-\-edit\-changelog
-.LP 
+.LP
 .RS
 Appelle le plugin (respectivement l'éditeur) pour modifier les sections du fichier specfile :
 preamble, conflicts, obsoletes, provides, requires, description, files, triggers, preinstall, postinstall, preuninstall,
 postuninstall, verifyscript ou changelog.
-.br 
+.br
 Aucune des ces options ne peut être spécifié après les options \fB\-\-change\-spec\-whole\fP
 ou \fB\-\-edit\-whole\fP.
 
 .SH "INCLUDE FILES"
 Chacune des options (format long) peut être donnée en argument de la ligne de
 commande ou dans un fichier inclus (donné avec l'option \-i/\-\-include)
-.LP 
+.LP
 Les fichiers inclus sont aussi cherchés dans le répertoire \fB/usr/lib/rpmrebuild/plugins\fP.
-.LP 
+.LP
 La syntaxe de ces fichiers est la suivante :
-.TP 
+.TP
 \fBcomments\fP
 Toutes les lignes commençant par un # (précédé ou non par des espaces) est un commentaire.
-.TP 
+.TP
 \fBempty line\fP
 les lignes vides sont ignorées.
-.TP 
+.TP
 \fBoption line\fP
 Les lignes contenant les options sont semblables aux options passées en ligne de commande,
 avec les limitations suivantes :
 .RS
-.TP 
+.TP
 option longue
 elles doivent être utilisées sans le prefixe \-\-.
-.TP 
+.TP
 argument des option
 ils ne doivent pas être entourés d'apostrophes.
-.TP 
+.TP
 separateur
 \- les arguments doivent être séparés des options par des espaces ou des tabulations, pas par le signe "="
-.TP 
-arguments obligatoires 
+.TP
+arguments obligatoires
 le nom du package (argument obligatoire) ne peut être passé par un fichier d'inclusion.
 .RE
-.LP 
+.LP
 par exemple, la ligne de commande suivante :
 .RS
 rpmrebuild \-\-change\-files="pgm1 a b c" \-\-change\-spec\-pre="pgm2 bb" pkg
 .RE
-.LP 
+.LP
 se traduit dans un fichier d'inclusion par :
 .RS
 change\-files    pgm1 a b c
-.br 
+.br
 change\-spec\-pre pgm2 bb
-.br 
+.br
 .RE
 
 .SH "FILES"
-.TP 
-\fB~/.rpmmacros\fP 
+.TP
+\fB~/.rpmmacros\fP
 ce fichier est utilisé par rpm lors de la construction de packages (macros)
-.TP 
+.TP
 \fB$RPMREBUILD_TMPDIR/work\fP
 répertoire des fichiers temporaires.
 
 .SH "ENVIRONMENT"
-.LP 
-.TP 
+.LP
+.TP
 \fBRPMREBUILD_TMPDIR\fP
 donne le répertoire pour les fichiers temporaires. S'il n'est pas positionné, le répertoire  ~/.tmp/rpmrebuild.$$ est utilisé.
-.TP 
+.TP
 \fBRPMREBUILD_OPTS\fP
 permet de passer des options à rpmrebuild, permet de changer les options par défaut (à utiliser avec precaution).
 Par exemple, pour activer le plugin un_prelink, il suffit de configurer RPMREBUILD_OPTS="--include un_prelink.plug"
-.TP 
+.TP
 \fBVISUAL\fP
-permet de spécifier un éditeur de fichier. 
-.TP 
+permet de spécifier un éditeur de fichier.
+.TP
 \fBEDITOR\fP
 peut aussi être utilisé pour spécifier un editeur de fichier, si \fBVISUAL\fP n'est pas initialisé. Si aucune de ces variables n'est initialisé, rpmrebuild utiliseras \fBvi\fP.
 
 .SH "EXAMPLES"
-.LP 
+.LP
 Construire un package rpm aussi proche que possible de l'original :
-.LP 
+.LP
 \fBrpmrebuild \-\-batch package\fP
-.LP 
+.LP
 Construire un package modifié :
 .LP
 \fBrpmrebuild \-\-keep\-perm package\fP
@@ -295,7 +295,7 @@ Construire un package modifié :
 Construire un rpm à partir d'un fichier rpm en y appliquant un filtre :
 .LP
 \fBrpmrebuild \-\-package \-\-filter filter /some/place/package.rpm\fP
-.LP 
+.LP
 Passer des options pour rpm:
 reconstruire et signer le package bash
 .LP
@@ -308,53 +308,53 @@ reconstruire un package compatible avec rpm version 3 (legacy)
 Donner un nom pour le fichier rpm généré:
 .LP
 \fBrpmrebuild \-\-define "_rpmfilename %%{NAME}.rpm" bash\fP
-.LP 
+.LP
 Modification interactive du package:
-.LP 
+.LP
 \fBrpmrebuild \-\-package \-\-change\-files="/bin/bash" /some/place/package.rpm\fP
-.LP 
+.LP
 Modification batch du package :
-.LP 
+.LP
 \fBrpmrebuild \-\-package \-\-change\-files "a.sh && b.sh" /some/place/package.rpm\fP
-.LP 
+.LP
 Si vous connaissez la syntaxe des fichier specfile, vous pouvez les éditer "au vol" :
-.LP 
+.LP
 \fBrpmrebuild  \-\-edit\-whole package\fP
-.LP 
+.LP
 changement en mode batch de la version
-.LP 
+.LP
 \fBrpmrebuild  \-\-change\-spec\-preamble='sed \-e "s/^Version:.*/Version: VotreVersion/"' Package\fP
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
-.br 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.br
 Valery Reznic <valery_reznic@users.sourceforge.net>
-.TP 
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 rpmrebuild ne peut reproduire exactement un package, car
-.br 
+.br
 \- la signature gpg ne peut être appliquée
-.br 
+.br
 \- le cheksum md5 ne peut correspondre avec l'original.
-.TP 
+.TP
 si un package contient des fichier avec des charactères d'expension (* .. ? ), il peut pas être traité par rpmrebuild.
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2002 by Eric Gerbier.
-.br 
+.br
 Ce programme est distribué sous la licence GNU General Public.
-.br 
-Il est fourni en l'état, sans garanties : même avec le plus grand soin, des bug peuvent subsister. 
-.br 
+.br
+Il est fourni en l'état, sans garanties : même avec le plus grand soin, des bug peuvent subsister.
+.br
 Consultez le fichier COPYING pour plus de details.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1), 'man \-k rrp' pour la doc sur les plugins.
 

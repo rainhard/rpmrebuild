@@ -27,6 +27,8 @@
      /usr/lib/rpmrebuild/plugins/demo.sh
      /usr/lib/rpmrebuild/plugins/demofiles.plug
      /usr/lib/rpmrebuild/plugins/demofiles.sh
+     /usr/lib/rpmrebuild/plugins/exclude_file.plug
+     /usr/lib/rpmrebuild/plugins/exclude_file.sh
      /usr/lib/rpmrebuild/plugins/file2pacDep.plug
      /usr/lib/rpmrebuild/plugins/file2pacDep.sh
      /usr/lib/rpmrebuild/plugins/nodoc.plug
@@ -51,10 +53,13 @@
 %doc /usr/share/man/man1/demo.plug.1rrp*
 %doc /usr/share/man/fr_FR/man1/demo.plug.1rrp*
 %doc /usr/share/man/fr_FR.UTF-8/man1/demo.plug.1rrp*
-%doc /usr/share/man/man1/file2pacDep.plug.1rrp*
 %doc /usr/share/man/man1/demofiles.plug.1rrp*
 %doc /usr/share/man/fr_FR/man1/demofiles.plug.1rrp*
 %doc /usr/share/man/fr_FR.UTF-8/man1/demofiles.plug.1rrp*
+%doc /usr/share/man/man1/exclude_file.plug.1rrp*
+%doc /usr/share/man/fr_FR/man1/exclude_file.plug.1rrp*
+%doc /usr/share/man/fr_FR.UTF-8/man1/exclude_file.plug.1rrp*
+%doc /usr/share/man/man1/file2pacDep.plug.1rrp*
 %doc /usr/share/man/fr_FR/man1/file2pacDep.plug.1rrp*
 %doc /usr/share/man/fr_FR.UTF-8/man1/file2pacDep.plug.1rrp*
 %doc /usr/share/man/man1/nodoc.plug.1rrp*

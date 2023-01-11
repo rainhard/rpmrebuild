@@ -5,7 +5,7 @@
 #
 #    Copyright (C) 2002, 2003, 2013 by Valery Reznic
 #    Bug reports to: valery_reznic@users.sourceforge.net
-#      or          : gerbier@users.sourceforge.net
+#      or          : eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ MY_LIB_DIR=$( dirname "$0" ) || ( echo "ERROR $0 dirname $0"; exit 1)
 MY_BASENAME=$( basename "$0" )
 source "$MY_LIB_DIR/rpmrebuild_lib.src"    || ( echo "ERROR $0 source $MY_LIB_DIR/rpmrebuild_lib.src" ; exit 1)
 
-if [ $# -ne 1 ] || [ "x$1" = "x" ]
+if [ $# -ne 1 ] || [ -z "$1" ]
 then
 	Critical "Usage: $0 <buildroot>"
 fi
@@ -51,7 +51,7 @@ BuildRoot="$1"
 
 while :; do
 	read file_type
-	[ "x$file_type" = "x" ] && break
+	[ -z "$file_type" ] && break
 	read file_flags
 	read file_perm
 	read file_user
@@ -61,8 +61,8 @@ while :; do
 	read file_cap
 	read file
 
-	case "X$file_flags" in
-		X*g*)
+	case "$file_flags" in
+		*g*)
 			# It's a ghost file, ok
 		;; 
 		
@@ -75,8 +75,8 @@ while :; do
 	File="$BuildRoot/$file"
 	[ -e "$File" ] && continue # File/directory already exist, do nothing
 
-	case "X$file_type" in
-		Xd*)
+	case "$file_type" in
+		d*)
 			# Directory. Ghost directory ?
 			Mkdir_p "$File" || Critical "$MY_BASENAME Mkdir_p $File"
 		;;

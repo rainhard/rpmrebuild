@@ -5,7 +5,7 @@
 #
 #    Copyright (C) 2002, 2003, 2013 by Valery Reznic
 #    Bug reports to: valery_reznic@users.sourceforge.net
-#      or          : gerbier@users.sourceforge.net
+#      or          : eric.gerbier@tutanota.com
 #    $Id$
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -58,10 +58,10 @@ g_val="%ghost "    # ghost
 VERIFY_FLAGS="md5 size link user group mtime mode rdev"
 
 # Check if we need (and have) getcap
-if [ "X$RPMREBUILD_CAP_FROM_FS" = "Xyes" ]; then
+if [ "$RPMREBUILD_CAP_FROM_FS" = "yes" ]; then
 	# Check if we have getcap program
 	tst=$( type getcap 2>/dev/null )
-	if [ "x$tst" = "x" ]; then
+	if [ -z "$tst" ]; then
 		Warning "no getcap found, capability will not be taken from filesystem" 1>&2
 		RPMREBUILD_CAP_FROM_FS="no"
 	else
@@ -71,7 +71,7 @@ fi
 
 while :; do
 	read file_type
-	[ "x$file_type" = "x" ] && break
+	[ -z "$file_type" ] && break
 	read file_flags
 	read file_perm
 	read file_user
@@ -92,12 +92,12 @@ while :; do
 	#wild=$(echo $file | grep "\*")
 	#[ -n "$wild" ] && file=$(echo "$file"|sed 's/\*/\\*/')
 	# quick and portable
-	case "x$file" in
-		x*\**) file=${file//\*/\\*} ;;
-		x*) ;;
+	case "$file" in
+		*\**) file=${file//\*/\\*} ;;
+		*) ;;
 	esac
 	miss_str=""
-	if [ "X$RPMREBUILD_COMMENT_MISSING" = "Xyes" ]; then
+	if [ "$RPMREBUILD_COMMENT_MISSING" = "yes" ]; then
 		if [ -e "$file" ]; then
 			miss_str=""
 		else 
@@ -106,8 +106,8 @@ while :; do
 	fi
 
 	# language handling
-	[ "X$file_lang" = "X(none)" ] && file_lang=""
-	if [ "X$file_lang" = "X" ]; then
+	[ "$file_lang" = "(none)" ] && file_lang=""
+	if [ -z "$file_lang" ]; then
 		lang_str=""
 	else
 		lang_str="%lang($file_lang) "
@@ -121,8 +121,8 @@ while :; do
 	fi
    
 	# %dir handling
-	case "X$file_type" in
-		Xd*)
+	case "$file_type" in
+		d*)
 			dir_str="%dir "
 		;;
 
@@ -132,11 +132,11 @@ while :; do
 	esac
 
 	# %fflags handling
-	if [ "X$file_flags" = "X" ]; then
+	if [ -z "$file_flags" ]; then
 		fflags_str=""
 	else
 		for flag in $FFLAGS; do
-			if [ "X${file_flags##*${flag}*}" = "X" ]; then
+			if [ -z "${file_flags##*${flag}*}" ]; then
 				eval ${flag}_str="\$${flag}_val"
 			else
 				eval ${flag}_str=""
@@ -150,7 +150,7 @@ while :; do
 		# Handle a rpm's bug described by Han Holl:
 		# There are missignok or/and noreplace flag but no config flag
 		# In this case I simple force using '%config' string
-		[ "X$config_par" = "X" ] || c_str=$c_val
+		[ -z "$config_par" ] || c_str=$c_val
 
 		# Concatenate c_str with config_param. 
 		# If config param non-empty strip it's last character
@@ -163,7 +163,7 @@ while :; do
 	fi
 
 	# %attr handling
-	if [ "X$RPMREBUILD_PUG_FROM_FS" = "Xyes" ]; then
+	if [ "$RPMREBUILD_PUG_FROM_FS" = "yes" ]; then
 		# get attribute from file system
 		attr_str="%attr(-,-,-) "
 	else
@@ -188,11 +188,11 @@ while :; do
 	fi
 
 	# %caps handling
-	if [ "X$RPMREBUILD_CAP_FROM_FS" = "Xyes" ]; then
+	if [ "$RPMREBUILD_CAP_FROM_FS" = "yes" ]; then
 		file_cap=$(  getcap "$file" | cut -f2 -d' ' )
 	else
 		# get capability from rpm query
-		[ "X$file_cap" = "X(none)" ] && file_cap=""
+		[ "$file_cap" = "(none)" ] && file_cap=""
 	fi
 	if [ -n "$file_cap" ]; then
 		caps_str="%caps($file_cap) "
@@ -236,7 +236,7 @@ while :; do
 
 	# test for jokers in file : globing seems not to work
 	# for performance reason, just if warning flag
-	if [ "X$RPMREBUILD_WARNING" = "Xyes" ]; then
+	if [ "$RPMREBUILD_WARNING" = "yes" ]; then
 		case "$file" in
 			*[*?]*)
 				cat <<-WARN_TXT 1>&2 || Critical "$MY_BASENAME cat"

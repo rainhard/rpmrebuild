@@ -4,7 +4,7 @@
 #      it's a part of the rpmrebuild project
 #
 #    Copyright (C) 2002 by Eric Gerbier
-#    Bug reports to: gerbier@users.sourceforge.net
+#    Bug reports to: eric.gerbier@tutanota.com
 #      or	   : valery_reznic@users.sourceforge.net
 #    $Id$
 #
@@ -112,7 +112,7 @@ do
 #	fi
 	# second code style (avoid call to external grep process)
 	case "$line" in
-   		%doc*)
+   		*%doc*)
 			#echo "%doc found"
       			case "$line" in
 				*/man*/man*/* | */man*/*/man*/*)

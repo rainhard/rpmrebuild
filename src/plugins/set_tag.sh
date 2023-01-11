@@ -4,7 +4,7 @@
 #      it's a part of the rpmrebuild project
 #
 #    Copyright (C) 2004 by Eric Gerbier
-#    Bug reports to: gerbier@users.sourceforge.net
+#    Bug reports to: eric.gerbier@tutanota.com
 #      or	   : valery_reznic@users.sourceforge.net
 #    $Id$
 #

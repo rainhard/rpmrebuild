@@ -20,24 +20,24 @@
 
 function Debug
 {
-	if [ -n "$debug" ]
+	if [ -n "$RPMREBUILD_debug" ]
 	then
-		echo -e "DEBUG: $@" 1>&2
+		echo -e "DEBUG: $*" 1>&2
 	fi
 }
 ###############################################################################
 function Echo
 {
-	echo -e "$@"
+	echo -e "$*"
 }
 ###############################################################################
 # common low level code for Error and Warning functions
 function Logger
 {
 	# screen
-	Echo "$0: $@" 1>&2
+	Echo "$0: $*" 1>&2
 	# for optionnal bug report
-	echo -e "$0: $@" >> $RPMREBUILD_BUGREPORT
+	echo -e "$0: $*" >> "$RPMREBUILD_BUGREPORT"
 
 }
 ###############################################################################
@@ -50,18 +50,18 @@ function Logger
 function Error
 {
 	ret=$?
-	Logger "ERROR: $@"
+	Logger "ERROR: $*"
 	return $ret
 }
 ###############################################################################
 function Warning
 {
-	Logger "WARNING: $@"
+	Logger "WARNING: $*"
 }
 ###############################################################################
 function Critical
 {
-	Error $@
+	Error "$*"
 	exit 1
 }
 ###############################################################################
@@ -69,10 +69,11 @@ function Critical
 function AskYesNo
 {
 	local Ans
-	echo -en "$@ ? (y/N) " 1>&2
-	read Ans
-	case "x$Ans" in
-		x[yY]*) return 0;;
+	read -r -p "$* ? (y/N) " Ans
+	Debug "(AskYesNo) $Ans"
+	case "$Ans" in
+		[yY]*) return 0;;
+		[nN]*) return 1;;
 		*)      return 1;;
 	esac || return 1 # should not happened
 	return 1 # should not happend
@@ -81,7 +82,7 @@ function AskYesNo
 ###############################################################################
 function RmDir
 {
-	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	if [ $# -ne 1 ] || [ -z "$1" ]
 	then
 		Warning "Usage: RmDir <dir>"
 		return 1
@@ -104,7 +105,7 @@ function RmDir
 # is not allways the same
 function Mkdir_p
 {
-	if [ $# -ne 1 ] || [ "x$1" = "x" ]
+	if [ $# -ne 1 ] || [ -z "$1" ]
 	then
 		Warning "Usage: Mkdir_p <dir>"
 		return 1
@@ -125,7 +126,8 @@ function Mkdir_p
 # not posix
 function TestAwk
 {
-	local tst=$( echo 1 | awk '{ print lshift($1,1) }' 2> /dev/null )
+	local tst
+	tst=$( echo 1 | awk '{ print lshift($1,1) }' 2> /dev/null )
 	if [ -n "$tst" ] && [ "$tst" -eq '2' ]
 	then
 		return 0

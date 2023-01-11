@@ -1,68 +1,72 @@
 .TH "demofiles.plug" "1" "@VERSION@" "Eric Gerbier" "rpmrebuild plugin"
 .SH "NAME"
 demofiles.plug \- a dummy plugin for rpmrebuild, to show how the plugin can work on files
+
 .SH "SYNOPSIS"
 rpmrebuild \-\-include demofiles.plug <\fIpackagename\fP>
-.br 
+.br
 or
-.br 
+.br
 rpmrebuild  \-\-change\-files="demofiles.sh [\fIoption\fP]" <\fIpackagename\fP>
-.br 
-
-
+.br
 the second form allow to specify plugin's soptions
+
 .SH "DESCRIPTION"
 this plugin is to show how the plugin work on files
-.br 
+.br
 it will just show the files (with find \-ls command) in the package.
 The package is not modified.
 
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 output help information plugins option and exit.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 print plugin version and exit
 
 .SH "FILES"
-.TP 
+.TP
 \fBdemofiles.plug\fP
 is the 'include file' for a quicker use
-.TP 
+.TP
 \fBdemofiles.sh\fP
 contains the code for change\-files
-.TP 
+.TP
 \fBdemofiles.plug.1\fP
 is this man page
+
 .SH "EXAMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-include demofiles.plug apache\fP
 
 will apply plugin to files, then build the package
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
-.TP 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
+
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 this plugin is given as an example of what can be done
+
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.
-.br 
+.br
 this program is distributed under GNU General Public License
-.br 
+.br
 It is provided "as is", without any express or implied
 warranties.  See the file COPYING for details.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
-compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1) set_tag.plug(1) unset_tag.plug(1)
-.br 
+compat_digest.plug(1), demo.plug(1), demofiles.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), exclude_file.plug(1), un_prelink.plug(1)
+set_tag.plug(1), unset_tag.plug(1)
+.br
 man \-k rrp for plugins specific manpages

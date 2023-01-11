@@ -1,8 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # this script test rpmrebuild on all installed packages
 # it must be started as root
 # internal use for developpers
 # $Id$
+
+# shellcheck disable=SC2219
+# shellcheck disable=SC2181
 
 function bench {
 	# rpm -qa can return packages as gpg-pubkey-4ebfc273-48b5dbf3.src
@@ -17,12 +20,16 @@ function bench {
 	pbarch=0
 	pbnotdir=0
 	pbchangelog=0
+	pbdb5=0
+	pbglob=0
 	list_bad=''
 	list_bad_dep=''
 	list_bad_magic=''
 	list_bad_arch=''
 	list_bad_dir=''
 	list_bad_changelog=''
+	list_bad_db5=''
+	list_bad_glob=''
 
 	for pac in $list
 	do
@@ -30,7 +37,7 @@ function bench {
 		echo -n "$seen/$max $pac "
 		localtmpdir=${tmpdir}/$$
 		mkdir $localtmpdir
-		output=$( nice ./rpmrebuild -b -k  -y no -c yes -d $localtmpdir $pac  2>&1 )
+		output=$( nice ./rpmrebuild.sh -b -k -w -y no -c yes -d $localtmpdir $pac  2>&1 )
 		irep=$?
 		if [ $irep -eq 0 ]
 		then
@@ -48,6 +55,8 @@ function bench {
 			cpio=$( echo "$output" | grep "cpio: Bad magic" )
 			arch=$( echo "$output" | grep "Arch dependent binaries" )
 			notdir=$( echo "$output" | grep "Not a directory" )
+			db5=$( echo "$output" | grep "run database recovery" )
+			glob=$( echo "$output" | grep "contains globbing characters" )
 			if [ -n "$depend" ]
 			then
 				echo "NOTOK (Failed dependencies)"
@@ -78,6 +87,18 @@ function bench {
 				echo "  $output"
 				let pbnotdir="$pbnotdir + 1"
 				list_bad_dir="$list_bad_dir $pac"
+			elif [ -n "$db5" ]
+			then
+				echo "NOTOK (db5)"
+				echo "  $output"
+				let pbdb5="$pbdb5 + 1"
+				list_bad_db5="$list_bad_db5 $pac"
+			elif [ -n "$glob" ]
+			then
+				echo "NOTOK (glob)"
+				echo "  $output"
+				let pbglob="$pbglob + 1"
+				list_bad_glob="$list_bad_glob $pac"
 			else
 				echo "KO"
 				echo "  $output"
@@ -90,9 +111,6 @@ function bench {
 		rm -rf $localtmpdir
 	done
 
-	# clean temporary directories
-	rm -rf $tmpdir 2> /dev/null
-
 	echo "-------------------------------------------------------"
 	echo "$notok failed build on $seen packages"
 	echo "  pb cpio : $pbmagic ($list_bad_magic)"
@@ -100,6 +118,8 @@ function bench {
 	echo "  pb arch : $pbarch ($list_bad_arch)"
 	echo "  pb dir  : $pbnotdir ($list_bad_dir)"
 	echo "  pb changelog  : $pbchangelog ($list_bad_changelog)"
+	echo "  pb db5  : $pbdb5 ($list_bad_db5)"
+	echo "  pb glob : $pbglob ($list_bad_glob)"
 	echo "  others  : $bad ($list_bad)"
 	echo "full log on $LOG"
 	echo "-------------------------------------------------------"
@@ -118,22 +138,30 @@ then
 fi
 
 LOG="$(pwd)/rpmrebuild_bench.log"
-if [ -f $LOG ]
+if [ -f "$LOG" ]
 then
-	mv $LOG $LOG.old
+	mv "$LOG" "${LOG}.old"
 fi
 
 export tmpdir=/tmp/rpmrebuild
-if [ -d $tmpdir ]
+if [ -d "$tmpdir" ]
 then
 	echo "find $tmpdir : check if another run"
 	exit 1
 fi
 mkdir -p $tmpdir
 
-
-
 # to have standardize error messages
 export LC_ALL=POSIX
 
 bench 2>&1 | tee $LOG
+
+# temporary directories
+if [ -z "$1" ]
+then
+	# by default clean
+	echo "clean temporary directories :  $tmpdir"
+	rm -rf $tmpdir 2> /dev/null
+else
+	echo "keep temporary directories :  $tmpdir"
+fi

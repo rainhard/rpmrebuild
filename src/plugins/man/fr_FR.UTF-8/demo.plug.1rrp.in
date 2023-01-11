@@ -3,71 +3,72 @@
 demo.plug \- un plugin de démo pour rpmrebuild, pour montrer le fonctionnement des plugins sur les fichier spec
 .SH "SYNOPSIS"
 rpmrebuild \-\-include demo.plug <\fIpackagename\fP>
-.br 
+.br
 ou
-.br 
+.br
 rpmrebuild  \-\-change\-spec\-{type}="demo.sh [\fIoption\fP]" <\fIpackagename\fP>
-.br 
+.br
 
 la première forme s'applique à toutes les sections
-.br 
+.br
 la seconde permet de choisir la ou les sections, ainsi que les options du plugin
 .SH "DESCRIPTION"
 ce plugin permet de montrer le fonctionnement des plugins
-.br 
+.br
 il ajoute en début de fichier specfile un prefixe correspondant au nom + type du plugin.
 Le fichier spec n'est plus fonctionnel, mais il montre bien ce qui peut être modifié.
 .SH "OPTIONS"
-.TP 
+.TP
 \fB\-h, \-\-help\fP
 affiche cette aide, puis quitte.
-.TP 
+.TP
 \fB\-v, \-\-version\fP
 affiche la version du plugin, puis quitte.
-.TP 
+.TP
 \fB\-n, \-\-null\fP
 n'ajoute rien : se contente d'afficher le fichier specfile
 .SH "FILES"
-.TP 
+.TP
 \fBdemo.plug\fP
 le fichier à inclure, pour une utilisation rapide
-.TP 
+.TP
 \fBdemo.sh\fP
 contient le code pour l'option change\-spec*
-.TP 
+.TP
 \fBdemo.plug.1\fP
 les pages de doc
 .SH "EXEMPLES"
-.LP 
+.LP
 \fBrpmrebuild \-\-include demo.plug apache\fP
 
 permet de lancer la fabrication du fichier specfile modifié,
 puis l'édite
 
 .SH "AUTHORS"
-.LP 
-Eric Gerbier <gerbier@users.sourceforge.net>
-.TP 
+.LP
+Eric Gerbier <eric.gerbier@tutanota.com>
+.TP
 See <URL:http://rpmrebuild.sourceforge.net/>.
 
 .SH "NOTES"
-.LP 
-.TP 
+.LP
+.TP
 Ce plugin est donné à titre d'exemple
 
 .SH "COPYRIGHT"
-.LP 
+.LP
 rpmrebuild is copyright (C) 2004 by Eric Gerbier.
-.br 
+.br
 Ce programme est distribué sous la licence GNU General Public
-.br 
+.br
 Il est fourni en l'état, sans garanties.
 Consultez le fichier COPYING pour plus de détails.
 
 .SH "SEE ALSO"
-.LP 
+.LP
 rpm(8), rpmbuild(8), rpmrebuild_plugins(1)
 .br
-compat_digest.plug(1), demo.plug(1), demofiles.plug(1),  file2pacDep.plug(1), nodoc.plug(1), uniq.plug(1), set_tag.plug(1), unset_tag.plug(1)
-.br 
+compat_digest.plug(1), demo.plug(1), demofiles.plug(1), nodoc.plug(1), uniq.plug(1), file2pacDep.plug(1), exclude_file.plug(1), un_prelink.plug(1)
+set_tag.plug(1), unset_tag.plug(1)
+.br
 man \-k rrp for plugins specific manpages
