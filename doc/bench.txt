@@ -1,3 +1,13 @@
+unitary tests
+-------------
+in src/t directory one file by args or plugin
+start test with src/make_mytest.pl or src/make_tests.sh
+
+global bench
+------------
+rebuild all the installed rpm on the distribution
+must be started by root
+
 fedora 37 , 2154 packages, 4 proc
 mono-thread (bench.sh) : real	89m45,825s user	77m22,186s sys	15m0,111s
 multi-thread bench_parallel_restoredb.sh : real	36m51,539s user	116m45,306s sys	19m5,949s
