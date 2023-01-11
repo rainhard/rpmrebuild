@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.7.28" />
+  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.8.0" />
   <title>rpmrebuild changelog</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="Author" content="Gerbier" />
@@ -14,6 +14,7 @@
     <h1>CHANGELOG</h1><!-- AS-TOC_BEGIN{ -->
     <h2>Table of Contents</h2>
     <ol>
+      <li><a href="#v2.17">2.17</a></li>
       <li><a href="#v2.16-1">2.16-1</a></li>
       <li><a href="#v2.15-1">2.15-1</a></li>
       <li><a href="#v2.14-1">2.14-1</a></li>
@@ -70,6 +71,28 @@
       <li><a href="#v0.2">0.2</a></li>
       <li><a href="#v0.1">0.1</a></li>
     </ol><!-- AS-TOC_END} -->
+    <hr />
+    Tue Jan 10 2023 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.17" id="v2.17">2.17</a>
+    <ul>
+      <li>fix -r does not work (xujing)</li>
+      <li>fix spelling errors that could mislead users (xujing)</li>
+      <li>fix --comment-missing=n does not work (xujing)</li>
+      <li>fix --cap-from-fs does not work (xujing)</li>
+      <li>all shell are bash</li>
+      <li>clean test x$var, use -z</li>
+      <li>change email to tutanota</li>
+      <li>change copyright year</li>
+      <li>change gpg key</li>
+      <li>fix warnings from shellcheck</li>
+      <li>add unitary tests for plugins and options</li>
+      <li>if batch mode, do not edit any spec part</li>
+      <li>spec_only : display spec name if successfull</li>
+      <li>echo+read in one line with read -p</li>
+      <li>add new plugin exclude_file to exclude files from spec</li>
+      <li>split tests in t directory</li>
+      <li>bugfix in nodoc plugin</li>
+      <li>rename internal variable with RPMREBUILD_ prefix</li>
+    </ul>
     <hr />
     Sun Jan 17 2021 Eric Gerbier &lt;<a href="mailto:eric.gerbier@tutanota.com">eric.gerbier@tutanota.com</a>&gt; <a name="v2.16-1" id="v2.16-1">2.16-1</a>
     <ul>
