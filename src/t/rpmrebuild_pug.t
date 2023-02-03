@@ -38,7 +38,7 @@ my $cmd      = $dir_src . 'rpmrebuild.sh -b';
 my $pb   = '/usr/share/doc/rpmrebuild/Todo';
 my $spec = "/tmp/toto_$PID.spec";
 
-# 1-5 control before changes
+# 1-7 control before changes
 my $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'pug control before build spec ok' )
   or diag("out=$out\n");
@@ -57,8 +57,15 @@ if ($tst) {
 	like(
 		$out,
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug control before spec files'
+		'pug control before spec files %attr'
 	) or diag("out=$out\n");
+	unlike(
+		$out,
+		qr/%doc %attr\(-,-,-\) "$pb"/,
+		'pug control before spec files %attr'
+	) or diag("out=$out\n");
+	unlike( $out, qr/%defattr\(-,-,-\)/, 'pug control before %defattr' )
+	  or diag("out=$out\n");
 }
 else {
 	fail('pug control before spec');
@@ -67,7 +74,7 @@ else {
 # modify rpmrebuild installed files
 system "sudo chown eric:eric $pb";
 
-# 6-10 control after change
+# 8-14 control after change
 $out = `$cmd --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'pug control after build spec ok' )
   or diag("out=$out\n");
@@ -86,14 +93,21 @@ if ($tst) {
 	like(
 		$out,
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
-		'pug control after spec files'
+		'pug control after spec files %attr'
 	) or diag("out=$out\n");
+	unlike(
+		$out,
+		qr/%doc %attr\(-,-,-\) "$pb"/,
+		'pug control after spec files %attr'
+	) or diag("out=$out\n");
+	unlike( $out, qr/%defattr\(-,-,-\)/, 'pug control after %defattr' )
+	  or diag("out=$out\n");
 }
 else {
 	fail('pug control after spec');
 }
 
-# 11-15 pug-from-db (default)
+# 15-21 pug-from-db (default)
 $out = `$cmd --pug-from-db --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'pug pug-from-db build spec ok' )
   or diag("out=$out\n");
@@ -114,12 +128,19 @@ if ($tst) {
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
 		'pug pug-from-db spec files'
 	) or diag("out=$out\n");
+	unlike(
+		$out,
+		qr/%doc %attr\(-,-,-\) "$pb"/,
+		'pug pug-from-db after spec files %attr'
+	) or diag("out=$out\n");
+	unlike( $out, qr/%defattr\(-,-,-\)/, 'pug pug-from-db %defattr' )
+	  or diag("out=$out\n");
 }
 else {
 	fail('pug pug-from-db spec');
 }
 
-# 16-20 pug-from-fs
+# 22-28 pug-from-fs
 $out = `$cmd --pug-from-fs --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'pug pug-from-fs build spec ok' )
   or diag("out=$out\n");
@@ -140,12 +161,19 @@ if ($tst) {
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
 		'pug pug-from-fs spec files'
 	) or diag("out=$out\n");
+	like(
+		$out,
+		qr/%doc %attr\(-,-,-\) "$pb"/,
+		'pug pug-from-db after spec files %attr'
+	) or diag("out=$out\n");
+	like( $out, qr/%defattr\(-,-,-\)/, 'pug pug-from-fs %defattr' )
+	  or diag("out=$out\n");
 }
 else {
 	fail('pug pug-from-fs spec');
 }
 
-# 21-25 keep-perm alias of pug-from-fs
+# 29-35 keep-perm alias of pug-from-fs
 $out = `$cmd --keep-perm --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'pug keep-perm build spec ok' )
   or diag("out=$out\n");
@@ -166,12 +194,16 @@ if ($tst) {
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
 		'pug keep-perm spec files'
 	) or diag("out=$out\n");
+	like( $out, qr/%doc %attr\(-,-,-\) "$pb"/, 'pug keep-perm  %attr' )
+	  or diag("out=$out\n");
+	like( $out, qr/%defattr\(-,-,-\)/, 'pug keep-perm %defattr' )
+	  or diag("out=$out\n");
 }
 else {
 	fail('pug keep-perm spec');
 }
 
-# 26-30 -k of pug-from-fs
+# 36-42 -k of pug-from-fs
 $out = `$cmd -k --spec-only=$spec rpmrebuild 2>&1`;
 like( $out, qr/specfile: $spec/, 'pug short keep-perm build spec ok' )
   or diag("out=$out\n");
@@ -192,6 +224,10 @@ if ($tst) {
 		qr/%doc %attr\(0644, root, root\) "$pb"/,
 		'pug short keep-perm spec files'
 	) or diag("out=$out\n");
+	like( $out, qr/%doc %attr\(-,-,-\) "$pb"/, 'pug short keep-perm  %attr' )
+	  or diag("out=$out\n");
+	like( $out, qr/%defattr\(-,-,-\)/, 'pug short keep-perm %defattr' )
+	  or diag("out=$out\n");
 }
 else {
 	fail('pug short keep-perm spec');
