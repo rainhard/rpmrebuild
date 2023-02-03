@@ -69,6 +69,10 @@ if [ "$RPMREBUILD_CAP_FROM_FS" = "yes" ]; then
 	fi
 fi
 
+if [ "$RPMREBUILD_PUG_FROM_FS" = "yes" ]; then
+	echo "%defattr(-,-,-)"
+fi
+
 while :; do
 	read file_type
 	[ -z "$file_type" ] && break
