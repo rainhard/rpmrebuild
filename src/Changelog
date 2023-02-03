@@ -1,5 +1,5 @@
-* Sat Feb 03 2023 <eric.gerbier@tutanota.com> 2.18
-- fix --cap-frpm-fs is not as expected when use libcap-2.32 (xujing)
+* Sun Feb 05 2023 <eric.gerbier@tutanota.com> 2.18
+- fix --cap-from-fs is not as expected when use libcap-2.32 (xujing)
 - reset %defattr when users want to keep files permission, uid and gid (xujing)
 - fix -k may not keep uid or gid (xujing)
 
