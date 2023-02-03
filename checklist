@@ -4,7 +4,6 @@ src/Release
 src/Changelog
 src/rpmrebuild.lsm
 src/News
-
 web/index*
 web/changelog*
 web/news*
@@ -14,6 +13,8 @@ make alldist
 git status
 git push
 git push --tags
+
+../git_qa_tag2.sh
 
 publication :
 web site
