@@ -189,7 +189,10 @@ while :; do
 
 	# %caps handling
 	if [ "$RPMREBUILD_CAP_FROM_FS" = "yes" ]; then
-		file_cap=$(  getcap "$file" | cut -f2 -d' ' )
+		# several output format are possible depending libcap version
+		# /usr/bin/arping cap_net_raw=p
+		# /usr/bin/ping = cap_net_admin,cap_net_raw+p
+		file_cap=$(  getcap "$file" | rev | cut -f1 -d' ' | rev )
 	else
 		# get capability from rpm query
 		[ "$file_cap" = "(none)" ] && file_cap=""
