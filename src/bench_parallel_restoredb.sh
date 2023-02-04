@@ -11,7 +11,7 @@
 
 # number of procs for gnu parallel
 # 0 means as many as possible
-maxprocs=0
+maxprocs=$( parallel --number-of-threads )
 
 # started by gnu parellel
 function bench {
@@ -226,7 +226,7 @@ list=$( rpm -qa | sed 's/\.src$//' | sort )
 export max=$( echo "$list" | wc -l )
 
 echo "------- build -----------------"
-echo "$list" | sort | parallel --max-procs $maxprocs bench | tee $LOG
+echo "$list" | sort | parallel --jobs $maxprocs bench | tee $LOG
 
 echo "------- analysis --------------"
 # output analysis
