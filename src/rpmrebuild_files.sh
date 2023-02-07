@@ -70,7 +70,7 @@ if [ "$RPMREBUILD_CAP_FROM_FS" = "yes" ]; then
 fi
 
 if [ "$RPMREBUILD_PUG_FROM_FS" = "yes" ]; then
-	echo "%defattr(-,-,-)"
+	echo "%defattr(-,-,-,-)"
 fi
 
 while :; do

@@ -64,7 +64,7 @@ if ($tst) {
 		qr/%doc %attr\(-,-,-\) "$pb"/,
 		'pug control before spec files %attr'
 	) or diag("out=$out\n");
-	unlike( $out, qr/%defattr\(-,-,-\)/, 'pug control before %defattr' )
+	unlike( $out, qr/%defattr\(-,-,-,-\)/, 'pug control before %defattr' )
 	  or diag("out=$out\n");
 }
 else {
@@ -100,7 +100,7 @@ if ($tst) {
 		qr/%doc %attr\(-,-,-\) "$pb"/,
 		'pug control after spec files %attr'
 	) or diag("out=$out\n");
-	unlike( $out, qr/%defattr\(-,-,-\)/, 'pug control after %defattr' )
+	unlike( $out, qr/%defattr\(-,-,-,-\)/, 'pug control after %defattr' )
 	  or diag("out=$out\n");
 }
 else {
@@ -133,7 +133,7 @@ if ($tst) {
 		qr/%doc %attr\(-,-,-\) "$pb"/,
 		'pug pug-from-db after spec files %attr'
 	) or diag("out=$out\n");
-	unlike( $out, qr/%defattr\(-,-,-\)/, 'pug pug-from-db %defattr' )
+	unlike( $out, qr/%defattr\(-,-,-,-\)/, 'pug pug-from-db %defattr' )
 	  or diag("out=$out\n");
 }
 else {
@@ -166,7 +166,7 @@ if ($tst) {
 		qr/%doc %attr\(-,-,-\) "$pb"/,
 		'pug pug-from-db after spec files %attr'
 	) or diag("out=$out\n");
-	like( $out, qr/%defattr\(-,-,-\)/, 'pug pug-from-fs %defattr' )
+	like( $out, qr/%defattr\(-,-,-,-\)/, 'pug pug-from-fs %defattr' )
 	  or diag("out=$out\n");
 }
 else {
@@ -196,7 +196,7 @@ if ($tst) {
 	) or diag("out=$out\n");
 	like( $out, qr/%doc %attr\(-,-,-\) "$pb"/, 'pug keep-perm  %attr' )
 	  or diag("out=$out\n");
-	like( $out, qr/%defattr\(-,-,-\)/, 'pug keep-perm %defattr' )
+	like( $out, qr/%defattr\(-,-,-,-\)/, 'pug keep-perm %defattr' )
 	  or diag("out=$out\n");
 }
 else {
@@ -226,7 +226,7 @@ if ($tst) {
 	) or diag("out=$out\n");
 	like( $out, qr/%doc %attr\(-,-,-\) "$pb"/, 'pug short keep-perm  %attr' )
 	  or diag("out=$out\n");
-	like( $out, qr/%defattr\(-,-,-\)/, 'pug short keep-perm %defattr' )
+	like( $out, qr/%defattr\(-,-,-,-\)/, 'pug short keep-perm %defattr' )
 	  or diag("out=$out\n");
 }
 else {
