@@ -146,6 +146,16 @@ echo
 echo '[%%trigger%{TRIGGERTYPE} -p %{TRIGGERSCRIPTPROG} -- %{TRIGGERCONDS}\n%|TRIGGERSCRIPTS?{%{TRIGGERSCRIPTS}\n}|]'
 }
 
+function qf_spec_filetriggers {
+echo 
+echo '[%%filetrigger%{FILETRIGGERTYPE} -p %{FILETRIGGERSCRIPTPROG} -P %{FILETRIGGERPRIORITIES} -- %{FILETRIGGERCONDS}\n%|FILETRIGGERSCRIPTS?{%{FILETRIGGERSCRIPTS}\n}|]'
+}
+
+function qf_spec_transfiletriggers {
+echo 
+echo '[%%transfiletrigger%{TRANSFILETRIGGERTYPE} -p %{TRANSFILETRIGGERSCRIPTPROG} -P %{TRANSFILETRIGGERPRIORITIES} -- %{TRANSFILETRIGGERCONDS}\n%|TRANSFILETRIGGERSCRIPTS?{%{TRANSFILETRIGGERSCRIPTS}\n}|]'
+}
+
 function qf_spec_pre {
 echo 
 echo '%|PREINPROG?{%%pre -p %{PREINPROG}\n%|PREIN?{[%{PREIN}\n]}|}:{%|PREIN?{\n%%pre\n[%{PREIN}\n]}|}|'

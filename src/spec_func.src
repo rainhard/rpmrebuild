@@ -172,6 +172,8 @@ function SpecGeneration
 	spec_query qf_spec_description  > "$SPEC_DESCRIPTION.$i"  || Error "(SpecGeneration) qf_spec_description" || return
 	spec_files                      > "$SPEC_FILES.$i"        || Error "(SpecGeneration) spec_files" || return
 	spec_query qf_spec_triggers     > "$SPEC_TRIGGERS.$i"     || Error "(SpecGeneration) qf_spec_triggers" || return
+	spec_query qf_spec_filetriggers > "$SPEC_FILETRIGGERS.$i"     || Error "(SpecGeneration) qf_spec_filetriggers" || return
+	spec_query qf_spec_transfiletriggers > "$SPEC_TRANSFILETRIGGERS.$i"     || Error "(SpecGeneration) qf_spec_transfiletriggers" || return
 	spec_query qf_spec_pre          > "$SPEC_PRE.$i"          || Error "(SpecGeneration) qf_spec_pre" || return
 	spec_query qf_spec_pretrans     > "$SPEC_PRETRANS.$i"     || Error "(SpecGeneration) qf_spec_pretrans" || return
 	spec_query qf_spec_post         > "$SPEC_POST.$i"         || Error "(SpecGeneration) qf_spec_post" || return
@@ -242,6 +244,10 @@ function spec_concatenate
 
 	# %%triger -> %trigger (in begin of line)
 	local sed_trigger="/^%%trigger/s/^%%/%/1"
+	local sed_filetrigger="/^%%filetrigger/s/^%%/%/1"
+	#local sed_filetrigger="/^%%filetrigger/s/, / /1"
+	local sed_transfiletrigger="/^%%transfiletrigger/s/^%%/%/1"
+	#local sed_transfiletrigger="/^%%transfiletrigger/s/, / /1"
 	# %%pre -> %pre (in begin of line) It'll work for %%preun too.
 	local sed_pre="/^%%pre/s/^%%/%/1"
 	# %%post -> %post (in begin of line) It'll work for %%postun too.
@@ -251,11 +257,15 @@ function spec_concatenate
 	sed                                         \
 		-e "$sed_double_percent"            \
 		-e "$sed_trigger"                   \
+		-e "$sed_filetrigger"               \
+		-e "$sed_transfiletrigger"          \
 		-e "$sed_pre"                       \
 		-e "$sed_post"                      \
 		-e "$sed_verifyscript"              \
 		-e "$sed_global" 	             \
 		"$SPEC_TRIGGERS.$si_triggers"         \
+		"$SPEC_FILETRIGGERS.$si_filetriggers" \
+		"$SPEC_TRANSFILETRIGGERS.$si_transfiletriggers" \
 		"$SPEC_PRE.$si_pre"                   \
 		"$SPEC_PRETRANS.$si_pretrans"         \
 		"$SPEC_POST.$si_post"                 \

@@ -41,6 +41,8 @@ function processing_init
 	SPEC_RECOMMENDS=${SPEC_DIR}/recommends
 	SPEC_SUPPLEMENTS=${SPEC_DIR}/supplements
 	SPEC_TRIGGERS=${SPEC_DIR}/triggers
+	SPEC_FILETRIGGERS=${SPEC_DIR}/filetriggers
+	SPEC_TRANSFILETRIGGERS=${SPEC_DIR}/transfiletriggers
 	SPEC_VERIFYSCRIPT=${SPEC_DIR}/verifyscript
 
 	spec_index=1
@@ -64,6 +66,8 @@ function processing_init
 	si_recommends=1
 	si_supplements=1
 	si_triggers=1
+	si_filetriggers=1
+	si_transfiletriggers=1
 	si_verifyscript=1
 	si_rpmqf=1
 }
@@ -222,6 +226,20 @@ function processing_spec_change
 			SPEC_IN=$SPEC_TRIGGERS.$si_triggers
 			si_triggers=$(( si_triggers + 1 ))
 			SPEC_OUT=$SPEC_TRIGGERS.$si_triggers
+		;;
+
+		change-spec-filetriggers | \
+		edit-filetriggers)
+			SPEC_IN=$SPEC_FILETRIGGERS.$si_filetriggers
+			si_filetriggers=$(( si_filetriggers + 1 ))
+			SPEC_OUT=$SPEC_FILETRIGGERS.$si_filetriggers
+		;;
+
+		change-spec-transfiletriggers | \
+		edit-transfiletriggers)
+			SPEC_IN=$SPEC_TRANSFILETRIGGERS.$si_transfiletriggers
+			si_transfiletriggers=$(( si_transfiletriggers + 1 ))
+			SPEC_OUT=$SPEC_TRANSFILETRIGGERS.$si_transfiletriggers
 		;;
 
 		change-spec-verifyscript | \

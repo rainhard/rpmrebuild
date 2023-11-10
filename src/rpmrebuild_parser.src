@@ -81,6 +81,8 @@ options:
    --change-spec-description=<command>
    --change-spec-files=<command>
    --change-spec-triggers=<command>
+   --change-spec-filetriggers=<command>
+   --change-spec-transfiletriggers=<command>
    --change-spec-pre=<command>
    --change-spec-pretrans=<command>
    --change-spec-post=<command>
@@ -105,6 +107,8 @@ options:
    --edit-description
    --edit-files
    --edit-triggers
+   --edit-filetriggers
+   --edit-transfiletriggers
    --edit-pre
    --edit-pretrans
    --edit-post

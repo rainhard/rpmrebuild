@@ -30,6 +30,8 @@ change-spec-requires demo.sh
 change-spec-description demo.sh
 change-spec-files demo.sh
 change-spec-triggers demo.sh
+change-spec-filetriggers demo.sh
+change-spec-transfiletriggers demo.sh
 change-spec-pre demo.sh
 change-spec-pretrans demo.sh
 change-spec-post demo.sh
